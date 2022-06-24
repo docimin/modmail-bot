@@ -1,0 +1,12 @@
+{
+ "type": "success",
+ "info": "Wird gesendet, wenn mit /snippet ein Snippet bearbeitet oder erstellt wird",
+ "data": {
+  "embeds": [
+   {
+    "title": "${emoji} Snippet `${name}` gesetzt",
+    "description": "${content}"
+   }
+  ]
+ }
+}

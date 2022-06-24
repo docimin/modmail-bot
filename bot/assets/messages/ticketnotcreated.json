@@ -1,0 +1,12 @@
+{
+ "type": "error",
+ "info": "Wird gesendet, wenn /report geused wird und der User DMs deaktiviert hat",
+ "data": {
+  "embeds": [
+   {
+    "title": "${emoji} Ticket konnte nicht erstellt werden",
+    "description": "Du musst Direktnachrichten von anderen Usern erlauben, um ein Ticket öffnen zu können."
+   }
+  ]
+ }
+}

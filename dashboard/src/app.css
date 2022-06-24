@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&display=swap');
+
+:root {
+ font-family: 'Source Sans Pro', sans-serif;
+ --font-default: 'Source Sans Pro', sans-serif;
+
+ --clr-400: #5865f2;
+ --clr-450: #4752cc;
+ --clr-500: #38419b;
+
+ --clr-gray-800: #222231;
+
+ --clr-green-400: #39b23d;
+ --clr-green-450: #32a136;
+ --clr-green-500: #2b882e;
+ 
+ --clr-red-400: #b23939;
+ --clr-red-450: #a13232;
+ --clr-red-500: #882b2b;
+
+ color: #fff;
+}
+
+* {
+ margin: 0;
+ padding: 0;
+}
+
+body {
+ background: #2c2c49;
+ height: 100vh;
+ width: 100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+ width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+ background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+ background: #0e0e0e;
+ border-radius: 10px;
+ z-index: 500;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+ background: #35374b;
+}

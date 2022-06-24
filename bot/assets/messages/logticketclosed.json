@@ -1,0 +1,20 @@
+{
+ "type": "error",
+ "info": "Wird in den Log Channel gesendet, wenn ein Ticket geschlossen wird",
+ "data": {
+  "embeds": [
+   {
+    "author": {
+     "name": "${usertag} (${userid}) | ${ticketid}",
+     "url": "${host}/tickets/${ticketid}"
+    },
+    "description": "${reason}: ${commentpreview}",
+    "footer": {
+     "text": "Geschlossen von ${authortag} (${authorid})",
+     "icon_url": "${authoravatarurl}"
+    },
+    "timestamp": "${nowtimestamp}"
+   }
+  ]
+ }
+}

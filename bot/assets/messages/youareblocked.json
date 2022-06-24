@@ -1,0 +1,11 @@
+{
+ "type": "error",
+ "info": "Wird gesendet, wenn ein blockierter User versucht, ein Ticket zu öffnen",
+ "data": {
+  "embeds": [
+   {
+    "description": "Du hast keine Rechte, ein Ticket zu erstellen."
+   }
+  ]
+ }
+}

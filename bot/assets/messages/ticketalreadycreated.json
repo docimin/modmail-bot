@@ -1,0 +1,12 @@
+{
+ "type": "error",
+ "info": "Wird gesendet, wenn /support ausgeführt wurde und ein offenes Ticket bereits existiert",
+ "data": {
+  "embeds": [
+   {
+    "title": "Ticket bereits erstellt",
+    "description": "Du hast bereits ein offenes Supportticket. Klicke [hier](${dmchannelurl}), um mit dem Team zu schreiben."
+   }
+  ]
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "type": "success",
+ "info": "Wird per DM gesendet, wenn ein Ticket erfolgreich erstellt wurde",
+ "data": {
+  "embeds": [
+   {
+    "title": "${emoji} Ticket erstellt",
+    "description": [
+     "Ein Ticket wurde mit folgenden Angaben erstellt:",
+     "",
+     "> **Grund:**",
+     "> ${reason}",
+     "",
+     "> **Kommentar:**",
+     "> ${comment}",
+     "",
+     "> **Anhängte User:**",
+     "> ${attachedusers}",
+     "",
+     "**Ein Teammitglied wird dir so schnell wie möglich antworten.**",
+     "Schreibe in diesen Chat, um Nachrichten an das Team zu senden."
+    ]
+   }
+  ]
+ }
+}
