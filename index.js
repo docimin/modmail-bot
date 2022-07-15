@@ -19,6 +19,8 @@ function validateDatabase() {
 
  return new Promise(async (resolve) => {
 
+  console.log(`[MySQL] Connecting to ${config.database.user}@${config.database.host} ...`);
+       
   let connection = mysql.createConnection({
     host     : config.database.host,
     user     : config.database.user,
