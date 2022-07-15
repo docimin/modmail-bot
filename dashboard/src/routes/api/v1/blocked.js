@@ -1,6 +1,6 @@
 import db from "$lib/db.js";
 
-export async function get(event) {
+export async function GET(event) {
 
  if (!event.locals.userData)
   return {
@@ -36,7 +36,7 @@ export async function get(event) {
 
 }
 
-export async function del(event) {
+export async function DEL(event) {
 
  if (!event.locals.userData)
   return {

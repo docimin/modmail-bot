@@ -1,7 +1,7 @@
 import config from "$lib/config.js";
 import db from "$lib/db.js";
 
-export async function get(event) {
+export async function GET(event) {
 
  if (!event.locals.userData?.manager)
   return {
@@ -35,7 +35,7 @@ export async function get(event) {
 
 }
 
-export async function put(event) {
+export async function PUT(event) {
 
  if (!event.locals.userData?.manager)
   return {
@@ -74,7 +74,7 @@ export async function put(event) {
 
 }
 
-export async function del(event) {
+export async function DEL(event) {
 
  if (!event.locals.userData?.manager)
   return {

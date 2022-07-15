@@ -1,4 +1,4 @@
-export function get(event) {
+export function GET(event) {
 
  let snowflake = event.params.snowflake;
 

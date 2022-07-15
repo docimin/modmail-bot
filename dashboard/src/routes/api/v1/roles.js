@@ -1,6 +1,6 @@
 import config from "$lib/config.js";
 
-export async function get(event) {
+export async function GET(event) {
 
  if (!event.locals.userData?.manager)
   return resolve({

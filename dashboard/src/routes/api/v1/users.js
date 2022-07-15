@@ -2,7 +2,7 @@ import config from "$lib/config.js";
 
 const userCache = new Map(); // key: userId; value: user object + timestamp of last update
 
-export function get(event) {
+export function GET(event) {
 
  return new Promise((resolve) => {
 

@@ -4,8 +4,10 @@ import db from "$lib/db.js";
 import { v4 as uuid } from "uuid";
 import * as _utils from "$lib/_Utils.js";
 
-export async function get(event) {
+export async function GET(event) {
 
+ console.log("[login.js]", 1, "Processing login request ...");
+ 
  if (event.locals.userData)
   return {
    status: 307,
@@ -18,6 +20,8 @@ export async function get(event) {
 
  if (code) {
 
+  console.log("[login.js]", 2, "Detected redirect from Discord");
+  
   let accessTokenResult = await fetch("https://discord.com/api/oauth2/token", {
    method: "POST",
    body: new URLSearchParams({
@@ -31,6 +35,8 @@ export async function get(event) {
  
   if (accessTokenResult.status === 200) {
  
+   console.log("[login.js]", 3, "Successfully fetched access token");
+   
    accessTokenResult = await accessTokenResult.json().catch(() => null);
   
    if (accessTokenResult?.access_token) {
@@ -41,6 +47,8 @@ export async function get(event) {
       Authorization: `Bearer ${accessTokenResult?.access_token}`
      }
     });
+
+    console.log("[login.js]", 4, "User info result:", fetchResult.status);
 
     if (fetchResult.status !== 200)
      return {
@@ -54,6 +62,8 @@ export async function get(event) {
 
     let userAuthorized = await _utils.isUserAuthorized(fetchResultJSON.id);
 
+    console.log("[login.js]", 5, "User authorized:", userAuthorized);
+
     if (!userAuthorized)
      return {
       status: 307,
@@ -64,7 +74,11 @@ export async function get(event) {
 
     let cookieId = uuid();
 
+    console.log("[login.js]", 6, "Writing to db ...");
+
     await new Promise((resolve, reject) => db.query(`INSERT INTO sessions (id, access_token, refresh_token) VALUES (?, ?, ?)`, [cookieId, accessTokenResult.access_token, accessTokenResult.refresh_token], (err) => err ? reject(err) : resolve()));
+
+    console.log("[login.js]", 7, "Returning to / with cookies");
 
     return {
      status: 307,
@@ -80,9 +94,9 @@ export async function get(event) {
      body: "Redirecting..."
     }
 
-   }
+   } else console.log("[login.js]", 4, "No access token found");
 
-  }
+  } else console.log("[login.js]", 3, "Invalid access token result:", accessTokenResult.status, await accessTokenResult.json().catch(() => null));
  
  }
 
