@@ -1,4 +1,4 @@
-import mysql from "mysql2";
+import mysql from "mysql2/promise";
 import config from "$lib/config.js";
 
 let connectionObj = {
@@ -8,14 +8,14 @@ let connectionObj = {
  database : config.database.database
 }
 
-let connection = mysql.createConnection(connectionObj);
+let connection = mysql.createConnection(connectionObj).catch((err) => console.log("[MySQL] Connection failed", err));
 
 function query(...args) {
 
  connection.ping((err) => {
 
   if (err)
-   connection = mysql.createConnection(connectionObj);
+   connection = mysql.createConnection(connectionObj).catch((err) => console.log("[MySQL] Connection failed", err));
 
   connection.query(...args);
 
