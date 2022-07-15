@@ -1,0 +1,44 @@
+{
+ "guildId": "347871491402235914",
+ "messageTypes": {
+  "default": {
+   "color": "#5865f2",
+   "emoji": ""
+  },
+  "success": {
+   "color": "#3ea45f",
+   "emoji": "<:check_green:934432144577667072>"
+  },
+  "error": {
+   "color": "#ed4245",
+   "emoji": "<:x_red:934432302333829150>"
+  }
+ },
+ "presence": {
+  "activities": [
+   {
+    "type": "WATCHING",
+    "name": "reports"
+   }
+  ],
+  "status": "online"
+ },
+ "channelIds": {
+  "ticketsCategory": "728239286834692176",
+  "ticketsLog": "728026505132769360"
+ },
+ "emojiIds": {
+  "check_white": "935183922051043388",
+  "x_white": "935183989394767903"
+ },
+ "ticketReasons": [
+  "Grund 1",
+  "Grund 2",
+  "Grund 3"
+ ],
+ "dmPrefixes": {
+  "user": "**${user}:** ${message}",
+  "anonymous": "**Team:** ${message}"
+ },
+ "deleteChannelAfterClosedInSeconds": 30
+}
