@@ -1,4 +1,3 @@
-import config from "$lib/config.js";
 import cookie from "cookie";
 import db from "$lib/db.js";
 import { v4 as uuid } from "uuid";
@@ -25,11 +24,11 @@ export async function GET(event) {
   let accessTokenResult = await fetch("https://discord.com/api/oauth2/token", {
    method: "POST",
    body: new URLSearchParams({
-    client_id: config.discord.id,
-    client_secret: config.discord.secret,
+    client_id: process.env.DISCORD_ID,
+    client_secret: process.env.DISCORD_SECRET,
     grant_type: "authorization_code",
     code,
-    redirect_uri: `${config.host}/api/v1/login`
+    redirect_uri: `${process.env.DASHBOARD_HOST}/api/v1/login`
    })
   });
  
@@ -103,7 +102,7 @@ export async function GET(event) {
  return {
   status: 307,
   headers: {
-   Location: `https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&prompt=none&redirect_uri=${config.host}%2Fapi%2Fv1%2Flogin&response_type=code&scope=identify`
+   Location: `https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_ID}&prompt=none&redirect_uri=${process.env.DASHBOARD_HOST}%2Fapi%2Fv1%2Flogin&response_type=code&scope=identify`
   }
  }
 

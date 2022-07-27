@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const Core = require("core");
 
 let dClient = Core.data.discordClient;
@@ -18,4 +19,4 @@ dClient.once("ready", async () => {
 
 });
 
-dClient.login(Core.data.gConfig.discord.token);
+dClient.login(process.env.DISCORD_TOKEN);

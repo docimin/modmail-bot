@@ -20,6 +20,7 @@
     "cookie": "^0.4.1",
     "dayjs": "^1.10.7",
     "discord-markdown": "^2.5.1",
+    "dotenv": "^16.0.1",
     "mysql2": "^2.3.3",
     "svelte-infinite-scroll": "^2.0.0",
     "twemoji": "^13.1.0",

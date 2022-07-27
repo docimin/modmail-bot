@@ -2,15 +2,15 @@
 Fyfu ModMail
 
 ## Einrichten
-Zum Einrichten müssen die Konfigurationsdateien `./config.json` und `./bot/assets/config.json` ausgefüllt werden.
+Zum Einrichten muss die Datei `.env` ausgefüllt werden.
 
 ## Nachrichten editieren
 Alle Nachrichten sind in `./bot/assets/messages` gespeichert und können beliebig editiert werden.
 
-Um Nachrichten zu visualiseren kann ein beliebiger Discord Nachrichten Editor verwendet werden, wie bspw. der im Dashboard von [Sapphire](https://sapph.xyz/dashboard).
+Um Nachrichten zu visualiseren kann ein beliebiger Discord Nachrichten Editor verwendet werden, wie bspw. der im Dashboard von [Sapphire](https://dashboard.sapph.xyz).
 
 ## Slash Command Permissions
-Alle User, die als Manager in der `./config.json` eingetragen sind, haben automatisch Rechte, alle Slash Commands auszuführen.
+Alle User, die als Manager in der `.env` eingetragen sind, haben automatisch Rechte, alle Slash Commands auszuführen.
 
 Zusätzlich können User und Rollen im "User Management" Tab hinzugefügt werden. Diese bekommen **nach einem Neustart** auch Rechte, die Slash Commands ausführen zu können.
 

@@ -1,6 +1,4 @@
-import { c as config } from "../../../../chunks/config-3e06af2b.js";
-import "fs";
-async function get(event) {
+async function GET(event) {
   var _a;
   if (!((_a = event.locals.userData) == null ? void 0 : _a.manager))
     return resolve({
@@ -9,9 +7,9 @@ async function get(event) {
         error: "Unauthorized"
       }
     });
-  let result = await fetch(`https://discord.com/api/v10/guilds/${config.sub.guildId}/roles`, {
+  let result = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/roles`, {
     headers: {
-      Authorization: `Bot ${config.discord.token}`
+      Authorization: `Bot ${process.env.DISCORD_TOKEN}`
     }
   });
   let roles = [];
@@ -28,4 +26,6 @@ async function get(event) {
     body: roles
   };
 }
-export { get };
+export {
+  GET
+};

@@ -2,7 +2,6 @@
  "type": "default",
  "info": "Wird in einen neuen Ticketchannel gesendet",
  "data": {
-  "content": "<@&347881078004121611>",
   "embeds": [
    {
     "author": {

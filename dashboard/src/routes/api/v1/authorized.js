@@ -1,4 +1,3 @@
-import config from "$lib/config.js";
 import db from "$lib/db.js";
 
 export async function GET(event) {
@@ -18,8 +17,8 @@ export async function GET(event) {
   return {
    status: 200,
    body: {
-    managerIds: config.managerUserIds,
-    userIds: [...new Set([...config.managerUserIds, ...result.filter(r => r.type === "user").map(r => r.id)])].filter(id => id),
+    managerIds: process.env?.MANAGER_USER_IDS?.split?.(","),
+    userIds: [...new Set([...process.env?.MANAGER_USER_IDS?.split?.(","), ...result.filter(r => r.type === "user").map(r => r.id)])].filter(id => id),
     roleIds: [...new Set(result.filter(r => r.type === "role").map(r => r.id))]
    }
   };

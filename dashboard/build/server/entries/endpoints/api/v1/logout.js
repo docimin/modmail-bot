@@ -1,9 +1,7 @@
-import { d as db } from "../../../../chunks/db-27ceeaba.js";
+import { d as db } from "../../../../_app/immutable/chunks/db-90aa6d88.js";
 import cookie from "cookie";
 import "mysql2";
-import "../../../../chunks/config-3e06af2b.js";
-import "fs";
-async function get(event) {
+async function GET(event) {
   if (event.locals.userData)
     await new Promise((resolve) => db.query("DELETE FROM sessions WHERE id = ?", [event.locals.sessionId], () => resolve()));
   return {
@@ -19,4 +17,6 @@ async function get(event) {
     }
   };
 }
-export { get };
+export {
+  GET
+};

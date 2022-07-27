@@ -1,24 +1,23 @@
 // private utils, do not expose
 
 import db from "$lib/db.js";
-import config from "$lib/config.js";
 
 export async function isUserAuthorized(userId) {
 
  if (!userId || !Number.isInteger(parseInt(userId)))
   return false;
 
- if (config.managerUserIds.includes(userId))
+ if (process.env?.MANAGER_USER_IDS?.split?.(",")?.includes?.(userId))
   return true;
 
  let result = await new Promise((resolve, reject) => db.query(`SELECT * FROM authorized WHERE id = ? AND type = "user"`, [userId], (err, result) => err ? reject(err) : resolve(result))).catch((err) => { console.log(err); return null });
  if (result?.length > 0)
   return true;
 
- let fetchResult = await fetch(`https://discord.com/api/v10/guilds/${config.sub.guildId}/members/${userId}`, {
+ let fetchResult = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${userId}`, {
   method: "GET",
   headers: {
-   Authorization: `Bot ${config.discord.token}`
+   Authorization: `Bot ${process.env.DISCORD_TOKEN}`
   }
  });
 

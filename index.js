@@ -1,14 +1,15 @@
-const mysql  = require("mysql2"),
-      fs     = require("fs"),
-      config = require("./config.json");
+require("dotenv").config();
+
+const mysql = require("mysql2"),
+      fs    = require("fs");
 
 validateDatabase().then(() => {
  let foundBot       = fs.existsSync(`${__dirname}/bot/index.js`),
      foundDashboard = fs.existsSync(`${__dirname}/dashboard/build/index.js`);
  if (foundBot || foundDashboard) {
-  if (foundBot && ["both", "bot"].includes(config.run))
+  if (foundBot && ["both", "bot"].includes(process.env.RUN))
    require("./bot/index.js");
-  if (foundDashboard && ["both", "dashboard"].includes(config.run))
+  if (foundDashboard && ["both", "dashboard"].includes(process.env.RUN))
    import("./dashboard/build/index.js");
  } else {
   console.log("Bot and dashboard not found");
@@ -19,13 +20,13 @@ function validateDatabase() {
 
  return new Promise(async (resolve) => {
 
-  console.log(`[MySQL] Connecting to ${config.database.user}@${config.database.host} ...`);
+  console.log(`[MySQL] Connecting to ${process.env.DATABASE_USER}@${process.env.DATABASE_HOST} ...`);
        
   let connection = mysql.createConnection({
-    host     : config.database.host,
-    user     : config.database.user,
-    password : config.database.password,
-    database : config.database.database
+    host     : process.env.DATABASE_HOST,
+    user     : process.env.DATABASE_USER,
+    password : process.env.DATABASE_PASSWORD,
+    database : process.env.DATABASE_DATABASE
   });
    
   connection.connect(async (err) => {

@@ -55,9 +55,9 @@ class Ticket {
 
   const Core = require("core");
 
-  let { discordClient: dClient, config, gConfig } = Core.data;
+  let { discordClient: dClient, config } = Core.data;
   
-  this.guild = dClient.guilds.resolve(config.guildId);
+  this.guild = dClient.guilds.resolve(process.env.GUILD_ID);
   this.member = await this.guild.members.fetch(this.userId).catch(() => null);
   this.author = await this.guild.members.fetch(this.authorId).catch(() => null);
   this.user = this.member?.user;
@@ -107,13 +107,13 @@ class Ticket {
     usercreatedtimestamp: Math.floor(this.user.createdTimestamp/1000),
     memberjoinedtimestamp: Math.floor(this.member.joinedTimestamp/1000),
     membernickname: this.member.nickname || "/",
-    memberroles: Discord.Util.discordSort(this.member.roles.cache).filter(r => r.id !== config.guildId).map(r => `<@&${r.id}>`).join(" "),
+    memberroles: Discord.Util.discordSort(this.member.roles.cache).filter(r => r.id !== process.env.GUILD_ID).map(r => `<@&${r.id}>`).join(" "),
     dmchannelid: this.dmChannel.id,
     reason: this.reason,
     comment: this.comment || "/",
     attachedusers: attachedUsersDisplay,
     ticketId: this.ticketId,
-    host: gConfig.host
+    host: process.env.DASHBOARD_HOST
    }));
   }
 
@@ -321,7 +321,7 @@ class Ticket {
   interaction[interaction.replied ? "followUp" : "reply"](Core.messages.get("ticketclosed", {
    ticketId: this.ticketId.id,
    authorId: interaction.member.id,
-   host: Core.data.gConfig.host
+   host: process.env.DASHBOARD_HOST
   }));
 
   Core.database.query(`UPDATE tickets SET closedTimestamp = ?, closedAuthorId = ? WHERE id = ?`, [Date.now(), interaction.member.id, this.ticketId]);
@@ -335,7 +335,7 @@ class Ticket {
    authortag: interaction.member.user.tag,
    authoravatarurl: interaction.member.user.displayAvatarURL({ dynamic: true }),
    ticketid: this.ticketId,
-   host: Core.data.gConfig.host,
+   host: process.env.DASHBOARD_HOST,
    reason: this.reason,
    commentpreview: this.comment ? `${this.comment.slice(0, 200)}${this.comment.length > 200 ? " [...]" : ""}` : null,
    nowtimestamp: Math.floor(Date.now() / 1000)

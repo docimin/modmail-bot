@@ -1,4 +1,4 @@
-import { c as create_ssr_component, e as escape } from "../../chunks/index-aa015feb.js";
+import { c as create_ssr_component, e as escape } from "../../_app/immutable/chunks/index-80a2f878.js";
 function load({ error, status }) {
   return { props: { error, status } };
 }
@@ -18,4 +18,7 @@ const Error = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 ${error.frame ? `<pre>${escape(error.frame)}</pre>` : ``}
 ${error.stack ? `<pre>${escape(error.stack)}</pre>` : ``}`;
 });
-export { Error as default, load };
+export {
+  Error as default,
+  load
+};

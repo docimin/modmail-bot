@@ -1,5 +1,3 @@
-import config from "$lib/config.js";
-
 const userCache = new Map(); // key: userId; value: user object + timestamp of last update
 
 export function GET(event) {
@@ -34,7 +32,7 @@ export function GET(event) {
 
      let result = await fetch(`https://discord.com/api/v10/users/${userId}`, {
       headers: {
-       Authorization: `Bot ${config.discord.token}`
+       Authorization: `Bot ${process.env.DISCORD_TOKEN}`
       }
      });
 

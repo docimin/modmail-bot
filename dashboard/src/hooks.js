@@ -1,6 +1,7 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import cookie from "cookie";
 import db from "$lib/db.js";
-import config from "$lib/config.js";
 import * as _utils from "$lib/_Utils.js";
 
 const sessionIdCache = new Map(); // key: session_id; value: { userData, timestamp }
@@ -57,7 +58,7 @@ export const handle = async ({ event, resolve }) => {
  }
 
  let userId = event.locals.userData?.id;
- let manager = config.managerUserIds.includes(userId);
+ let manager = process.env?.MANAGER_USER_IDS?.split?.(",")?.includes?.(userId);
 
  if (userId && !manager) {
   let userAuthorized = await _utils.isUserAuthorized(userId);

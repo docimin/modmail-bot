@@ -9,26 +9,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/sushiroll/modmail-bot.git"
+    "url": "git+https://github.com/xgedev/fyfu-modmail.git"
   },
   "author": "Xge",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://suro.atlassian.net/jira/software/c/projects/SMB/issues"
+    "url": "https://github.com/xgedev/fyfu-modmail/issues"
   },
-  "homepage": "https://bitbucket.org/sushiroll/modmail-bot",
+  "homepage": "https://github.com/xgedev/fyfu-modmail#readme",
   "dependencies": {
-    "core": "file:./bot/core",
-    "discord.js": "^13.6.0",
-    "dotenv": "^14.2.0",
-    "mysql2": "^2.3.3",
-    "nanoid": "^3.2.0",
+    "@lukeed/uuid": "^2.0.0",
     "cookie": "^0.4.1",
+    "core": "file:./bot/core",
     "dayjs": "^1.10.7",
     "discord-markdown": "^2.5.1",
-    "svelte-infinite-scroll": "^2.0.0",
+    "discord.js": "^13.6.0",
+    "dotenv": "^14.3.2",
+    "mysql2": "^2.3.3",
+    "nanoid": "^3.2.0",
     "twemoji": "^13.1.0",
-    "uuid": "^8.3.2",
-    "@lukeed/uuid": "^2.0.0"
+    "uuid": "^8.3.2"
   }
 }

@@ -1,9 +1,7 @@
-import { c as config } from "../../../../chunks/config-3e06af2b.js";
-import { d as db } from "../../../../chunks/db-27ceeaba.js";
-import "fs";
+import { d as db } from "../../../../_app/immutable/chunks/db-90aa6d88.js";
 import "mysql2";
-async function get(event) {
-  var _a;
+async function GET(event) {
+  var _a, _b, _c, _d, _e, _f, _g;
   if (!((_a = event.locals.userData) == null ? void 0 : _a.manager))
     return {
       status: 401,
@@ -19,8 +17,8 @@ async function get(event) {
     return {
       status: 200,
       body: {
-        managerIds: config.managerUserIds,
-        userIds: [.../* @__PURE__ */ new Set([...config.managerUserIds, ...result.filter((r) => r.type === "user").map((r) => r.id)])].filter((id) => id),
+        managerIds: (_d = (_c = (_b = process.env) == null ? void 0 : _b.MANAGER_USER_IDS) == null ? void 0 : _c.split) == null ? void 0 : _d.call(_c, ","),
+        userIds: [.../* @__PURE__ */ new Set([...(_g = (_f = (_e = process.env) == null ? void 0 : _e.MANAGER_USER_IDS) == null ? void 0 : _f.split) == null ? void 0 : _g.call(_f, ","), ...result.filter((r) => r.type === "user").map((r) => r.id)])].filter((id) => id),
         roleIds: [...new Set(result.filter((r) => r.type === "role").map((r) => r.id))]
       }
     };
@@ -32,7 +30,7 @@ async function get(event) {
     }
   };
 }
-async function put(event) {
+async function PUT(event) {
   var _a;
   if (!((_a = event.locals.userData) == null ? void 0 : _a.manager))
     return {
@@ -65,7 +63,7 @@ async function put(event) {
     }
   };
 }
-async function del(event) {
+async function DEL(event) {
   var _a;
   if (!((_a = event.locals.userData) == null ? void 0 : _a.manager))
     return {
@@ -98,4 +96,8 @@ async function del(event) {
     }
   };
 }
-export { del, get, put };
+export {
+  DEL,
+  GET,
+  PUT
+};

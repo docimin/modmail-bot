@@ -16,7 +16,7 @@ exports.run = async () => {
  */
 async function registerCommands() {
 
- let guild = dClient.guilds.resolve(config.guildId);
+ let guild = dClient.guilds.resolve(process.env.GUILD_ID);
 
  let commands           = fs.readdirSync(`${__dirname}/commands`).map(f => require(`./commands/${f}`)),
      registeredCommands = await guild.commands.fetch();
@@ -58,7 +58,7 @@ async function registerCommands() {
  if (authorizedResult) {
 
   authorized = {
-   userIds: [...new Set([...gConfig.managerUserIds, ...authorizedResult.filter(r => r.type === "user").map(r => r.id)])].filter(id => id),
+   userIds: [...new Set([...proccess.env.MANAGER_USER_IDS.split(","), ...authorizedResult.filter(r => r.type === "user").map(r => r.id)])].filter(id => id),
    roleIds: [...new Set(authorizedResult.filter(r => r.type === "role").map(r => r.id))]
   }
 
@@ -108,7 +108,7 @@ function listenToSlashCommands() {
 
   if (!interaction.isCommand()) return;
 
-  if (gConfig.state === "dev")
+  if (process.env.STATE === "dev")
    delete require.cache[require.resolve(`./commands/${interaction.commandName}.js`)];
 
   let command = require(`./commands/${interaction.commandName}.js`);

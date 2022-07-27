@@ -23,15 +23,13 @@ let discordClient = new Discord.Client({
  partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
  failIfNotExists: false
 }),
-    config        = require("../assets/config.json"),
-    gConfig       = require("../../config.json");
+    config        = require("../assets/config.json");
 
 class Core {
 
  static data = {
   discordClient,
-  config,
-  gConfig
+  config
  }
 
  static tickets = require("./TicketsManager");

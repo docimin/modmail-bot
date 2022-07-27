@@ -40,7 +40,7 @@ exports.run = async (interaction) => {
      color: Core.data.config.messageTypes.default.color,
      title: `\`${result.length}\` Tickets von ${user.tag}`,
      description: result.map((r) => {
-      return `<t:${Math.floor(r.createdTimestamp/1000)}:R> | [${r.reason}](${Core.data.gConfig.host}/tickets/${r.id})`
+      return `<t:${Math.floor(r.createdTimestamp/1000)}:R> | [${r.reason}](${process.env.DASHBOARD_HOST}/tickets/${r.id})`
      }).join("\n")
     }
    ]

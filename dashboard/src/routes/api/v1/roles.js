@@ -1,5 +1,3 @@
-import config from "$lib/config.js";
-
 export async function GET(event) {
 
  if (!event.locals.userData?.manager)
@@ -10,9 +8,9 @@ export async function GET(event) {
    }
   });
 
- let result = await fetch(`https://discord.com/api/v10/guilds/${config.sub.guildId}/roles`, {
+ let result = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/roles`, {
   headers: {
-   Authorization: `Bot ${config.discord.token}`
+   Authorization: `Bot ${process.env.DISCORD_TOKEN}`
   }
  });
 
