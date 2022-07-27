@@ -1,5 +1,5 @@
 import { j as assign, k as is_function, c as create_ssr_component, v as validate_component } from "../../_app/immutable/chunks/index-80a2f878.js";
-import { R as Rolling } from "../../_app/immutable/chunks/Rolling-eaf58c22.js";
+import { R as Rolling } from "../../_app/immutable/chunks/Rolling-65211973.js";
 /* empty css                                                                          */function cubicOut(t) {
   const f = t - 1;
   return f * f * f + 1;
@@ -102,7 +102,7 @@ const Manageusers = create_ssr_component(($$result, $$props, $$bindings, slots) 
     }
   });
   $$result.css.add(css);
-  return `${$$result.head += `${$$result.title = `<title>FyFu Modmail</title>`, ""}`, ""}
+  return `${$$result.head += `${$$result.title = `<title>Mexify Modmail</title>`, ""}`, ""}
 
 
 

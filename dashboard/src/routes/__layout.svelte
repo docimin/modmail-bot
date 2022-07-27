@@ -39,7 +39,7 @@
 </script>
 
 <svelte:head>
-	<title>FyFu Modmail {$page.url?.pathname.split("/")[1] ? `| ${$page.url.pathname.split("/")[1][0].toUpperCase()}${$page.url.pathname.split("/")[1].slice(1)}` : ""}</title>
+	<title>Mexify Modmail {$page.url?.pathname.split("/")[1] ? `| ${$page.url.pathname.split("/")[1][0].toUpperCase()}${$page.url.pathname.split("/")[1].slice(1)}` : ""}</title>
 </svelte:head>
 
 {#if mounted}

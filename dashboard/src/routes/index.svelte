@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>FyFu Modmail</title>
+	<title>Mexify Modmail</title>
 </svelte:head>
 
 Redirecting...
