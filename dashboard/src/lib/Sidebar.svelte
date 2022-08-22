@@ -30,7 +30,7 @@
 
 <nav>
  <div class="brand">
-  <span class="name">fyfu modmail</span>
+  <span class="name">fuxelbau modmail</span>
  </div>
  <div class="items">
   {#each items as item}
