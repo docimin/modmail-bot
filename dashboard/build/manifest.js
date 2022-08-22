@@ -5,15 +5,15 @@ export const manifest = {
 	_: {
 		entry: {"file":"_app/immutable/start-08a856c0.js","imports":["_app/immutable/start-08a856c0.js","_app/immutable/chunks/index-dd217174.js","_app/immutable/chunks/index-32c9bc07.js","_app/immutable/chunks/preload-helper-c28b9807.js","_app/immutable/chunks/singletons-eca981c1.js"],"stylesheets":[]},
 		nodes: [
-			() => import('./nodes/0.js'),
-			() => import('./nodes/1.js'),
-			() => import('./nodes/3.js'),
-			() => import('./nodes/2.js'),
-			() => import('./nodes/4.js'),
-			() => import('./nodes/5.js'),
-			() => import('./nodes/6.js'),
-			() => import('./nodes/8.js'),
-			() => import('./nodes/7.js')
+			() => import('./server/nodes/0.js'),
+			() => import('./server/nodes/1.js'),
+			() => import('./server/nodes/3.js'),
+			() => import('./server/nodes/2.js'),
+			() => import('./server/nodes/4.js'),
+			() => import('./server/nodes/5.js'),
+			() => import('./server/nodes/6.js'),
+			() => import('./server/nodes/8.js'),
+			() => import('./server/nodes/7.js')
 		],
 		routes: [
 			{
@@ -88,7 +88,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/users\/?$/,
 				names: [],
 				types: [],
-				load: () => import('./entries/endpoints/api/v1/users.js')
+				load: () => import('./server/entries/endpoints/api/v1/users.js')
 			},
 			{
 				type: 'endpoint',
@@ -96,7 +96,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/tickets\/?$/,
 				names: [],
 				types: [],
-				load: () => import('./entries/endpoints/api/v1/tickets.js')
+				load: () => import('./server/entries/endpoints/api/v1/tickets.js')
 			},
 			{
 				type: 'endpoint',
@@ -104,7 +104,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/snippets\/?$/,
 				names: [],
 				types: [],
-				load: () => import('./entries/endpoints/api/v1/snippets.js')
+				load: () => import('./server/entries/endpoints/api/v1/snippets.js')
 			},
 			{
 				type: 'endpoint',
@@ -112,7 +112,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/roles\/?$/,
 				names: [],
 				types: [],
-				load: () => import('./entries/endpoints/api/v1/roles.js')
+				load: () => import('./server/entries/endpoints/api/v1/roles.js')
 			},
 			{
 				type: 'endpoint',
@@ -120,7 +120,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/logout\/?$/,
 				names: [],
 				types: [],
-				load: () => import('./entries/endpoints/api/v1/logout.js')
+				load: () => import('./server/entries/endpoints/api/v1/logout.js')
 			},
 			{
 				type: 'endpoint',
@@ -128,7 +128,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/login\/?$/,
 				names: [],
 				types: [],
-				load: () => import('./entries/endpoints/api/v1/login.js')
+				load: () => import('./server/entries/endpoints/api/v1/login.js')
 			},
 			{
 				type: 'endpoint',
@@ -136,7 +136,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/blocked\/?$/,
 				names: [],
 				types: [],
-				load: () => import('./entries/endpoints/api/v1/blocked.js')
+				load: () => import('./server/entries/endpoints/api/v1/blocked.js')
 			},
 			{
 				type: 'endpoint',
@@ -144,7 +144,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/authorized\/?$/,
 				names: [],
 				types: [],
-				load: () => import('./entries/endpoints/api/v1/authorized.js')
+				load: () => import('./server/entries/endpoints/api/v1/authorized.js')
 			},
 			{
 				type: 'endpoint',
@@ -152,7 +152,7 @@ export const manifest = {
 				pattern: /^\/api\/v1\/convert-snowflake-([^/]+?)\/?$/,
 				names: ["snowflake"],
 				types: [null],
-				load: () => import('./entries/endpoints/api/v1/convert-snowflake-_snowflake_.js')
+				load: () => import('./server/entries/endpoints/api/v1/convert-snowflake-_snowflake_.js')
 			},
 			{
 				type: 'page',
