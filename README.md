@@ -6,7 +6,6 @@ To setup the bot please fill in the `.env` file.
 ## Edit messages
 All messages are saved in `./bot/assets/messages` and can be edited at any time.
 
-Um Nachrichten zu visualiseren kann ein beliebiger Discord Nachrichten Editor verwendet werden, wie bspw. der im Dashboard von [Sapphire](https://dashboard.sapph.xyz).
 To visualize messages, you can use any Discord message editor like the editor in [Sapphire](https://dashboard.sapph.xyz).
 
 ## Slash Command Permissions
