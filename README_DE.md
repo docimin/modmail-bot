@@ -21,10 +21,12 @@ Der `/support` Command ist immer für alle User zugänglich.
 ### Bot
 Wenn der Code in `./bot` editiert wurde, muss er neu gestartet werden.
 
-### Website
+### Dashboard
 Wenn der Code in `./dashboard/src` editiert wurde, muss folgendes in `./dashboard` ausgeführt werden:
 
 ```
 npm i
 npm run build
 ```
+
+Das Dashboard muss danach neugestartet werden.
