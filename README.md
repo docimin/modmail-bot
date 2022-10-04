@@ -15,10 +15,10 @@ Additionally users can be add in the "User Management" tab in the Dashboard. The
 
 The command `/support` is open for all users.
 
-## Code editieren
+## Code editing
 
 ### Bot
-When the code in `./bot` has been edited, the bot need sto be restarted.
+When the code in `./bot` has been edited, the bot needs to be restarted.
 
 ### Dashboard
 When the code in `./dashboard/src` has been edited, the following needs to be run in the `./dashboard` folder:
