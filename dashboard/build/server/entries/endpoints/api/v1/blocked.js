@@ -1,4 +1,4 @@
-import { d as db } from "../../../../_app/immutable/chunks/db-085607c7.js";
+import { d as db } from "../../../../_app/immutable/chunks/db-90aa6d88.js";
 import "mysql2";
 async function GET(event) {
   if (!event.locals.userData)
@@ -24,7 +24,7 @@ async function GET(event) {
     };
   }
 }
-async function DEL(event) {
+async function DELETE(event) {
   if (!event.locals.userData)
     return {
       status: 401,
@@ -48,6 +48,6 @@ async function DEL(event) {
   }
 }
 export {
-  DEL,
+  DELETE,
   GET
 };

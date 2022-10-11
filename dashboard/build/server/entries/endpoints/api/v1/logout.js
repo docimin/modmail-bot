@@ -1,4 +1,4 @@
-import { d as db } from "../../../../_app/immutable/chunks/db-085607c7.js";
+import { d as db } from "../../../../_app/immutable/chunks/db-90aa6d88.js";
 import cookie from "cookie";
 import "mysql2";
 async function GET(event) {

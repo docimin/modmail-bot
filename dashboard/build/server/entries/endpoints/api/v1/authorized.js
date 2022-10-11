@@ -1,4 +1,4 @@
-import { d as db } from "../../../../_app/immutable/chunks/db-085607c7.js";
+import { d as db } from "../../../../_app/immutable/chunks/db-90aa6d88.js";
 import "mysql2";
 async function GET(event) {
   var _a, _b, _c, _d, _e, _f, _g;
@@ -63,7 +63,7 @@ async function PUT(event) {
     }
   };
 }
-async function DEL(event) {
+async function DELETE(event) {
   var _a;
   if (!((_a = event.locals.userData) == null ? void 0 : _a.manager))
     return {
@@ -97,7 +97,7 @@ async function DEL(event) {
   };
 }
 export {
-  DEL,
+  DELETE,
   GET,
   PUT
 };

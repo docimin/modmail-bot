@@ -73,7 +73,7 @@ export async function PUT(event) {
 
 }
 
-export async function DEL(event) {
+export async function DELETE(event) {
 
  if (!event.locals.userData?.manager)
   return {
