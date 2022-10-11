@@ -63,7 +63,7 @@ async function PUT(event) {
     }
   };
 }
-async function DEL(event) {
+async function DELETE(event) {
   var _a;
   if (!((_a = event.locals.userData) == null ? void 0 : _a.manager))
     return {
@@ -97,7 +97,7 @@ async function DEL(event) {
   };
 }
 export {
-  DEL,
+  DELETE,
   GET,
   PUT
 };
