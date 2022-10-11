@@ -1,7 +1,7 @@
-import './shims-ff515308.js';
+import './shims-7fd472a1.js';
 import 'fs';
 import 'path';
-export { h as handler } from './handler-393b2283.js';
+export { h as handler } from './handler-aee37ee5.js';
 import 'url';
 import './server/index.js';
 import './manifest.js';
