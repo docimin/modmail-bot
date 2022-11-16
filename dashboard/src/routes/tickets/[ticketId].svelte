@@ -17,12 +17,16 @@
  import { goto } from "$app/navigation";
  import Tile from "$lib/Tile.svelte";
  import DiscordMessage from "$lib/DiscordMessage.svelte";
+ import Toggle from "$lib/Toggle.svelte";
  import dayjs from "dayjs";
  import dayjs_relativeTime from "dayjs/plugin/relativeTime.js";
  import dayjs_locale_de from "dayjs/locale/de.js";
  dayjs.extend(dayjs_relativeTime);
  dayjs.locale("de");
+
  let ticket, users = new Map();
+
+ let showInternalMsgs = false;
 
  onMount(async () => {
 
@@ -144,11 +148,17 @@
     style="height: auto; width: 100%;"
    >
     <div class="messages">
-     {#each [...(ticket.comment ? [{ content: ticket.comment, authorId: ticket.userId, timestamp: parseInt(ticket.createdTimestamp) }] : []), ...ticket.messages] as message}
+     {#each [...(ticket.comment ? [{ content: ticket.comment, authorId: ticket.userId, timestamp: parseInt(ticket.createdTimestamp) }] : []), ...ticket.messages.filter(m => m.type === "INTERNAL" ? showInternalMsgs : true)] as message}
       <div class="message">
        <DiscordMessage json={{...message, dmId: ticket.dmChannelId}} user={users.get(message.authorId) ? {...users.get(message.authorId) } : { id: message.authorId, username: message.authorId, avatarURL: "https://discord.com/assets/1f0bfc0865d324c2587920a7d80c609b.png" }} />
       </div>
      {/each}
+    </div>
+    <div class="show-internal-msgs">
+     Interne Nachrichten anzeigen
+     <Toggle toggled={showInternalMsgs} onToggle={() => {
+      showInternalMsgs = !showInternalMsgs;
+     }} />
     </div>
    </Tile>
   </div>
@@ -342,5 +352,13 @@
   text-overflow: ellipsis;
   min-height: 25px;
   font-size: .9em;
+ }
+
+ div.show-internal-msgs {
+  display: flex;
+  column-gap: 10px;
+  row-gap: 10px;
+  margin-top: 15px;
+  opacity: .9;
  }
 </style>

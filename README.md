@@ -1,31 +1,30 @@
-# Fyfu ModMail
+# fyfu-modmail
+Fyfu ModMail
 
-## Setup
-To setup the bot please fill in the `.env` file.
+## Einrichten
+Zum Einrichten muss die Datei `.env` ausgefüllt werden.
 
-## Edit messages
-All messages are saved in `./bot/assets/messages` and can be edited at any time.
+## Nachrichten editieren
+Alle Nachrichten sind in `./bot/assets/messages` gespeichert und können beliebig editiert werden.
 
-To visualize messages, you can use any Discord message editor like the editor in [Sapphire](https://dashboard.sapph.xyz).
+Um Nachrichten zu visualiseren kann ein beliebiger Discord Nachrichten Editor verwendet werden, wie bspw. der im Dashboard von [Sapphire](https://dashboard.sapph.xyz).
 
 ## Slash Command Permissions
-Every user in the `.env` file will automatically have permissions for slash commands (and oauth).
+Alle User, die als Manager in der `.env` eingetragen sind, haben automatisch Rechte, alle Slash Commands auszuführen.
 
-Additionally users can be add in the "User Management" tab in the Dashboard. They will get permission to login **after restarting**, even permissions that use Slash Commands.
+Zusätzlich können User und Rollen im "User Management" Tab hinzugefügt werden. Diese bekommen **nach einem Neustart** auch Rechte, die Slash Commands ausführen zu können.
 
-The command `/support` is open for all users.
+Der `/support` Command ist immer für alle User zugänglich.
 
-## Code editing
+## Code editieren
 
 ### Bot
-When the code in `./bot` has been edited, the bot needs to be restarted.
+Wenn der Code in `./bot` editiert wurde, muss er neu gestartet werden.
 
-### Dashboard
-When the code in `./dashboard/src` has been edited, the following needs to be run in the `./dashboard` folder:
+### Website
+Wenn der Code in `./dashboard/src` editiert wurde, muss folgendes in `./dashboard` ausgeführt werden:
 
 ```
 npm i
 npm run build
 ```
-
-And restart the dashboard after.
