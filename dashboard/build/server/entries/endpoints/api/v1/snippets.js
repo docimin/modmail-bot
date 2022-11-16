@@ -24,7 +24,7 @@ async function GET(event) {
     };
   }
 }
-async function DEL(event) {
+async function DELETE(event) {
   if (!event.locals.userData)
     return {
       status: 401,
@@ -94,7 +94,7 @@ async function PUT(event) {
   }
 }
 export {
-  DEL,
+  DELETE,
   GET,
   PATCH,
   PUT

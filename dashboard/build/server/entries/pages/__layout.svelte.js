@@ -1,5 +1,5 @@
 import { g as getContext, c as create_ssr_component, a as subscribe, e as escape, v as validate_component } from "../../_app/immutable/chunks/index-80a2f878.js";
-import { R as Rolling } from "../../_app/immutable/chunks/Rolling-ee5dd404.js";
+import { R as Rolling } from "../../_app/immutable/chunks/Rolling-eaf58c22.js";
 import { p as popupData, u as updateSite } from "../../_app/immutable/chunks/Popup-07dce18e.js";
 /* empty css                                                                          */const app = "";
 const getStores = () => {
@@ -55,7 +55,7 @@ const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_page();
   $$unsubscribe_popupData();
   $$unsubscribe_updateSite();
-  return `${$$result.head += `${$$result.title = `<title>Mexify Modmail ${escape(((_a = $page.url) == null ? void 0 : _a.pathname.split("/")[1]) ? `| ${$page.url.pathname.split("/")[1][0].toUpperCase()}${$page.url.pathname.split("/")[1].slice(1)}` : "")}</title>`, ""}`, ""}
+  return `${$$result.head += `${$$result.title = `<title>FyFu Modmail ${escape(((_a = $page.url) == null ? void 0 : _a.pathname.split("/")[1]) ? `| ${$page.url.pathname.split("/")[1][0].toUpperCase()}${$page.url.pathname.split("/")[1].slice(1)}` : "")}</title>`, ""}`, ""}
 
 ${`<div class="${"loading svelte-1p50pmi"}">${validate_component(Rolling, "Loading_Rolling").$$render($$result, { style: "transform: scale(.2);" }, {}, {})}</div>`}`;
 });
