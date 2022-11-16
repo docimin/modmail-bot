@@ -1,6 +1,6 @@
-import { p as parse$1, e as env, h as handler } from './handler-393b2283.js';
+import { p as parse$1, e as env, h as handler } from './handler-aee37ee5.js';
 import http from 'http';
-import './shims-ff515308.js';
+import './shims-7fd472a1.js';
 import 'assert';
 import 'net';
 import 'stream';
@@ -204,7 +204,7 @@ function polka (opts) {
 
 const path = env('SOCKET_PATH', false);
 const host = env('HOST', '0.0.0.0');
-const port = env('PORT', !path && '3000');
+const port = env('PORT', !path && '3003');
 
 const server = polka().use(handler);
 

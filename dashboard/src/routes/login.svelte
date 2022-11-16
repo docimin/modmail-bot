@@ -21,11 +21,11 @@
 </script>
 
 <svelte:head>
-	<title>FyFu Modmail | Login</title>
+	<title>Mexify Modmail | Login</title>
 </svelte:head>
 
 <div class="container">
- <h1>fyfu modmail</h1>
+ <h1>mexify modmail</h1>
  <DefaultButton
   style="border-radius: 100px; padding: 0; width: calc(100% - 10px); max-width: 200px; height: 40px"
   disabled={clickedLogin}
