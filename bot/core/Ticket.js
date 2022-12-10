@@ -62,7 +62,13 @@ class Ticket {
   this.author = await this.guild.members.fetch(this.authorId).catch(() => null);
   this.user = this.member?.user;
 
-  if (!this.user) throw new Error("User not found");
+  // Close ticket instantly when user left
+  if (!this.user) {
+   //throw new Error("User not found");
+   console.log("Ticket from user", this.userId, "closed because they left the server.");
+   this.close();
+   return;
+  }
 
   // Check DM availability
   if (this.dmChannelId) {
@@ -142,6 +148,8 @@ class Ticket {
   */
  async addMessage(type = "DM", message, anonymous = false) {
 
+  console.log("Adding message to ticket", this.ticketId, "of type", type);
+
   const Core = require("core");
 
   let messageId        = message.id,
@@ -157,7 +165,7 @@ class Ticket {
 
    let notifyUserIds = JSON.parse((await new Promise((resolve) => Core.database.query("SELECT notifyUserIds FROM tickets WHERE id = ?", [this.ticketId], (err, result) => resolve(result?.[0]?.notifyUserIds))).catch(() => null)) || "[]");
    if (notifyUserIds.length > 0)
-    this.channel.send(`Neue Ticketnachricht von ${this.user.tag} | ${notifyUserIds.map(uId => `<@${uId}>`).join(" ")}`).then((m) => m.delete());
+    this.channel.send(`Neue Ticketnachricht von ${this.user?.tag || this.userId} | ${notifyUserIds.map(uId => `<@${uId}>`).join(" ")}`).then((m) => m.delete());
 
   } else if (type === "GUILD") {
 
@@ -289,6 +297,8 @@ class Ticket {
 
   Core.database.query(`UPDATE tickets SET messages=? WHERE id = ?`, [JSON.stringify([...this.messages.values()]), this.ticketId]);
 
+  console.log("Messages for ticket saved.");
+
  }
 
  async notify(userId) {
@@ -318,22 +328,23 @@ class Ticket {
   Core.tickets.cache.delete(this.userId);
 
   // Send closed message
-  interaction[interaction.replied ? "followUp" : "reply"](Core.messages.get("ticketclosed", {
-   ticketId: this.ticketId.id,
-   authorId: interaction.member.id,
-   host: process.env.DASHBOARD_HOST
-  }));
+  if (interaction)
+   interaction[interaction.replied ? "followUp" : "reply"](Core.messages.get("ticketclosed", {
+    ticketId: this.ticketId.id,
+    authorId: interaction.member.id,
+    host: process.env.DASHBOARD_HOST
+   }));
 
-  Core.database.query(`UPDATE tickets SET closedTimestamp = ?, closedAuthorId = ? WHERE id = ?`, [Date.now(), interaction.member.id, this.ticketId]);
+  Core.database.query(`UPDATE tickets SET closedTimestamp = ?, closedAuthorId = ? WHERE id = ?`, [Date.now(), interaction?.member?.id || Core.data.discordClient.user.id, this.ticketId]);
 
   let logChannel = Core.data.discordClient.channels.resolve(Core.data.config.channelIds.ticketsLog);
 
   logChannel?.send?.(Core.messages.get("logticketclosed", {
    userid: this.userId,
-   usertag: this.user.tag,
-   authorid: interaction.member.id,
-   authortag: interaction.member.user.tag,
-   authoravatarurl: interaction.member.user.displayAvatarURL({ dynamic: true }),
+   usertag: this.user?.tag || this.userId,
+   authorid: interaction?.member?.id || Core.data.discordClient.user.id,
+   authortag: interaction?.member?.user?.tag || Core.data.discordClient.user.tag,
+   authoravatarurl: interaction?.member?.user?.displayAvatarURL?.({ dynamic: true }) || Core.data.discordClient.user.displayAvatarURL({ dynamic: true }),
    ticketid: this.ticketId,
    host: process.env.DASHBOARD_HOST,
    reason: this.reason,
