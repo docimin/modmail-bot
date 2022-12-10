@@ -3,7 +3,11 @@ export const manifest = {
 	assets: new Set(["assets/icons/arrow-right.svg","assets/icons/blocked.svg","assets/icons/discord_id.svg","assets/icons/discord_link.svg","assets/icons/logout.svg","assets/icons/pen.svg","assets/icons/plus.svg","assets/icons/quote.svg","assets/icons/search-thin.svg","assets/icons/search.svg","assets/icons/tickets.svg","assets/icons/user-settings.svg","assets/icons/x.svg"]),
 	mimeTypes: {".svg":"image/svg+xml"},
 	_: {
+<<<<<<< HEAD
 		entry: {"file":"_app/immutable/start-0665d124.js","imports":["_app/immutable/start-0665d124.js","_app/immutable/chunks/index-dd217174.js","_app/immutable/chunks/index-32c9bc07.js","_app/immutable/chunks/preload-helper-c28b9807.js","_app/immutable/chunks/singletons-eca981c1.js"],"stylesheets":[]},
+=======
+		entry: {"file":"_app/immutable/start-b0ce1f46.js","imports":["_app/immutable/start-b0ce1f46.js","_app/immutable/chunks/index-dd217174.js","_app/immutable/chunks/index-32c9bc07.js","_app/immutable/chunks/preload-helper-c28b9807.js","_app/immutable/chunks/singletons-eca981c1.js"],"stylesheets":[]},
+>>>>>>> cfe3d57d7ff2894a22f422988fe520aad1b8482c
 		nodes: [
 			() => import('./nodes/0.js'),
 			() => import('./nodes/1.js'),
