@@ -73,7 +73,7 @@
 </script>
 
 {#if json}
- <div class="container" on:click={(e) => { e.path.find(t => t?.classList?.contains?.("d-spoiler") && !t?.classList?.contains?.("d-spoiler-visible"))?.classList.add("d-spoiler-visible");}}>
+ <div class="container type-{json.type}" on:click={(e) => { e.path.find(t => t?.classList?.contains?.("d-spoiler") && !t?.classList?.contains?.("d-spoiler-visible"))?.classList.add("d-spoiler-visible");}}>
   <div class="message">
    <div class="user-profile">
     <img src="{user.avatarURL}" alt="avatar" on:error={(t) => t.src = "https://discord.com/assets/1f0bfc0865d324c2587920a7d80c609b.png"}>
@@ -82,7 +82,7 @@
     <div class="user-name">
      <div class="name">{user.username}</div>
      <div class="badges">
-      {#if json.type === "GUILD"}
+      {#if json.type === "GUILD" || json.type === "INTERNAL"}
        <div class="badge" style="background: var(--clr-400);">TEAM</div>
       {/if}
       {#if json.anonymous}
@@ -148,6 +148,12 @@
   letter-spacing: -0.03em;
   font-weight: 300;
   user-select: text;
+ }
+
+ div.container.type-INTERNAL {
+  background: #36393F;
+  background: linear-gradient(90deg, var(--clr-450-8) 0%, #36393F 100%);
+  border-left: 3px solid var(--clr-450);
  }
 
  div.message {

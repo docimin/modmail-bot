@@ -14,7 +14,8 @@ dClient.once("ready", async () => {
   "presence",
   "commands",
   "dmhandler",
-  "componenthandler"
+  "componenthandler",
+  "internalmsghandler"
  ]);
 
 });
