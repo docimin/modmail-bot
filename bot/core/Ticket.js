@@ -64,10 +64,9 @@ class Ticket {
 
   // Close ticket instantly when user left
   if (!this.user) {
-   //throw new Error("User not found");
    console.log("Ticket from user", this.userId, "closed because they left the server.");
-   this.close();
-   return;
+   await this.close();
+   throw new Error("User not found");
   }
 
   // Check DM availability

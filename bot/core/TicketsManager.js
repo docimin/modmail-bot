@@ -30,9 +30,9 @@ class TicketsManager {
 
       ticket = new Ticket(ticket);
 
-      await ticket._init();
-
-      TicketsManager.cache.set(ticket.userId, ticket);
+      await ticket._init().then(() => {
+       TicketsManager.cache.set(ticket.userId, ticket);
+      }).catch(() => null);
 
      }
 
