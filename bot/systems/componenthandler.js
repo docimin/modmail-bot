@@ -238,7 +238,7 @@ exports.run = async () => {
    dClient.api.interactions(interaction.id, interaction.token).callback.post({
     data: {
      type: 9,
-     data: Core.tickets.getModalData({ type: "create", comment: message.content || "" })
+     data: Core.tickets.getModalData({ type: "create", comment: message?.content || "" })
     }
    });
 
