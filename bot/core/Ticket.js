@@ -147,7 +147,9 @@ class Ticket {
   */
  async addMessage(type = "DM", message, anonymous = false) {
 
-  console.log("Adding message to ticket", this.ticketId, "of type", type);
+  /** Logs for debugging
+  *  console.log("Adding message to ticket", this.ticketId, "of type", type);
+  */
 
   const Core = require("core");
 
@@ -296,8 +298,9 @@ class Ticket {
 
   Core.database.query(`UPDATE tickets SET messages=? WHERE id = ?`, [JSON.stringify([...this.messages.values()]), this.ticketId]);
 
-  console.log("Messages for ticket saved.");
-
+  /** Logs for debugging
+  * console.log("Messages for ticket saved.");
+  */
  }
 
  async notify(userId) {
