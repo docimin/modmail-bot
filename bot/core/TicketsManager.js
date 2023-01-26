@@ -112,7 +112,7 @@ class TicketsManager {
       style: 2,
       min_length: 1,
       max_length: 1000,
-      value: comment?.slice?.(0, 990) || "",
+      value: comment?.slice?.(0, 990) || null,
       placeholder: "Z. B. \"Der Nutzer hat in #laberecke beleidigt\" oder \"Wie erhalte ich die Sub Rolle?\"",
       required: true
      }], }, { type: 1, components: [{
