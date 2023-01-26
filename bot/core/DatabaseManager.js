@@ -8,7 +8,6 @@ module.exports = mysql.createPool({
  database : process.env.DATABASE_DATABASE,
  multipleStatements: true,
  // keepAlive to try to prevent the connection from being closed by the database
- keepAlive: true,
  keepAliveInitialDelay: 28799 // 1s less than 8 hours | default timeout when no activity is detected is 8 hours
 });
 
