@@ -332,7 +332,7 @@ class Ticket {
   // Send closed message
   if (interaction)
    interaction[interaction.replied ? "followUp" : "reply"](Core.messages.get("ticketclosed", {
-    ticketId: this.ticketId.id,
+    ticketId: this.ticketId,
     authorId: interaction.member.id,
     host: process.env.DASHBOARD_HOST
    }));
