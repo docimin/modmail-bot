@@ -61,7 +61,7 @@ const Snippets = create_ssr_component(($$result, $$props, $$bindings, slots) => 
       <div class="${"column last svelte-1b09m5s"}" style="${"margin-left: auto; min-width: 30px;"}"><button class="${"svelte-1b09m5s"}"><img src="${"/assets/icons/pen.svg"}" alt="${"edit"}" class="${"svelte-1b09m5s"}">
        </button></div>
      </button>`;
-  }) : `<div class="${"loading svelte-1b09m5s"}">Keine Snippets gefunden
+  }) : `<div class="${"loading svelte-1b09m5s"}">No snippets found
      </div>`}
     ${validate_component(InfiniteScroll, "InfiniteScroll").$$render($$result, {}, {}, {})}` : `<div class="${"loading svelte-1b09m5s"}">${validate_component(Rolling, "Loading_Rolling").$$render($$result, { style: "transform: scale(.2);" }, {}, {})}</div>`}</div>
 </div>`;
