@@ -1,10 +1,10 @@
 {
  "type": "success",
- "info": "Wird beim Ausführen von /unblock gesendet.",
+ "info": "Sent when /unblock is executed.",
  "data": {
   "embeds": [
    {
-    "description": "Blockierung von **${user}** aufgehoben."
+    "description": "Unblocked **${user}**."
    }
   ]
  }

@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>FyFu Modmail</title>
+	<title>Reo's Modmail</title>
 </svelte:head>
 
 <script>

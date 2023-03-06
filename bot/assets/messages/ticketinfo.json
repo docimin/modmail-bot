@@ -1,15 +1,15 @@
 {
  "type": "default",
- "info": "Wird in einen neuen Ticketchannel gesendet",
+ "info": "Sent to the new ticket channel",
  "data": {
-  "content": "<@&347881078004121611>",
+  "content": "<@&1082382656899137647>",
   "embeds": [
    {
     "author": {
      "name": "${usertag}",
      "icon_url": "${useravatarurl}"
     },
-    "description": "<@${userid}> wurde <t:${usercreatedtimestamp}:R> erstellt und ist <t:${memberjoinedtimestamp}:R> dem Server beigetreten.",
+    "description": "<@${userid}> was created <t:${usercreatedtimestamp}:R> and joined <t:${memberjoinedtimestamp}:R> the server.",
     "fields": [
      {
       "name": "Nickname",
@@ -17,7 +17,7 @@
       "inline": true
      },
      {
-      "name": "Rollen",
+      "name": "Roles",
       "value": "${memberroles}",
       "inline": true
      },
@@ -26,12 +26,12 @@
       "value": "\u200B"
      },
      {
-      "name": "Anliegen",
+      "name": "Reason",
       "value": "${reason}",
       "inline": true
      },
      {
-      "name": "Kommentar",
+      "name": "Comment",
       "value": "${comment}",
       "inline": true
      },
@@ -45,7 +45,7 @@
       "value": "\u200B"
      },
      {
-      "name": "Angehängte User",
+      "name": "Attached users",
       "value": "${attachedusers}"
      }
     ],
@@ -61,11 +61,11 @@
     "components": [
      {
       "type": 3,
-      "placeholder": "Schnellaktionen",
+      "placeholder": "Quick actions",
       "custom_id": "quickactions",
       "options": [
        {
-        "label": "Ticket schließen",
+        "label": "Close ticket",
         "value": "close-ticket",
         "emoji": {
          "name": "check_green",
@@ -73,14 +73,14 @@
         }
        },
        {
-        "label": "Snippet senden",
+        "label": "Send snippet",
         "value": "send-snippet",
         "emoji": {
          "name": "📋"
         }
        },
        {
-        "label": "User blockieren",
+        "label": "Block user",
         "value": "block-user",
         "emoji": {
          "name": "🚫"

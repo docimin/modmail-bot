@@ -1,11 +1,11 @@
 {
  "type": "success",
- "info": "Wird gesendet, wenn /report geused wird und das Ticket erfolgreich erstellt wurde",
+ "info": "Sent when /report is used and the ticket is created successfully.",
  "data": {
   "embeds": [
    {
-    "title": "${emoji} Ticket erstellt",
-    "description": "Dein Ticket wurde erstellt."
+    "title": "${emoji} Ticket created",
+    "description": "Your ticket has been created."
    }
   ],
   "components": [
@@ -15,7 +15,7 @@
      {
       "type": 2,
       "style": 5,
-      "label": "Klicke hier, um zum Ticket zu gelangen",
+      "label": "Click here to go to the ticket",
       "url": "${dmmessageurl}"
      }
     ]

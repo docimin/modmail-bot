@@ -1,11 +1,11 @@
 {
  "type": "default",
- "info": "Wird gesendet, wenn /report ausgeführt wurde und wird zu ticketcreated / ticketnotcreated editiert",
+ "info": "Sent when /report was executed and will be edited to ticketcreated / ticketnotcreated",
  "data": {
   "embeds": [
    {
-    "title": "Ticket wird erstellt...",
-    "description": "Bitte habe einen Moment Geduld, während dein Ticket erstellt wird."
+    "title": "Ticket is being created...",
+    "description": "Please be patient for a moment while your ticket is created."
    }
   ]
  }

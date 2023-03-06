@@ -1,11 +1,11 @@
 {
  "type": "default",
- "info": "Wird per DM gesendet, wenn ein User den Bot anschreibt, ohne ein offenes Ticket zu haben",
+ "info": "Sent via DM when a user writes to the bot without having an open ticket",
  "data": {
   "embeds": [
    {
-    "title": "Supportticket erstellen",
-    "description": "Klicke unten auf den Knopf, um ein Ticket zu erstellen und das Team zu kontaktieren."
+    "title": "Create support ticket",
+    "description": "Click the button below to create a support ticket"
    }
   ],
   "components": [
@@ -15,7 +15,7 @@
      {
       "type": 2,
       "style": 1,
-      "label": "Ticket erstellen",
+      "label": "Create",
       "custom_id": "createticket-${commentmessageid}"
      }
     ]

@@ -1,10 +1,10 @@
 {
  "type": "error",
- "info": "Wird beim Ausführen von /block gesendet.",
+ "info": "Sent when /block is executed.",
  "data": {
   "embeds": [
    {
-    "description": "User **${user}** blockiert."
+    "description": "User **${user}** blocked."
    }
   ]
  }

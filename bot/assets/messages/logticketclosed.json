@@ -1,6 +1,6 @@
 {
  "type": "error",
- "info": "Wird in den Log Channel gesendet, wenn ein Ticket geschlossen wird",
+ "info": "Sent to the Log Channel when a ticket is closed",
  "data": {
   "embeds": [
    {
@@ -10,7 +10,7 @@
     },
     "description": "${reason}: ${commentpreview}",
     "footer": {
-     "text": "Geschlossen von ${authortag} (${authorid})",
+     "text": "Closed by ${authortag} (${authorid})",
      "icon_url": "${authoravatarurl}"
     },
     "timestamp": "${nowtimestamp}"

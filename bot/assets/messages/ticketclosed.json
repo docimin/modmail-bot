@@ -1,10 +1,10 @@
 {
  "type": "error",
- "info": "Wird in einen Ticketchannel gesendet, wenn /close ausgeführt wurde",
+ "info": "Sent to a ticket channel when /close was executed",
  "data": {
   "embeds": [
    {
-    "description": "**Ticket wurde von <@${authorId}> geschlossen.**"
+    "description": "**Ticket closed by <@${authorId}>.**"
    }
   ],
   "components": [
@@ -15,7 +15,7 @@
       "type": 2,
       "style": 5,
       "url": "${host}/tickets/${ticketId}",
-      "label": "Ticket anschauen"
+      "label": "View ticket"
      }
     ]
    }

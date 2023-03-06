@@ -1,10 +1,10 @@
 {
  "type": "success",
- "info": "Wird gesendet, wenn mit /snippet ein Snippet bearbeitet oder erstellt wird",
+ "info": "Sent when a snippet is edited or created with /snippet",
  "data": {
   "embeds": [
    {
-    "title": "${emoji} Snippet `${name}` gesetzt",
+    "title": "${emoji} Snippet `${name}` set",
     "description": "${content}"
    }
   ]
