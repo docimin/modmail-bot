@@ -123,7 +123,7 @@
      </button>
     {:else}
      <div class="loading">
-      Keine Snippets gefunden
+      No snippets found
      </div>
     {/each}
     <InfiniteScroll on:loadMore={() => loadMore()} />

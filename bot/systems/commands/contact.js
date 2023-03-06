@@ -4,18 +4,18 @@ const Core    = require("core"),
 
 exports.data = {
  name: "contact",
- description: "Ticket für einen User erstellen",
+ description: "Create a ticket for a user",
  options: [
   {
    type: "USER",
    name: "user",
-   description: "User, der kontaktiert werden soll",
+   description: "User that needs to be contacted",
    required: true
   },
   {
    type: "STRING",
    name: "reason",
-   description: "Grund"
+   description: "Reason"
   }
  ]
 }

@@ -4,12 +4,12 @@ const Core    = require("core"),
 
 exports.data = {
  name: "logs",
- description: "Alle erstellen Tickets eines Users ansehen",
+ description: "View all created tickets of a user",
  options: [
   {
    type: "USER",
    name: "user",
-   description: "User, dessen Tickets angezeigt werden sollen",
+   description: "User whose tickets are to be displayed",
    required: true
   }
  ]
@@ -38,7 +38,7 @@ exports.run = async (interaction) => {
    embeds: [
     {
      color: Core.data.config.messageTypes.default.color,
-     title: `\`${result.length}\` Tickets von ${user.tag}`,
+     title: `\`${result.length}\` Tickets from ${user.tag}`,
      description: result.map((r) => {
       return `<t:${Math.floor(r.createdTimestamp/1000)}:R> | [${r.reason}](${process.env.DASHBOARD_HOST}/tickets/${r.id})`
      }).join("\n")

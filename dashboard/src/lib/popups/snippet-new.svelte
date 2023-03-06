@@ -36,7 +36,7 @@
 </script>
 
 <div class="wrapper">
- <h2>Snippet erstellen</h2>
+ <h2>Create snippet</h2>
  <form on:submit|preventDefault={create}>
   <input class="new-name" type="text" bind:value={newName} placeholder="Name" maxlength=128>
  </form>
@@ -45,7 +45,7 @@
    {#if loading === "save"}
     <Loading_Rolling scaleFactor=0.12 />
    {:else}
-    Erstellen
+    Create
    {/if}
   </button>
   <button class="nein" on:click={async () => {
