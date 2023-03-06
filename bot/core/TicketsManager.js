@@ -113,7 +113,7 @@ class TicketsManager {
       min_length: 1,
       max_length: 1000,
       value: comment?.slice?.(0, 990) || null,
-      placeholder: "Ex: \"The user has offended in #general\" or \"How do I get the sub role?\"",
+      placeholder: "Ex: \"The user has offended in #general\"",
       required: true
      }], }, { type: 1, components: [{
       type: 4,
