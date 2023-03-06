@@ -9,7 +9,7 @@ const Tickets = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let ticketFilter = "";
   $$result.css.add(css);
   return `<div class="${"container svelte-1wcasmu"}"><div class="${"header svelte-1wcasmu"}"><span class="${"svelte-1wcasmu"}">Tickets</span>
-   <form class="${"search " + escape("disabled", true) + " svelte-1wcasmu"}"><input type="${"text"}" placeholder="${"ID / Grund / Nachricht"}" ${"disabled"} class="${"svelte-1wcasmu"}"${add_attribute("value", ticketFilter, 0)}>
+   <form class="${"search " + escape("disabled", true) + " svelte-1wcasmu"}"><input type="${"text"}" placeholder="${"ID / Reason / Message"}" ${"disabled"} class="${"svelte-1wcasmu"}"${add_attribute("value", ticketFilter, 0)}>
     <button type="${"submit"}" class="${"svelte-1wcasmu"}"><img src="${"/assets/icons/search-thin.svg"}" alt="${"search"}" class="${"svelte-1wcasmu"}"></button></form></div>
   <div class="${"tickets svelte-1wcasmu"}">${`<div class="${"loading svelte-1wcasmu"}">${validate_component(Rolling, "Loading_Rolling").$$render($$result, { style: "transform: scale(.2);" }, {}, {})}</div>`}</div>
 </div>`;

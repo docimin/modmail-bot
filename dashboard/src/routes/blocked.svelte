@@ -24,7 +24,7 @@
   },
   {
    id: "reason",
-   label: "Grund",
+   label: "Reason",
    get: (user) => user.reason,
    width: 40,
    minwidth: 100
@@ -134,7 +134,7 @@
 
 <div class="container">
   <div class="header">
-   <span>Blockierte User</span>
+   <span>Blocked users</span>
    <form class="search {blocked ? "" : "disabled"}" on:submit|preventDefault={() => search()}>
     <input type="text" placeholder="User ID" disabled={!blocked} bind:value={blockedFilter}>
     <button type="submit">

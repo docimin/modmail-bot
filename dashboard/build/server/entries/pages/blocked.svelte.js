@@ -34,7 +34,7 @@ const Blocked = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     },
     {
       id: "reason",
-      label: "Grund",
+      label: "Reason",
       get: (user) => user.reason,
       width: 40,
       minwidth: 100
@@ -83,7 +83,7 @@ const Blocked = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   }
   $$unsubscribe_updateSite();
   $$unsubscribe_popupData();
-  return `<div class="${"container svelte-1m23zr9"}"><div class="${"header svelte-1m23zr9"}"><span class="${"svelte-1m23zr9"}">Blockierte User</span>
+  return `<div class="${"container svelte-1m23zr9"}"><div class="${"header svelte-1m23zr9"}"><span class="${"svelte-1m23zr9"}">Blocked users</span>
    <form class="${"search " + escape(blocked ? "" : "disabled", true) + " svelte-1m23zr9"}"><input type="${"text"}" placeholder="${"User ID"}" ${!blocked ? "disabled" : ""} class="${"svelte-1m23zr9"}"${add_attribute("value", blockedFilter, 0)}>
     <button type="${"submit"}" class="${"svelte-1m23zr9"}"><img src="${"/assets/icons/search-thin.svg"}" alt="${"search"}" class="${"svelte-1m23zr9"}"></button></form></div>
   <div class="${"tickets svelte-1m23zr9"}">${blocked ? `<div class="${"ticket columns-template svelte-1m23zr9"}">${each(columns, (column) => {

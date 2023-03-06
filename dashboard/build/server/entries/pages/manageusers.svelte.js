@@ -107,7 +107,7 @@ const Manageusers = create_ssr_component(($$result, $$props, $$bindings, slots) 
 
 
 <div class="${"wrapper svelte-cs31s5"}"><div class="${"box svelte-cs31s5"}"><div class="${"text svelte-cs31s5"}"><h1>Autorisierte User</h1>
-   <p class="${"svelte-cs31s5"}">Die untenstehenden User sind berechtigt, Tickets, blockierte User und Snippets \xFCber das Dashboard anzusehen und zu bearbeiten.</p></div>
+   <p class="${"svelte-cs31s5"}">The users below are authorized to view and edit tickets, blocked users, and snippets via the dashboard.</p></div>
   <div class="${"users svelte-cs31s5"}">${`<div class="${"loading svelte-cs31s5"}">${validate_component(Rolling, "Loading_Rolling").$$render($$result, { style: "transform: scale(.2);" }, {}, {})}</div>`}</div></div>
 </div>`;
 });

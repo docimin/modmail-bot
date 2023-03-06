@@ -17,7 +17,7 @@
   },
   {
    path: "blocked",
-   name: "Blockierte User",
+   name: "Blocked users",
    icon: "blocked.svg"
   },
   {

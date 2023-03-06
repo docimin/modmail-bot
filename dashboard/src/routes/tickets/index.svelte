@@ -31,7 +31,7 @@
   },
   {
    id: "reason",
-   label: "Grund",
+   label: "Reason",
    get: (ticket) => ticket.reason || "/",
    width: 40,
    minwidth: 100
@@ -128,7 +128,7 @@
   <div class="header">
    <span>Tickets</span>
    <form class="search {tickets ? "" : "disabled"}" on:submit|preventDefault={() => search()}>
-    <input type="text" placeholder="ID / Grund / Nachricht" disabled={!tickets} bind:value={ticketFilter}>
+    <input type="text" placeholder="ID / Reason / Message" disabled={!tickets} bind:value={ticketFilter}>
     <button type="submit">
      <img src="/assets/icons/search-thin.svg" alt="search">
     </button>

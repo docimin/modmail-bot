@@ -95,7 +95,7 @@
    </Tile>
    {#if ticket.reason}
     <Tile
-     title="Grund"
+     title="Reason"
      style=""
     >
      <div class="created">
@@ -105,7 +105,7 @@
    {/if}
    {#if ticket.attachedUsers?.length > 0}
     <Tile
-     title="Anhang"
+     title="Attached Users"
      style=""
     >
      <div class="created scroll">
@@ -116,7 +116,7 @@
     </Tile>
    {/if}
    <Tile
-    title="Erstellt"
+    title="Created"
     style=""
    >
     <div class="created">
@@ -129,7 +129,7 @@
    </Tile>
    {#if ticket.closedTimestamp}
     <Tile
-     title="Geschlossen"
+     title="Closed"
      style=""
     >
      <div class="created">
@@ -144,7 +144,7 @@
   </div>
   <div class="tiles" style="margin-top: 20px; height: calc(100% - {tiles2OffsetTop || 0}px - 225px);" bind:this={tiles2Element}>
    <Tile
-    title="Nachrichten ({ticket.messages.length})"
+    title="Messages ({ticket.messages.length})"
     style="height: auto; width: 100%;"
    >
     <div class="messages">
@@ -155,7 +155,7 @@
      {/each}
     </div>
     <div class="show-internal-msgs">
-     Interne Nachrichten anzeigen
+     Show internal messages
      <Toggle toggled={showInternalMsgs} onToggle={() => {
       showInternalMsgs = !showInternalMsgs;
      }} />

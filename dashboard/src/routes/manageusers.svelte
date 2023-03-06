@@ -89,7 +89,7 @@
  <div class="box">
   <div class="text">
    <h1>Autorisierte User</h1>
-   <p>Die untenstehenden User sind berechtigt, Tickets, blockierte User und Snippets über das Dashboard anzusehen und zu bearbeiten.</p>
+   <p>The users below are authorized to view and edit tickets, blocked users, and snippets via the dashboard.</p>
   </div>
   <div class="users">
    {#if authedUserIds}
