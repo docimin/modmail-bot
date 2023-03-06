@@ -95,33 +95,33 @@ class TicketsManager {
    case "create":
     return {
      custom_id: "createticket",
-     title: "Supportticket öffnen",
+     title: "Create support ticket",
      components: [{ type: 1, components: [{
       type: 4,
       custom_id: "reason",
-      label: "Grund - Warum möchtest du ein Ticket öffnen?",
+      label: "Reason - Why do you want to open a ticket?",
       style: 1,
       min_length: 4,
       max_length: 100,
-      placeholder: "Z. B. \"Nutzer melden\" oder \"Ich habe eine Frage\"",
+      placeholder: "Example: \"Report user\" or \"I have a question\"",
       required: true
      }] }, { type: 1, components: [{
       type: 4,
       custom_id: "comment",
-      label: "Kommentar - Beschreibe dein Anliegen genauer",
+      label: "Comment - Describe your request in more detail",
       style: 2,
       min_length: 1,
       max_length: 1000,
       value: comment?.slice?.(0, 990) || null,
-      placeholder: "Z. B. \"Der Nutzer hat in #laberecke beleidigt\" oder \"Wie erhalte ich die Sub Rolle?\"",
+      placeholder: "Example: \"The user has offended in #general\" or \"How do I get the sub role?\"",
       required: true
      }], }, { type: 1, components: [{
       type: 4,
       custom_id: "userids",
-      label: "Nutzernamen / IDs (optional)",
+      label: "Username / IDs (optional)",
       style: 1,
       max_length: 500,
-      placeholder: "Z. B. \"Mexify Furdis\" oder \"143862050169421834 196977925998903297\"",
+      placeholder: "Example: \"Faye#0001\" or \"196742608846979072 176088246697197570\"",
       required: false
      }] }]
     };

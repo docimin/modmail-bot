@@ -29,7 +29,7 @@ exports.run = async () => {
         components: [
          {
           type: 2,
-          label: "Ja, Kommentar anhängen",
+          label: "Yes, leave a comment",
           custom_id: `dm-comment-yes-${interaction.values[0].replace("reason", "")}`, // reason index will be saved here
           style: 1,
           emoji: {
@@ -39,7 +39,7 @@ exports.run = async () => {
          },
          {
           type: 2,
-          label: "Nein, Kommentar weglassen",
+          label: "No, don't leave a comment",
           custom_id: `dm-comment-no-${interaction.values[0].replace("reason", "")}`,
           style: 1,
           emoji: {
@@ -54,14 +54,14 @@ exports.run = async () => {
         components: [
          {
           type: 2,
-          label: "Ticket erstellen",
+          label: "Create ticket",
           disabled: true,
           custom_id: "dm-create",
           style: 3
          },
          {
           type: 2,
-          label: "Abbrechen",
+          label: "Cancel",
           custom_id: "dm-cancel",
           style: 4
          }
@@ -88,13 +88,13 @@ exports.run = async () => {
         components: [
          {
           type: 2,
-          label: "Ticket erstellen",
+          label: "Create ticket",
           custom_id: `dm-create-${decision}-${interaction.customId.split("-")[3]}`, // dm-create-decision-reasonindex -> dm-create-true-0
           style: 3
          },
          {
           type: 2,
-          label: "Abbrechen",
+          label: "Cancel",
           custom_id: "dm-cancel",
           style: 4
          }
@@ -163,7 +163,7 @@ exports.run = async () => {
         components: [
          {
           type: 3,
-          placeholder: "Wähle ein Snippet zum Senden aus",
+          placeholder: "Select a snippet to send..",
           custom_id: "select-snippet",
           disabled: snippets.length === 0,
           options: snippets.length > 0 ? snippets.slice(0, 25).map(s => {
@@ -174,9 +174,9 @@ exports.run = async () => {
            }
           }) : [
            {
-            label: "Keine Snippets erstellt",
+            label: "No snippets found",
             value: "none",
-            description: "Erstelle ein Snippet mit /snippet.",
+            description: "Create a snippet using /snippet.",
             default: true
            }
           ]
@@ -220,13 +220,13 @@ exports.run = async () => {
    if (addMsgResult?.errCode === 409) {
 
     interaction.editReply({
-     content: `${Core.data.config.messageTypes.error.emoji} **Nachricht konnte nicht gesendet werden:**\n> ${addMsgResult.error}`
+     content: `${Core.data.config.messageTypes.error.emoji} **Message could not be sent:**\n> ${addMsgResult.error}`
     });
      
    } else {
  
     interaction.editReply({
-     content: `${Core.data.config.messageTypes.success.emoji} Nachricht gesendet.`
+     content: `${Core.data.config.messageTypes.success.emoji} Message sent.`
     });
 
    }
