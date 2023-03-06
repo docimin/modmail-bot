@@ -121,7 +121,7 @@ class TicketsManager {
       label: "Username / IDs (optional)",
       style: 1,
       max_length: 500,
-      placeholder: "Ex: \"Faye#0001\" or \"196742608846979072 176088246697197570\"",
+      placeholder: "Ex: \"Faye#0001\" or \"196742608846979072\"",
       required: false
      }] }]
     };
