@@ -103,17 +103,17 @@ class TicketsManager {
       style: 1,
       min_length: 4,
       max_length: 100,
-      placeholder: "Example: \"Report user\" or \"I have a question\"",
+      placeholder: "Ex: \"Report user\" or \"I have a question\"",
       required: true
      }] }, { type: 1, components: [{
       type: 4,
       custom_id: "comment",
-      label: "Comment - Describe your request in more detail",
+      label: "Comment - Describe your request",
       style: 2,
       min_length: 1,
       max_length: 1000,
       value: comment?.slice?.(0, 990) || null,
-      placeholder: "Example: \"The user has offended in #general\" or \"How do I get the sub role?\"",
+      placeholder: "Ex: \"The user has offended in #general\"",
       required: true
      }], }, { type: 1, components: [{
       type: 4,
@@ -121,7 +121,7 @@ class TicketsManager {
       label: "Username / IDs (optional)",
       style: 1,
       max_length: 500,
-      placeholder: "Example: \"Faye#0001\" or \"196742608846979072 176088246697197570\"",
+      placeholder: "Ex: \"Faye#0001\" or \"196742608846979072\"",
       required: false
      }] }]
     };
