@@ -38,7 +38,7 @@
   },
   {
    id: "created",
-   label: "Erstellt",
+   label: "Created",
    get: (ticket) => new Date(parseInt(ticket.createdTimestamp)).toLocaleString(),
    width: 10,
    minwidth: 130

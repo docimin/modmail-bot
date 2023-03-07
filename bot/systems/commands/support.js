@@ -6,7 +6,7 @@ let dClient = Core.data.discordClient;
 
 exports.data = {
  name: "support",
- description: "Erstellt ein Support-Ticket"
+ description: "Creates a Support-Ticket"
 }
 
 /**
