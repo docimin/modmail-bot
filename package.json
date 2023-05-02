@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xgedev/fyfu-modmail.git"
+    "url": "git+https://github.com/dev-suro/modmail-bot.git"
   },
-  "author": "Xge",
-  "license": "UNLICENSED",
+  "author": "Faye",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xgedev/fyfu-modmail/issues"
+    "url": "https://github.com/dev-suro/modmail-bot/issues"
   },
-  "homepage": "https://github.com/xgedev/fyfu-modmail#readme",
+  "homepage": "https://github.com/dev-suro/modmail-bot#readme",
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
     "cookie": "^0.4.1",
