@@ -121,7 +121,7 @@ class TicketsManager {
       label: "Nutzernamen / IDs (optional)",
       style: 1,
       max_length: 500,
-      placeholder: "Z. B. \"Mexify Furdis\" oder \"143862050169421834 196977925998903297\"",
+      placeholder: "Z. B. \"Fuxel\" oder \"430447041248886794\"",
       required: false
      }] }]
     };
