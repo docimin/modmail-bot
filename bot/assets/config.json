@@ -6,11 +6,11 @@
   },
   "success": {
    "color": "#3ea45f",
-   "emoji": "<:check_green:934432144577667072>"
+   "emoji": "✅"
   },
   "error": {
    "color": "#ed4245",
-   "emoji": "<:x_red:934432302333829150>"
+   "emoji": "❌"
   }
  },
  "presence": {
