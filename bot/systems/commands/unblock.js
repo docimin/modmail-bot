@@ -29,7 +29,7 @@ exports.run = async (interaction) => {
 
  interaction.reply({
   ...Core.messages.get("userunblocked", {
-   user: user.tag
+   user: user.username
   }),
   ephemeral: true
  });
