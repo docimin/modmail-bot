@@ -191,7 +191,7 @@ exports.run = async () => {
      Core.database.query(`INSERT INTO blocked (id, authorId, reason, blockedTimestamp) VALUES (?, ?, ?, ?)`, [ticket.userId, interaction.member.id, `Ticket ${ticket.ticketId}`, Date.now()]);
      interaction.followUp({
       ...Core.messages.get("userblocked", {
-       user: ticket.user?.tag || ticket.userId
+       user: ticket.user?.username || ticket.userId
       })
      });
      break;

@@ -27,9 +27,12 @@ exports.run = async (interaction) => {
 
  await interaction.deferReply({ ephemeral: true });
 
+ let formattedMessage = interaction.options.get("anonymous_message")?.value
+ formattedMessage = formattedMessage.replaceAll("\\n", "\n");
+
  let addMsgResult = await ticket.addMessage("GUILD", {
   author: interaction.member.user,
-  content: interaction.options.get("anonymous_message")?.value
+  content: formattedMessage
  }, true);
 
  if (addMsgResult?.errCode === 409) {
