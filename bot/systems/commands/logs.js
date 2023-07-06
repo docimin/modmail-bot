@@ -38,7 +38,7 @@ exports.run = async (interaction) => {
    embeds: [
     {
      color: Core.data.config.messageTypes.default.color,
-     title: `\`${result.length}\` Tickets von ${user.tag}`,
+     title: `\`${result.length}\` Tickets von ${user.username}`,
      description: result.map((r) => {
       return `<t:${Math.floor(r.createdTimestamp/1000)}:R> | [${r.reason}](${process.env.DASHBOARD_HOST}/tickets/${r.id})`
      }).join("\n")

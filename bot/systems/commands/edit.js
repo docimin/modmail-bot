@@ -33,7 +33,10 @@ exports.run = async (interaction) => {
 
  await interaction.deferReply({ ephemeral: true });
 
- let edited = await ticket.editMessage(interaction.options.get("id").value, interaction.options.get("content").value);
+ let formattedMessage = interaction.options.get("content")?.value
+ formattedMessage = formattedMessage.replaceAll("\\n", "\n");
+
+ let edited = await ticket.editMessage(interaction.options.get("id").value, formattedMessage);
 
  if (edited) {
 
