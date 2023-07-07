@@ -1,5 +1,6 @@
 const { nanoid } = require("nanoid"),
       Discord    = require("discord.js");
+const Core = require("./index");
 
 /**
  * Represents a not-closed support ticket
@@ -8,7 +9,7 @@ class Ticket {
 
  /**
   * Creates / Opens a ticket
-  * @param {Discord.Snowflake} userId 
+  * @param {Discord.Snowflake} userId
   * @param {Discord.Snowflake} authorId
   * @param {String} reason
   * @param {String|null} comment
@@ -56,7 +57,7 @@ class Ticket {
   const Core = require("core");
 
   let { discordClient: dClient, config } = Core.data;
-  
+
   this.guild = dClient.guilds.resolve(process.env.GUILD_ID);
   this.member = await this.guild.members.fetch(this.userId).catch(() => null);
   this.author = await this.guild.members.fetch(this.authorId).catch(() => null);
@@ -77,11 +78,11 @@ class Ticket {
    if (!this.dmChannel) throw new Error("User disabled DMs");
    this.dmChannelId = this.dmChannel.id;
   }
-  
+
   let foundChannel = this.guild.channels.resolve(config.channelIds.ticketsCategory).children.find(c => c.name === this.userId);
 
   this.channel = this.ready && foundChannel ? foundChannel : (await this.guild.channels.resolve(config.channelIds.ticketsCategory).createChannel(this.userId, {
-   reason: `${this.author.user.tag} created a ticket`
+   reason: `${this.author.user.username} created a ticket`
   }));
 
   this.webhook = (await this.channel.fetchWebhooks().then((webhooks) => webhooks.find(w => w.owner?.id === dClient.user.id)).catch(() => null)) || (await this.channel.createWebhook("Messages"));
@@ -93,14 +94,20 @@ class Ticket {
         user   = member?.user || (await dClient.users.fetch(u).catch(() => null)) || null;
     if (!user) return `**${u}**`;
     let userMessage = allMessages.find(m => m?.author && m.author.id === user.id);
-    return `${member?.nickname ? `${member.nickname} | ` : ""}**${user.tag}** | \`${user.id}\`${userMessage ? ` | [Letzte Nachricht](${userMessage.url})` : ""}`
+    return `${member?.nickname ? `${member.nickname} | ` : ""}**${user.username}** | \`${user.id}\`${userMessage ? ` | [Letzte Nachricht](${userMessage.url})` : ""}`
    } else {
-    // check if user with this username (u) exists
-    let user = await dClient.users.fetch(u).catch(() => null);
-    if (!user) return `**${u}**`;
+    let user = dClient.users.cache.find(u2 => u2.tag === u);
+    if (!user) {
+     user = dClient.users.cache.find(u2 => u2.username === u);
+     if (!user) return `**${u}**`;
+     let member = this.guild.members.resolve(user.id);
+     let userMessage = allMessages.find(m => m?.author && m.author.id === user.id);
+     return `${member?.nickname ? `${member.nickname} | ` : ""}**${user.username}** | \`${user.id}\`${userMessage ? ` | [Letzte Nachricht](${userMessage.url})` : ""}`
+
+    }
     let member = this.guild.members.resolve(user.id);
     let userMessage = allMessages.find(m => m?.author && m.author.id === user.id);
-    return `${member?.nickname ? `${member.nickname} | ` : ""}**${user.tag}** | \`${user.id}\`${userMessage ? ` | [Letzte Nachricht](${userMessage.url})` : ""}`
+    return `${member?.nickname ? `${member.nickname} | ` : ""}**${user.username}** | \`${user.id}\`${userMessage ? ` | [Letzte Nachricht](${userMessage.url})` : ""}`
    }
   }))).join("\n");
 
@@ -109,6 +116,7 @@ class Ticket {
    this.infoMessage = await this.channel.send(Core.messages.get("ticketinfo", {
     userid: this.userId,
     usertag: this.user.tag,
+    username: this.user.username,
     useravatarurl: this.user.displayAvatarURL({dynamic: true}),
     usercreatedtimestamp: Math.floor(this.user.createdTimestamp/1000),
     memberjoinedtimestamp: Math.floor(this.member.joinedTimestamp/1000),
@@ -133,7 +141,7 @@ class Ticket {
    }));
 
   }
-  
+
   if (!this.ready)
    Core.database.query(`INSERT INTO tickets (id, userId, authorId, dmChannelId, reason, comment, attachedUsers, createdTimestamp, messages, notifyUserIds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [this.ticketId, this.userId, this.authorId, this.dmChannel?.id, this.reason, this.comment || null, JSON.stringify(this.attachedUsers), this.createdTimestamp, "[]", "[]"]);
 
@@ -144,7 +152,7 @@ class Ticket {
  /**
   * Adds a message to the ticket
   * @param {Discord.Message} message
-  * @param {String} type DM or GUILD 
+  * @param {String} type DM or GUILD
   */
  async addMessage(type = "DM", message, anonymous = false) {
 
@@ -167,14 +175,14 @@ class Ticket {
 
    let notifyUserIds = JSON.parse((await new Promise((resolve) => Core.database.query("SELECT notifyUserIds FROM tickets WHERE id = ?", [this.ticketId], (err, result) => resolve(result?.[0]?.notifyUserIds))).catch(() => null)) || "[]");
    if (notifyUserIds.length > 0)
-    this.channel.send(`Neue Ticketnachricht von ${this.user?.tag || this.userId} | ${notifyUserIds.map(uId => `<@${uId}>`).join(" ")}`).then((m) => m.delete());
+    this.channel.send(`Neue Ticketnachricht von ${this.user?.username || this.userId} | ${notifyUserIds.map(uId => `<@${uId}>`).join(" ")}`).then((m) => m.delete());
 
   } else if (type === "GUILD") {
 
    let config = Core.data.config;
 
    let dmMsg = await this.dmChannel.send({
-    content: config.dmPrefixes[anonymous ? "anonymous" : "user"].replace("${user}", message.author.tag).replace("${message}", message.content)
+    content: config.dmPrefixes[anonymous ? "anonymous" : "user"].replace("${user}", message.author.username).replace("${message}", message.content)
    }).catch(() => "not sent");
 
    if (dmMsg === "not sent")
@@ -216,7 +224,7 @@ class Ticket {
 
   if (!dmMessageId)
    return false;
-   
+
   this.messages.delete(dmMessageId);
 
   let deleted = await this.dmChannel.messages.delete(dmMessageId).then(() => true).catch(() => null);
@@ -247,7 +255,7 @@ class Ticket {
   if (!dmMessage)
    return false;
 
-  let edited = await this.dmChannel.messages.edit(dmMessage.id, { content: config.dmPrefixes[dmMessage.anonymous ? "anonymous" : "user"].replace("${user}", await dClient.users.fetch(dmMessage.authorId).then((u) => u.tag).catch(() => null)).replace("${message}", newContent) }).then(() => true).catch(() => null);
+  let edited = await this.dmChannel.messages.edit(dmMessage.id, { content: config.dmPrefixes[dmMessage.anonymous ? "anonymous" : "user"].replace("${user}", await dClient.users.fetch(dmMessage.authorId).then((u) => u.username).catch(() => null)).replace("${message}", newContent) }).then(() => true).catch(() => null);
 
   if (!edited)
    return false;
@@ -345,8 +353,10 @@ class Ticket {
   logChannel?.send?.(Core.messages.get("logticketclosed", {
    userid: this.userId,
    usertag: this.user?.tag || this.userId,
+   username: this.user?.username || this.userId,
    authorid: interaction?.member?.id || Core.data.discordClient.user.id,
    authortag: interaction?.member?.user?.tag || Core.data.discordClient.user.tag,
+   authorusername: interaction?.member?.user?.username || Core.data.discordClient.user.username,
    authoravatarurl: interaction?.member?.user?.displayAvatarURL?.({ dynamic: true }) || Core.data.discordClient.user.displayAvatarURL({ dynamic: true }),
    ticketid: this.ticketId,
    host: process.env.DASHBOARD_HOST,
