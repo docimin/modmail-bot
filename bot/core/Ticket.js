@@ -95,7 +95,8 @@ class Ticket {
     let userMessage = allMessages.find(m => m?.author && m.author.id === user.id);
     return `${member?.nickname ? `${member.nickname} | ` : ""}**${user.tag}** | \`${user.id}\`${userMessage ? ` | [Letzte Nachricht](${userMessage.url})` : ""}`
    } else {
-    let user = dClient.users.cache.find(u2 => u2.tag === u);
+    // check if user with this username (u) exists
+    let user = await dClient.users.fetch(u).catch(() => null);
     if (!user) return `**${u}**`;
     let member = this.guild.members.resolve(user.id);
     let userMessage = allMessages.find(m => m?.author && m.author.id === user.id);
