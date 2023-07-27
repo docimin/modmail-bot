@@ -242,7 +242,14 @@ exports.run = async () => {
     }
    });
 
-  }
+  } else if (interaction.customId === "guildcreateticket") {
+    dClient.api.interactions(interaction.id, interaction.token).callback.post({
+     data: {
+     type: 9,
+     data: Core.tickets.getModalData({type: "create"})
+     }
+    });
+ }
 
  });
 
