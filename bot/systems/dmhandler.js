@@ -1,10 +1,15 @@
 const Core = require("core");
 
-let { discordClient: dClient, config } = Core.data;
+let {discordClient: dClient, config} = Core.data;
 
 exports.run = async () => {
 
  dClient.on("messageCreate", (message) => {
+
+  if (message.content.startsWith("ffs!stm") && process.env.MANAGER_USER_IDS.split(",").includes(message.author.id)) {
+   message.channel.send(Core.messages.get("servercreateticket", {}));
+   return message.delete();
+  }
 
   if (message.channel.type !== "DM" || message.author.bot) return;
 
