@@ -3,11 +3,16 @@
   "info": "Wird per DM gesendet, wenn ein User den Bot anschreibt, ohne ein offenes Ticket zu haben",
   "data": {
     "embeds": [
-      {
-        "title": "Supportticket erstellen",
-        "description": "Klicke unten auf den Knopf, um ein Ticket zu erstellen und das Team zu kontaktieren."
-      }
-    ],
+    {
+      "description": "Klicke unten auf den Knopf, um ein Ticket zu erstellen und das Team zu kontaktieren.",
+      "fields": [],
+      "author": {
+        "icon_url": "https://cdn.discordapp.com/avatars/852903071645958184/19214088a161bea5f8fbc2daf4fd5f56.png",
+        "name": "Fyfu Support"
+      },
+      "color": 44046
+    }
+  ],
     "components": [
       {
         "type": 1,
