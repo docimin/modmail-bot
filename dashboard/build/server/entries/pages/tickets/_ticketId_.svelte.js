@@ -1,9 +1,5 @@
 import { c as create_ssr_component, v as validate_component } from "../../../_app/immutable/chunks/index-80a2f878.js";
-<<<<<<< HEAD
-import { R as Rolling } from "../../../_app/immutable/chunks/Rolling-70cd4588.js";
-=======
-import { R as Rolling } from "../../../_app/immutable/chunks/Rolling-eaf58c22.js";
->>>>>>> cfe3d57d7ff2894a22f422988fe520aad1b8482c
+import { R as Rolling } from "../../../_app/immutable/chunks/Rolling-d9e7ccd4.js";
 import "twemoji";
 import "discord-markdown";
 import dayjs from "dayjs";
