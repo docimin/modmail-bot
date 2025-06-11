@@ -4,13 +4,11 @@ FROM node:22-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy root package files and install dependencies
-COPY package*.json ./
-COPY bot/package*.json ./bot/
-RUN npm install
-
-# Copy the rest of the application code
+# Copy all source files first (including local dependencies)
 COPY . .
+
+# Install dependencies (including local 'core')
+RUN npm install
 
 # Build the dashboard (if present)
 RUN cd dashboard && npm install && npm run build && cd ..
