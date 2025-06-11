@@ -1,4 +1,4 @@
-import { c as create_ssr_component, h as createEventDispatcher, o as onDestroy, d as add_attribute } from "./index-d3cab7cb.js";
+import { c as create_ssr_component, h as createEventDispatcher, o as onDestroy, d as add_attribute } from "./index-80a2f878.js";
 const InfiniteScroll = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { threshold = 0 } = $$props;
   let { horizontal = false } = $$props;
