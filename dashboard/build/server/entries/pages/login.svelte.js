@@ -30,9 +30,9 @@ async function load({ session }) {
 const Login = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let clickedLogin = false;
   $$result.css.add(css);
-  return `${$$result.head += `${$$result.title = `<title>FyFu Modmail | Login</title>`, ""}`, ""}
+  return `${$$result.head += `${$$result.title = `<title>Mexify Modmail | Login</title>`, ""}`, ""}
 
-<div class="${"container svelte-b5o5q1"}"><h1 class="${"svelte-b5o5q1"}">fyfu modmail</h1>
+<div class="${"container svelte-b5o5q1"}"><h1 class="${"svelte-b5o5q1"}">mexify modmail</h1>
  ${validate_component(Default, "DefaultButton").$$render(
     $$result,
     {
