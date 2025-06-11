@@ -23,7 +23,7 @@
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
     "cookie": "^1.0.2",
-    "core": "file:./bot/core/index.js",
+    "core": "file:./bot/core",
     "dayjs": "^1.10.7",
     "discord-markdown": "^2.5.1",
     "discord.js": "^13.6.0",
