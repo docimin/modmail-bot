@@ -36,8 +36,8 @@
   "Grund 3"
  ],
  "dmPrefixes": {
-  "user": "**${user}:** ${message}",
-  "anonymous": "**Team:** ${message}"
+  "user": "**${user}:**\n${message}",
+  "anonymous": "**Team:**\n${message}"
  },
  "deleteChannelAfterClosedInSeconds": 30
 }

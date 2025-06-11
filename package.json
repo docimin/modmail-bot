@@ -1,31 +1,33 @@
 {
-  "name": "fyfu-modmail",
+  "name": "modmail-bot",
   "version": "1.0.0",
-  "description": "Fyfu ModMail",
+  "description": "ModMail Bot originally created for Fyfu Discord",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "22"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xgedev/fyfu-modmail.git"
+    "url": "git+https://github.com/dev-suro/modmail-bot.git"
   },
-  "author": "Xge",
-  "license": "UNLICENSED",
+  "author": "Faye",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xgedev/fyfu-modmail/issues"
+    "url": "https://github.com/dev-suro/modmail-bot/issues"
   },
-  "homepage": "https://github.com/xgedev/fyfu-modmail#readme",
+  "homepage": "https://github.com/dev-suro/modmail-bot#readme",
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
-    "cookie": "^0.4.1",
+    "cookie": "^1.0.2",
     "core": "file:./bot/core",
     "dayjs": "^1.10.7",
     "discord-markdown": "^2.5.1",
     "discord.js": "^13.6.0",
-    "dotenv": "^14.3.2",
-    "mysql2": "^2.3.3",
+    "dotenv": "^16.5.0",
+    "mysql2": "^3.14.1",
     "nanoid": "^3.2.0",
     "twemoji": "^13.1.0",
     "uuid": "^8.3.2"
