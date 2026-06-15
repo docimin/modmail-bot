@@ -1,96 +1,88 @@
-require("dotenv").config();
+const Discord = require("discord.js");
 
-const mysql = require("mysql2"),
-      fs    = require("fs");
+const discordClient = new Discord.Client({
+		restGlobalRateLimit: 40,
+		intents: [
+			Discord.Intents.FLAGS.GUILDS,
+			Discord.Intents.FLAGS.GUILD_BANS,
+			Discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+			Discord.Intents.FLAGS.GUILD_INTEGRATIONS,
+			Discord.Intents.FLAGS.GUILD_WEBHOOKS,
+			Discord.Intents.FLAGS.GUILD_INVITES,
+			Discord.Intents.FLAGS.GUILD_VOICE_STATES,
+			Discord.Intents.FLAGS.GUILD_MESSAGES,
+			Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+			Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING,
+			Discord.Intents.FLAGS.DIRECT_MESSAGES,
+			Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+			Discord.Intents.FLAGS.DIRECT_MESSAGE_TYPING,
+			Discord.Intents.FLAGS.GUILD_SCHEDULED_EVENTS,
+		],
+		partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
+		failIfNotExists: false,
+	}),
+	config = require("../assets/config.json");
 
-validateDatabase().then(() => {
- let foundBot       = fs.existsSync(`${__dirname}/bot/index.js`),
-     foundDashboard = fs.existsSync(`${__dirname}/dashboard/build/index.js`);
- if (foundBot || foundDashboard) {
-  if (foundBot && ["both", "bot"].includes(process.env.RUN))
-   require("./bot/index.js");
-  if (foundDashboard && ["both", "dashboard"].includes(process.env.RUN))
-   import("./dashboard/build/index.js");
- } else {
-  console.log("Bot and dashboard not found");
- }
-});
+const Core = {
+	data: {
+		discordClient,
+		config,
+	},
 
-function validateDatabase() {
+	tickets: require("./TicketsManager"),
+	messages: require("./MessagesManager"),
+	database: require("./DatabaseManager"),
+	utils: require("./Utils"),
 
- return new Promise(async (resolve) => {
+	/**
+	 * Starts the given systems.
+	 * @param {Array<String>} systemNames System names to start
+	 * @returns {Promise<>} Resolves when all systems are started
+	 */
+	startSystems(systemNames = []) {
+		return new Promise((resolve) => {
+			console.log("Starting", systemNames.length, "systems ...");
+			const startTimestamp = Date.now();
 
-  console.log(`[MySQL] Connecting to ${process.env.DATABASE_USER}@${process.env.DATABASE_HOST} ...`);
-       
-  let connection = mysql.createConnection({
-    host     : process.env.DATABASE_HOST,
-    user     : process.env.DATABASE_USER,
-    password : process.env.DATABASE_PASSWORD,
-    database : process.env.DATABASE_DATABASE
-  });
-   
-  connection.connect(async (err) => {
+			let iSystems = 0;
 
-   if (err) {
-    console.log("[MySQL] Connection failed");
-    console.log(err);
-    return;
-   }
+			startSystem();
 
-   console.log("[MySQL] Connected");
+			async function startSystem() {
+				const systemName = systemNames[iSystems];
 
-   await new Promise((resolve) => connection.query(`CREATE TABLE IF NOT EXISTS tickets (
-    id VARCHAR(12) NOT NULL,
-    userId VARCHAR(32) NOT NULL,
-    authorId VARCHAR(32) NOT NULL,
-    dmChannelId VARCHAR(32) NOT NULL,
-    reason TEXT,
-    comment TEXT,
-    attachedUsers TEXT,
-    createdTimestamp VARCHAR(32) NOT NULL,
-    closedTimestamp VARCHAR(32),
-    closedAuthorId VARCHAR(32),
-    messages TEXT,
-    notifyUserIds TEXT,
-    PRIMARY KEY (id)
-   )`, (err) => err ? console.log(err) : resolve()));
+				if (systemName) {
+					process.stdout.write(`[${systemName}] Starting ... `);
+					const startTimestampSystem = Date.now();
 
-   await new Promise((resolve) => connection.query(`CREATE TABLE IF NOT EXISTS sessions (
-    id VARCHAR(40) NOT NULL,
-    access_token VARCHAR(32) NOT NULL,
-    refresh_token VARCHAR(32) NOT NULL,
-    PRIMARY KEY (id)
-   )`, (err) => err ? console.log(err) : resolve()));
+					try {
+						const system = require(`../systems/${systemName}.js`);
 
-   await new Promise((resolve) => connection.query(`CREATE TABLE IF NOT EXISTS blocked (
-    id VARCHAR(32) NOT NULL,
-    authorId VARCHAR(32) NOT NULL,
-    reason TEXT,
-    blockedTimestamp VARCHAR(32) NOT NULL,
-    PRIMARY KEY (id)
-   )`, (err) => err ? console.log(err) : resolve()));
+						await system.run();
 
-   await new Promise((resolve) => connection.query(`CREATE TABLE IF NOT EXISTS snippets (
-    name VARCHAR(128) NOT NULL,
-    content TEXT NOT NULL,
-    PRIMARY KEY (name)
-   )`, (err) => err ? console.log(err) : resolve()));
+						process.stdout.write(
+							`DONE - Took ${(Date.now() - startTimestampSystem) / 1000}s\n`,
+						);
+					} catch (err) {
+						process.stdout.write("ERROR\n");
+						console.log("Error when starting", systemName);
+						console.log(err);
+					}
+				}
 
-   await new Promise((resolve) => connection.query(`CREATE TABLE IF NOT EXISTS authorized (
-    id VARCHAR(32) NOT NULL,
-    type VARCHAR(4) NOT NULL,
-    PRIMARY KEY (id)
-   )`, (err) => err ? console.log(err) : resolve()));
+				iSystems++;
+				if (iSystems < systemNames.length) startSystem();
+				else {
+					console.log(
+						`All systems started - Took ${(Date.now() - startTimestamp) / 1000}s`,
+					);
+					resolve();
+				}
+			}
 
-   connection.end(() => {
+			Core.tickets.handleModals();
+		});
+	},
+};
 
-    console.log("[MySQL] Validated");
-    resolve();
-
-   });
-
-  });
-
- });
-
-}
+module.exports = Core;
