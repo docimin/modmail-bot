@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: modmail_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: modmail
+      POSTGRES_PASSWORD: modmail
+      POSTGRES_DB: modmail
+    ports:
+      - "5433:5432"
+    volumes:
+      # Postgres 18's image stores data in a versioned dir (/var/lib/postgresql/<v>/docker)
+      # and declares its VOLUME at the parent, so mount the volume there.
+      - modmail_pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U modmail -d modmail"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  modmail_pgdata:

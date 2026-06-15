@@ -1,0 +1,30 @@
+{
+  "name": "@modmail/db",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./json-types": "./src/json-types.ts"
+  },
+  "scripts": {
+    "generate": "drizzle-kit generate --name",
+    "migrate": "bun run src/migrate.ts",
+    "push": "drizzle-kit push",
+    "studio": "drizzle-kit studio",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "nanoid": "^5.1.11",
+    "pg": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/pg": "^8.11.10",
+    "drizzle-kit": "^0.31.10",
+    "typescript": "^5.7.3"
+  }
+}

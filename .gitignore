@@ -11,3 +11,18 @@ node_modules
 /config.json
 .vscode
 .idea
+
+# revamp
+docs/
+.workflows/
+**/routeTree.gen.ts
+.nitro/
+.tanstack/
+dist/
+build/
+.nitro/
+.tanstack/
+.output/
+**/drizzle/meta/
+*.tsbuildinfo
+.turbo/
