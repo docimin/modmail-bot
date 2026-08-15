@@ -1,10 +1,5 @@
-import {
-  eq,
-  schema,
-  type Database,
-  type GuildConfig,
-} from "@modmail/db";
 import { DEFAULT_GUILD_CONFIG, parseGuildConfig } from "@modmail/core";
+import { type Database, eq, type GuildConfig, schema } from "@modmail/db";
 
 export interface ResolvedSettings {
   guildId: string;
@@ -83,9 +78,7 @@ export class SettingsService {
       .onConflictDoNothing()
       .returning();
 
-    const resolved = row
-      ? this.toResolved(row)
-      : (await this.get(guildId))!;
+    const resolved = row ? this.toResolved(row) : (await this.get(guildId))!;
     this.cache.set(guildId, {
       value: resolved,
       expires: Date.now() + TTL_MS,
@@ -93,9 +86,7 @@ export class SettingsService {
     return resolved;
   }
 
-  private toResolved(
-    row: typeof schema.guildSettings.$inferSelect,
-  ): ResolvedSettings {
+  private toResolved(row: typeof schema.guildSettings.$inferSelect): ResolvedSettings {
     return {
       guildId: row.guildId,
       enabled: row.enabled,

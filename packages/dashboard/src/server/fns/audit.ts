@@ -1,9 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
-import { db, schema, eq, desc, count } from "#/server/db.ts";
 import { requireGuildAccess } from "#/server/access.ts";
+import { count, db, desc, eq, schema } from "#/server/db.ts";
+import { pagedRef } from "#/server/validators.ts";
 
 export const listAudit = createServerFn({ method: "GET" })
-  .validator((d: { guildId: string; page?: number; pageSize?: number }) => d)
+  .validator((d: unknown) => pagedRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
 

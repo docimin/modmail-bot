@@ -1,10 +1,11 @@
-import { createServerFn } from "@tanstack/react-start";
 import { isNotNull } from "@modmail/db";
-import { db, schema, and, eq, gte, sql, count } from "#/server/db.ts";
+import { createServerFn } from "@tanstack/react-start";
 import { requireGuildAccess } from "#/server/access.ts";
+import { and, count, db, eq, gte, schema, sql } from "#/server/db.ts";
+import { guildRef } from "#/server/validators.ts";
 
 export const getStats = createServerFn({ method: "GET" })
-  .validator((d: { guildId: string }) => d)
+  .validator((d: unknown) => guildRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
 
@@ -58,7 +59,7 @@ export const getStats = createServerFn({ method: "GET" })
   });
 
 export const getAnalytics = createServerFn({ method: "GET" })
-  .validator((d: { guildId: string }) => d)
+  .validator((d: unknown) => guildRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
 

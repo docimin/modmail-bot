@@ -1,26 +1,24 @@
+import { relations } from "drizzle-orm";
 import {
-  pgTable,
-  text,
-  timestamp,
   boolean,
+  index,
   integer,
   jsonb,
+  pgTable,
   primaryKey,
-  index,
+  text,
+  timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import type { MessageTemplate, JsonObject } from "../json-types.ts";
+import type { JsonObject, MessageTemplate } from "../json-types.ts";
+import { messageType, scheduledTaskType, ticketPriority, ticketStatus } from "./enums.ts";
 import { guilds } from "./guild.ts";
-import {
-  ticketStatus,
-  ticketPriority,
-  messageType,
-  scheduledTaskType,
-} from "./enums.ts";
 
-const id = () => text("id").primaryKey().$defaultFn(() => nanoid());
+const id = () =>
+  text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid());
 
 // Ticket categories / departments. Optional routing + greeting per category.
 export const ticketCategories = pgTable(
@@ -251,16 +249,13 @@ export const ticketTagsRelations = relations(ticketTags, ({ one }) => ({
   tag: one(tags, { fields: [ticketTags.tagId], references: [tags.id] }),
 }));
 
-export const ticketCategoriesRelations = relations(
-  ticketCategories,
-  ({ one, many }) => ({
-    guild: one(guilds, {
-      fields: [ticketCategories.guildId],
-      references: [guilds.id],
-    }),
-    tickets: many(tickets),
+export const ticketCategoriesRelations = relations(ticketCategories, ({ one, many }) => ({
+  guild: one(guilds, {
+    fields: [ticketCategories.guildId],
+    references: [guilds.id],
   }),
-);
+  tickets: many(tickets),
+}));
 
 export const tagsRelations = relations(tags, ({ one, many }) => ({
   guild: one(guilds, { fields: [tags.guildId], references: [guilds.id] }),

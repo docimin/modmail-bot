@@ -1,9 +1,9 @@
-import { createFileRoute, redirect, Link } from "@tanstack/react-router";
-import { Plus, Settings2, CheckCircle2, CircleSlash } from "lucide-react";
-import { getSession } from "#/server/fns/session.ts";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { CheckCircle2, CircleSlash, Plus, Settings2 } from "lucide-react";
+import { Avatar, Badge, Button, EmptyState } from "#/components/ui/index.tsx";
 import { getMyGuilds } from "#/server/fns/guilds.ts";
 import { getPublicConfig } from "#/server/fns/public.ts";
-import { Avatar, Badge, Button, EmptyState } from "#/components/ui/index.tsx";
+import { getSession } from "#/server/fns/session.ts";
 
 export const Route = createFileRoute("/dashboard/")({
   loader: async () => {
@@ -23,7 +23,9 @@ function ServerSelector() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text">Your servers</h1>
-          <p className="mt-1 text-sm text-muted">Servers you own or manage. Add the bot to set up modmail.</p>
+          <p className="mt-1 text-sm text-muted">
+            Servers you own or manage. Add the bot to set up modmail.
+          </p>
         </div>
         <a href={config.inviteUrl} target="_blank" rel="noreferrer">
           <Button>
@@ -45,7 +47,10 @@ function ServerSelector() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {guilds.map((g) => (
-            <div key={g.id} className="rounded-[var(--radius-card)] border border-border bg-surface p-5">
+            <div
+              key={g.id}
+              className="rounded-[var(--radius-card)] border border-border bg-surface p-5"
+            >
               <div className="flex items-center gap-3">
                 {g.icon ? (
                   <Avatar src={g.icon} size={44} className="rounded-xl" />

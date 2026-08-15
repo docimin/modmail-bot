@@ -1,37 +1,36 @@
-import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import * as schema from "./schema/index.ts";
-
-export * from "./schema/index.ts";
-export * from "./client.ts";
-export type * from "./json-types.ts";
-export { schema };
 
 // drizzle helpers re-exported so consumers don't depend on drizzle-orm directly
 export {
-  eq,
   and,
-  or,
-  not,
-  desc,
   asc,
-  sql,
-  inArray,
-  notInArray,
-  isNull,
-  isNotNull,
-  gt,
-  gte,
-  lt,
-  lte,
-  like,
-  ilike,
+  avg,
   count,
   countDistinct,
+  desc,
+  eq,
+  gt,
+  gte,
+  ilike,
+  inArray,
+  isNotNull,
+  isNull,
+  like,
+  lt,
+  lte,
   max,
   min,
+  not,
+  notInArray,
+  or,
+  sql,
   sum,
-  avg,
 } from "drizzle-orm";
+export * from "./client.ts";
+export type * from "./json-types.ts";
+export * from "./schema/index.ts";
+export { schema };
 
 // Inferred row types
 export type Guild = InferSelectModel<typeof schema.guilds>;

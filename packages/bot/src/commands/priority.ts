@@ -1,5 +1,5 @@
-import { SlashCommandBuilder, MessageFlags } from "discord.js";
 import { eq, schema } from "@modmail/db";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const emoji = { low: "🟢", normal: "⚪", high: "🟠", urgent: "🔴" } as const;

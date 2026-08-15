@@ -1,4 +1,4 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { Toaster } from "#/components/ui/toast.tsx";
 import appCss from "../styles.css?url";

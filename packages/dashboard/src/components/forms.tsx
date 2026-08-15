@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
 import { Check, ChevronDown, Search } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "#/lib/utils.ts";
 
 export interface Option {
@@ -63,7 +63,9 @@ export function MultiSelect({
             />
           </div>
           <div className="max-h-52 overflow-y-auto py-1">
-            {filtered.length === 0 && <div className="px-3 py-2 text-sm text-faint">No options</div>}
+            {filtered.length === 0 && (
+              <div className="px-3 py-2 text-sm text-faint">No options</div>
+            )}
             {filtered.map((o) => (
               <button
                 key={o.value}
@@ -82,13 +84,7 @@ export function MultiSelect({
   );
 }
 
-export function ColorInput({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-}) {
+export function ColorInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
     <div className="flex items-center gap-2">
       <input

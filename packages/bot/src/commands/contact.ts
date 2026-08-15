@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, MessageFlags } from "discord.js";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {

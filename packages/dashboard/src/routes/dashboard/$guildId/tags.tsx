@@ -1,12 +1,12 @@
-import { useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { Plus, Trash2, Tag as TagIcon } from "lucide-react";
-import { listTags, createTag, deleteTag } from "#/server/fns/tags.ts";
+import { Plus, Tag as TagIcon, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
-import { Button, EmptyState, Field, Input } from "#/components/ui/index.tsx";
 import { ColorInput } from "#/components/forms.tsx";
 import { Dialog } from "#/components/ui/Dialog.tsx";
+import { Button, EmptyState, Field, Input } from "#/components/ui/index.tsx";
 import { toast } from "#/components/ui/toast.tsx";
+import { createTag, deleteTag, listTags } from "#/server/fns/tags.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/tags")({
   loader: ({ params }) => listTags({ data: { guildId: params.guildId } }),
@@ -130,21 +130,13 @@ function TagsPage() {
       >
         <div className="space-y-4">
           <Field label="Name">
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="billing"
-            />
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="billing" />
           </Field>
           <Field label="Color">
             <ColorInput value={color} onChange={setColor} />
           </Field>
           <Field label="Emoji" hint="Optional. Shown instead of the color dot.">
-            <Input
-              value={emoji}
-              onChange={(e) => setEmoji(e.target.value)}
-              placeholder="💸"
-            />
+            <Input value={emoji} onChange={(e) => setEmoji(e.target.value)} placeholder="💸" />
           </Field>
         </div>
       </Dialog>

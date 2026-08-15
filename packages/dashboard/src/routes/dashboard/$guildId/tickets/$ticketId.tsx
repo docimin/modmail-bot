@@ -1,28 +1,19 @@
-import { useState } from "react";
-import { createFileRoute, useRouter, Link } from "@tanstack/react-router";
+import { PRIORITIES, type Priority } from "@modmail/core";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import {
+  AlertTriangle,
   ArrowLeft,
-  Send,
-  StickyNote,
+  Clock,
   Lock,
   Paperclip,
-  Clock,
+  Send,
+  StickyNote,
   UserX,
-  AlertTriangle,
 } from "lucide-react";
-import { PRIORITIES, type Priority } from "@modmail/core";
-import {
-  getTicket,
-  replyTicket,
-  closeTicket,
-  addNote,
-  assignTicket,
-  setPriority,
-  setTicketTags,
-} from "#/server/fns/tickets.ts";
-import { listSnippets } from "#/server/fns/snippets.ts";
-import { listTags } from "#/server/fns/tags.ts";
+import { useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
+import { MultiSelect, type Option } from "#/components/forms.tsx";
+import { Dialog } from "#/components/ui/Dialog.tsx";
 import {
   Avatar,
   Badge,
@@ -35,10 +26,19 @@ import {
   Switch,
   Textarea,
 } from "#/components/ui/index.tsx";
-import { Dialog } from "#/components/ui/Dialog.tsx";
-import { MultiSelect, type Option } from "#/components/forms.tsx";
 import { toast } from "#/components/ui/toast.tsx";
-import { relativeTime, formatDateTime, discordAvatar } from "#/lib/utils.ts";
+import { discordAvatar, formatDateTime, relativeTime } from "#/lib/utils.ts";
+import { listSnippets } from "#/server/fns/snippets.ts";
+import { listTags } from "#/server/fns/tags.ts";
+import {
+  addNote,
+  assignTicket,
+  closeTicket,
+  getTicket,
+  replyTicket,
+  setPriority,
+  setTicketTags,
+} from "#/server/fns/tickets.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/tickets/$ticketId")({
   loader: async ({ params }) => {
@@ -233,7 +233,10 @@ function TicketView({
 
           <div className="flex-1 space-y-3 overflow-y-auto pr-1">
             {ticket.messages.length === 0 ? (
-              <EmptyState title="No messages yet" description="The conversation will appear here." />
+              <EmptyState
+                title="No messages yet"
+                description="The conversation will appear here."
+              />
             ) : (
               ticket.messages.map((m) => <MessageBubble key={m.id} message={m} />)
             )}
@@ -263,7 +266,9 @@ function TicketView({
               onChange={(e) => setContent(e.target.value)}
               rows={4}
               disabled={closed}
-              placeholder={noteMode ? "Write a private note for your team…" : "Write a reply to the user…"}
+              placeholder={
+                noteMode ? "Write a private note for your team…" : "Write a reply to the user…"
+              }
             />
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-4">
@@ -317,7 +322,8 @@ function TicketView({
               </div>
               {ticket.lastUserMessageAt && (
                 <div className="flex items-center gap-1.5">
-                  <Clock className="h-3.5 w-3.5" /> Last reply {relativeTime(ticket.lastUserMessageAt)}
+                  <Clock className="h-3.5 w-3.5" /> Last reply{" "}
+                  {relativeTime(ticket.lastUserMessageAt)}
                 </div>
               )}
             </div>
@@ -437,9 +443,13 @@ function MessageBubble({ message }: { message: TicketMessage }) {
   return (
     <div className={isStaff ? "flex justify-end" : "flex justify-start"}>
       <div className={`flex max-w-[80%] gap-2 ${isStaff ? "flex-row-reverse" : "flex-row"}`}>
-        {!isStaff && <Avatar src={message.authorAvatar ?? undefined} size={32} className="mt-0.5" />}
+        {!isStaff && (
+          <Avatar src={message.authorAvatar ?? undefined} size={32} className="mt-0.5" />
+        )}
         <div className="min-w-0">
-          <div className={`mb-1 flex items-center gap-2 text-xs text-faint ${isStaff ? "justify-end" : ""}`}>
+          <div
+            className={`mb-1 flex items-center gap-2 text-xs text-faint ${isStaff ? "justify-end" : ""}`}
+          >
             <span className="font-medium text-muted">
               {isStaff ? (message.anonymous ? "Staff" : message.authorTag) : message.authorTag}
             </span>

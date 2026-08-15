@@ -1,14 +1,12 @@
-import { SlashCommandBuilder, MessageFlags } from "discord.js";
 import { and, eq, schema } from "@modmail/db";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {
   data: new SlashCommandBuilder()
     .setName("unblock")
     .setDescription("Remove a user's block")
-    .addUserOption((o) =>
-      o.setName("user").setDescription("User to unblock").setRequired(true),
-    ),
+    .addUserOption((o) => o.setName("user").setDescription("User to unblock").setRequired(true)),
   access: "staff",
   async execute({ interaction, services }) {
     if (!interaction.inCachedGuild()) return;

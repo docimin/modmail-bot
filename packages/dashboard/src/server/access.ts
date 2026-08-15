@@ -1,7 +1,7 @@
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "./auth.ts";
-import { getUserGuilds, canManageDiscordGuild, getDiscordUserId } from "./discord.ts";
-import { db, schema, and, eq } from "./db.ts";
+import { and, db, eq, schema } from "./db.ts";
+import { canManageDiscordGuild, getDiscordUserId, getUserGuilds } from "./discord.ts";
 
 export function currentHeaders(): Headers {
   return new Headers(getRequestHeaders() as HeadersInit);

@@ -1,33 +1,34 @@
+import { closeInputSchema, noteInputSchema, PRIORITIES, replyInputSchema } from "@modmail/core";
 import { createServerFn } from "@tanstack/react-start";
-import type { Priority } from "@modmail/core";
-import { db, schema, and, eq, or, desc, ilike, count } from "#/server/db.ts";
+import { z } from "zod";
 import { requireGuildAccess } from "#/server/access.ts";
 import { botApi } from "#/server/bot-api.ts";
+import { and, count, db, desc, eq, ilike, inArray, or, schema } from "#/server/db.ts";
 
-type StatusFilter = "open" | "closed" | "all";
+const guildId = z.string().regex(/^\d{15,20}$/, "Invalid guild id");
+const ticketId = z.string().min(1).max(64);
+const ticketRef = z.object({ guildId, ticketId });
+
+const listSchema = z.object({
+  guildId,
+  status: z.enum(["open", "closed", "all"]).optional(),
+  categoryId: z.string().max(64).optional(),
+  assignedStaffId: z.string().max(32).optional(),
+  priority: z.enum(PRIORITIES).optional(),
+  search: z.string().max(200).optional(),
+  page: z.number().int().min(1).optional(),
+  pageSize: z.number().int().min(1).max(100).optional(),
+});
 
 export const listTickets = createServerFn({ method: "GET" })
-  .validator(
-    (d: {
-      guildId: string;
-      status?: StatusFilter;
-      categoryId?: string;
-      assignedStaffId?: string;
-      priority?: Priority;
-      search?: string;
-      page?: number;
-      pageSize?: number;
-    }) => d,
-  )
+  .validator((d: unknown) => listSchema.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
 
     const conds = [eq(schema.tickets.guildId, data.guildId)];
-    if (data.status && data.status !== "all")
-      conds.push(eq(schema.tickets.status, data.status));
+    if (data.status && data.status !== "all") conds.push(eq(schema.tickets.status, data.status));
     if (data.categoryId) conds.push(eq(schema.tickets.categoryId, data.categoryId));
-    if (data.assignedStaffId)
-      conds.push(eq(schema.tickets.assignedStaffId, data.assignedStaffId));
+    if (data.assignedStaffId) conds.push(eq(schema.tickets.assignedStaffId, data.assignedStaffId));
     if (data.priority) conds.push(eq(schema.tickets.priority, data.priority));
     if (data.search) {
       const term = `%${data.search}%`;
@@ -40,8 +41,8 @@ export const listTickets = createServerFn({ method: "GET" })
     }
     const where = and(...conds);
 
-    const pageSize = Math.min(Math.max(data.pageSize ?? 25, 1), 100);
-    const page = Math.max(data.page ?? 1, 1);
+    const pageSize = data.pageSize ?? 25;
+    const page = data.page ?? 1;
 
     const items = await db.query.tickets.findMany({
       where,
@@ -55,14 +56,11 @@ export const listTickets = createServerFn({ method: "GET" })
   });
 
 export const getTicket = createServerFn({ method: "GET" })
-  .validator((d: { guildId: string; ticketId: string }) => d)
+  .validator((d: unknown) => ticketRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
     const ticket = await db.query.tickets.findFirst({
-      where: and(
-        eq(schema.tickets.id, data.ticketId),
-        eq(schema.tickets.guildId, data.guildId),
-      ),
+      where: and(eq(schema.tickets.id, data.ticketId), eq(schema.tickets.guildId, data.guildId)),
       with: {
         category: true,
         tags: { with: { tag: true } },
@@ -75,13 +73,11 @@ export const getTicket = createServerFn({ method: "GET" })
   });
 
 export const replyTicket = createServerFn({ method: "POST" })
-  .validator(
-    (d: { guildId: string; ticketId: string; content: string; anonymous: boolean; snippetId?: string }) => d,
-  )
+  .validator((d: unknown) => ticketRef.extend(replyInputSchema.shape).parse(d))
   .handler(async ({ data }) => {
     const access = await requireGuildAccess(data.guildId);
     return (
-      (await botApi.reply(data.ticketId, {
+      (await botApi.reply(data.guildId, data.ticketId, {
         content: data.content,
         anonymous: data.anonymous,
         snippetId: data.snippetId,
@@ -91,24 +87,24 @@ export const replyTicket = createServerFn({ method: "POST" })
   });
 
 export const closeTicket = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; ticketId: string; reason?: string; silent?: boolean }) => d)
+  .validator((d: unknown) => ticketRef.extend(closeInputSchema.shape).parse(d))
   .handler(async ({ data }) => {
     const access = await requireGuildAccess(data.guildId);
     return (
-      (await botApi.close(data.ticketId, {
+      (await botApi.close(data.guildId, data.ticketId, {
         reason: data.reason,
-        silent: data.silent ?? false,
+        silent: data.silent,
         actorId: access.discordUserId ?? "",
       })) ?? { ok: false }
     );
   });
 
 export const addNote = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; ticketId: string; content: string }) => d)
+  .validator((d: unknown) => ticketRef.extend(noteInputSchema.shape).parse(d))
   .handler(async ({ data }) => {
     const access = await requireGuildAccess(data.guildId);
     return (
-      (await botApi.note(data.ticketId, {
+      (await botApi.note(data.guildId, data.ticketId, {
         content: data.content,
         actorId: access.discordUserId ?? "",
       })) ?? { ok: false }
@@ -116,28 +112,62 @@ export const addNote = createServerFn({ method: "POST" })
   });
 
 export const assignTicket = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; ticketId: string; staffId?: string | null }) => d)
+  .validator((d: unknown) =>
+    ticketRef
+      .extend({
+        staffId: z
+          .string()
+          .regex(/^\d{15,20}$/)
+          .nullish(),
+      })
+      .parse(d),
+  )
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
-    return (await botApi.assign(data.ticketId, { staffId: data.staffId ?? null })) ?? { ok: false };
+    return (
+      (await botApi.assign(data.guildId, data.ticketId, { staffId: data.staffId ?? null })) ?? {
+        ok: false,
+      }
+    );
   });
 
 export const setPriority = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; ticketId: string; priority: Priority }) => d)
+  .validator((d: unknown) => ticketRef.extend({ priority: z.enum(PRIORITIES) }).parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
-    return (await botApi.priority(data.ticketId, { priority: data.priority })) ?? { ok: false };
+    return (
+      (await botApi.priority(data.guildId, data.ticketId, { priority: data.priority })) ?? {
+        ok: false,
+      }
+    );
   });
 
 export const setTicketTags = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; ticketId: string; tagIds: string[] }) => d)
+  .validator((d: unknown) =>
+    ticketRef.extend({ tagIds: z.array(z.string().max(64)).max(50) }).parse(d),
+  )
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
-    await db.delete(schema.ticketTags).where(eq(schema.ticketTags.ticketId, data.ticketId));
-    if (data.tagIds.length)
+
+    const ticket = await db.query.tickets.findFirst({
+      columns: { id: true },
+      where: and(eq(schema.tickets.id, data.ticketId), eq(schema.tickets.guildId, data.guildId)),
+    });
+    if (!ticket) return { ok: false };
+
+    // only tags owned by this guild may be attached
+    const owned = data.tagIds.length
+      ? await db.query.tags.findMany({
+          columns: { id: true },
+          where: and(inArray(schema.tags.id, data.tagIds), eq(schema.tags.guildId, data.guildId)),
+        })
+      : [];
+
+    await db.delete(schema.ticketTags).where(eq(schema.ticketTags.ticketId, ticket.id));
+    if (owned.length)
       await db
         .insert(schema.ticketTags)
-        .values(data.tagIds.map((tagId) => ({ ticketId: data.ticketId, tagId })))
+        .values(owned.map((t) => ({ ticketId: ticket.id, tagId: t.id })))
         .onConflictDoNothing();
     return { ok: true };
   });

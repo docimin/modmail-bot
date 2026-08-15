@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import type { GuildConfig } from "@modmail/db";
 import { createFileRoute, getRouteApi, useRouter } from "@tanstack/react-router";
 import { Save } from "lucide-react";
-import type { GuildConfig } from "@modmail/db";
-import { getChannels, getRoles } from "#/server/fns/lookups.ts";
-import { updateSettings } from "#/server/fns/settings.ts";
+import { useEffect, useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
+import { ColorInput, MultiSelect, type Option } from "#/components/forms.tsx";
 import {
   Button,
   Card,
@@ -18,8 +17,9 @@ import {
   Switch,
   Textarea,
 } from "#/components/ui/index.tsx";
-import { MultiSelect, ColorInput, type Option } from "#/components/forms.tsx";
 import { toast } from "#/components/ui/toast.tsx";
+import { getChannels, getRoles } from "#/server/fns/lookups.ts";
+import { updateSettings } from "#/server/fns/settings.ts";
 
 const guildRoute = getRouteApi("/dashboard/$guildId");
 
@@ -171,7 +171,10 @@ function SettingsPage() {
               onChange={(v) => setTop((t) => ({ ...t, transcriptChannelId: v }))}
             />
           </Field>
-          <Field label="Fallback category" hint="Where channels are created when no category matches.">
+          <Field
+            label="Fallback category"
+            hint="Where channels are created when no category matches."
+          >
             <ChannelSelect
               options={categoryOpts}
               value={top.fallbackCategoryId}
@@ -234,7 +237,10 @@ function SettingsPage() {
               onChange={(v) => setCfg("anonymousByDefault", v)}
             />
           </Row>
-          <Row label="Show staff names" hint="Display the replying staff member's name to the user.">
+          <Row
+            label="Show staff names"
+            hint="Display the replying staff member's name to the user."
+          >
             <Switch checked={config.showStaffNames} onChange={(v) => setCfg("showStaffNames", v)} />
           </Row>
         </Section>
@@ -300,7 +306,10 @@ function SettingsPage() {
               onChange={(n) => setCfg("maxOpenTicketsPerUser", n)}
             />
           </Field>
-          <Field label="Min account age (minutes)" hint="Block accounts younger than this. 0 disables.">
+          <Field
+            label="Min account age (minutes)"
+            hint="Block accounts younger than this. 0 disables."
+          >
             <NumberInput
               value={config.minAccountAgeMinutes}
               min={0}
@@ -326,7 +335,10 @@ function SettingsPage() {
               placeholder="Your server name"
             />
           </Field>
-          <Field label="Name format" hint="Template for ticket channel/thread names, e.g. {username}.">
+          <Field
+            label="Name format"
+            hint="Template for ticket channel/thread names, e.g. {username}."
+          >
             <Input
               value={config.nameFormat}
               onChange={(e) => setCfg("nameFormat", e.target.value)}

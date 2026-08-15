@@ -1,14 +1,14 @@
+import { formatTicketName } from "@modmail/core";
 import {
   ChannelType,
-  PermissionFlagsBits,
-  ThreadAutoArchiveDuration,
   type Client,
   type Guild,
   type GuildMember,
-  type Webhook,
+  PermissionFlagsBits,
   type TextChannel,
+  ThreadAutoArchiveDuration,
+  type Webhook,
 } from "discord.js";
-import { formatTicketName } from "@modmail/core";
 import type { ResolvedSettings } from "../settings/service.ts";
 
 const WEBHOOK_NAME = "Modmail";
@@ -34,8 +34,7 @@ export async function getWebhook(channel: TextChannel): Promise<Webhook> {
     .then((hooks) => hooks.find((w) => w.owner?.id === me?.id))
     .catch(() => null);
 
-  const webhook =
-    existing ?? (await channel.createWebhook({ name: WEBHOOK_NAME }));
+  const webhook = existing ?? (await channel.createWebhook({ name: WEBHOOK_NAME }));
   webhookCache.set(channel.id, webhook);
   return webhook;
 }
@@ -80,7 +79,8 @@ export async function createInbox(
   }
 
   // channels mode
-  const categoryId = opts.categoryOverrideId ?? settings.fallbackCategoryId ?? settings.inboxChannelId;
+  const categoryId =
+    opts.categoryOverrideId ?? settings.fallbackCategoryId ?? settings.inboxChannelId;
   const channel = await guild.channels.create({
     name,
     type: ChannelType.GuildText,

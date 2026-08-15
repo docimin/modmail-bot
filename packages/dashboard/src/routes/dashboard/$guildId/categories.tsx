@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { Plus, Pencil, Trash2, FolderTree } from "lucide-react";
-import { listCategories, saveCategory, deleteCategory } from "#/server/fns/categories.ts";
-import { getRoles, getChannels } from "#/server/fns/lookups.ts";
+import { FolderTree, Pencil, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
+import { ColorInput, MultiSelect, type Option } from "#/components/forms.tsx";
+import { Dialog } from "#/components/ui/Dialog.tsx";
 import {
   Badge,
   Button,
@@ -14,9 +14,9 @@ import {
   Select,
   Switch,
 } from "#/components/ui/index.tsx";
-import { Dialog } from "#/components/ui/Dialog.tsx";
-import { MultiSelect, ColorInput, type Option } from "#/components/forms.tsx";
 import { toast } from "#/components/ui/toast.tsx";
+import { deleteCategory, listCategories, saveCategory } from "#/server/fns/categories.ts";
+import { getChannels, getRoles } from "#/server/fns/lookups.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/categories")({
   loader: async ({ params }) => {

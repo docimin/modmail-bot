@@ -1,11 +1,12 @@
-import { createServerFn } from "@tanstack/react-start";
 import { tagInputSchema } from "@modmail/core";
-import { db, schema, and, eq, desc } from "#/server/db.ts";
+import { createServerFn } from "@tanstack/react-start";
 import { requireGuildAccess } from "#/server/access.ts";
 import { botApi } from "#/server/bot-api.ts";
+import { and, db, desc, eq, schema } from "#/server/db.ts";
+import { guildRef, idRef } from "#/server/validators.ts";
 
 export const listTags = createServerFn({ method: "GET" })
-  .validator((d: { guildId: string }) => d)
+  .validator((d: unknown) => guildRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
     return db.query.tags.findMany({
@@ -15,7 +16,7 @@ export const listTags = createServerFn({ method: "GET" })
   });
 
 export const createTag = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; name: string; color?: string; emoji?: string }) => d)
+  .validator((d: unknown) => guildRef.extend(tagInputSchema.shape).parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
     const parsed = tagInputSchema.parse({ name: data.name, color: data.color, emoji: data.emoji });
@@ -33,7 +34,7 @@ export const createTag = createServerFn({ method: "POST" })
   });
 
 export const deleteTag = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; id: string }) => d)
+  .validator((d: unknown) => idRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
     await db

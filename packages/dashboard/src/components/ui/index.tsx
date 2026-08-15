@@ -1,11 +1,12 @@
-import type {
-  ButtonHTMLAttributes,
-  InputHTMLAttributes,
-  TextareaHTMLAttributes,
-  SelectHTMLAttributes,
-  ReactNode,
-} from "react";
 import { Loader2 } from "lucide-react";
+import {
+  type ButtonHTMLAttributes,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
+  useId,
+} from "react";
 import { cn } from "#/lib/utils.ts";
 
 // ─── Button ──────────────────────────────────────────────────────────────
@@ -69,7 +70,13 @@ export function CardHeader({ className, children }: { className?: string; childr
 export function CardTitle({ className, children }: { className?: string; children: ReactNode }) {
   return <h3 className={cn("text-base font-semibold text-text", className)}>{children}</h3>;
 }
-export function CardDescription({ className, children }: { className?: string; children: ReactNode }) {
+export function CardDescription({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
   return <p className={cn("text-sm text-muted mt-1", className)}>{children}</p>;
 }
 export function CardContent({ className, children }: { className?: string; children: ReactNode }) {
@@ -114,10 +121,26 @@ export function Spinner({ className }: { className?: string }) {
 }
 
 // ─── Inputs ──────────────────────────────────────────────────────────────
-export function Label({ className, children }: { className?: string; children: ReactNode }) {
-  return <label className={cn("block text-sm font-medium text-text mb-1.5", className)}>{children}</label>;
+const labelClass = "block text-sm font-medium text-text mb-1.5";
+
+export function Label({
+  className,
+  children,
+  htmlFor,
+}: {
+  className?: string;
+  children: ReactNode;
+  htmlFor?: string;
+}) {
+  return (
+    <label htmlFor={htmlFor} className={cn(labelClass, className)}>
+      {children}
+    </label>
+  );
 }
 
+// Children range from native inputs to custom widgets that own several focusable
+// elements, so the label is attached to the group rather than to one control.
 export function Field({
   label,
   hint,
@@ -129,12 +152,17 @@ export function Field({
   children: ReactNode;
   className?: string;
 }) {
+  const hintId = useId();
   return (
-    <div className={cn("space-y-1.5", className)}>
-      {label && <Label>{label}</Label>}
+    <fieldset aria-describedby={hint ? hintId : undefined} className={cn("space-y-1.5", className)}>
+      {label && <legend className={labelClass}>{label}</legend>}
       {children}
-      {hint && <p className="text-xs text-faint">{hint}</p>}
-    </div>
+      {hint && (
+        <p id={hintId} className="text-xs text-faint">
+          {hint}
+        </p>
+      )}
+    </fieldset>
   );
 }
 

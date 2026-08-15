@@ -1,19 +1,12 @@
-import { useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { Plus, Pencil, Trash2, MessageSquareText } from "lucide-react";
-import { listSnippets, saveSnippet, deleteSnippet } from "#/server/fns/snippets.ts";
+import { MessageSquareText, Pencil, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
-import {
-  Button,
-  Card,
-  EmptyState,
-  Field,
-  Input,
-  Textarea,
-} from "#/components/ui/index.tsx";
 import { Dialog } from "#/components/ui/Dialog.tsx";
+import { Button, Card, EmptyState, Field, Input, Textarea } from "#/components/ui/index.tsx";
 import { toast } from "#/components/ui/toast.tsx";
 import { relativeTime } from "#/lib/utils.ts";
+import { deleteSnippet, listSnippets, saveSnippet } from "#/server/fns/snippets.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/snippets")({
   loader: ({ params }) => listSnippets({ data: { guildId: params.guildId } }),
@@ -118,17 +111,31 @@ function SnippetsPage() {
         title={editing ? "Edit snippet" : "New snippet"}
         footer={
           <>
-            <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={save} loading={saving} disabled={!name || !content}>Save</Button>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={save} loading={saving} disabled={!name || !content}>
+              Save
+            </Button>
           </>
         }
       >
         <div className="space-y-4">
           <Field label="Name" hint="Letters, numbers, _ and - only.">
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="greeting" disabled={!!editing} />
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="greeting"
+              disabled={!!editing}
+            />
           </Field>
           <Field label="Content">
-            <Textarea value={content} onChange={(e) => setContent(e.target.value)} rows={5} placeholder="Hi! Thanks for reaching out…" />
+            <Textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              rows={5}
+              placeholder="Hi! Thanks for reaching out…"
+            />
           </Field>
         </div>
       </Dialog>

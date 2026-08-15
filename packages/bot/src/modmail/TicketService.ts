@@ -1,27 +1,27 @@
+import { renderMessage, renderPrefix } from "@modmail/core";
+import {
+  and,
+  type Database,
+  desc,
+  eq,
+  type JsonObject,
+  schema,
+  sql,
+  type Ticket,
+} from "@modmail/db";
 import {
   ChannelType,
   type Client,
-  type Message,
+  type DMChannel,
   type GuildMember,
+  type Message,
   type TextChannel,
   type ThreadChannel,
-  type DMChannel,
 } from "discord.js";
-import {
-  and,
-  desc,
-  eq,
-  schema,
-  sql,
-  type Database,
-  type Ticket,
-  type JsonObject,
-} from "@modmail/db";
-import { renderMessage, renderPrefix } from "@modmail/core";
-import type { Logger } from "../logger.ts";
-import type { SettingsService, ResolvedSettings } from "../settings/service.ts";
-import { createInbox, getWebhook } from "./inbox.ts";
 import { fetchMemberSafe } from "../lib/discord.ts";
+import type { Logger } from "../logger.ts";
+import type { ResolvedSettings, SettingsService } from "../settings/service.ts";
+import { createInbox, getWebhook } from "./inbox.ts";
 
 interface RelayTarget {
   webhookChannel: TextChannel;
@@ -53,10 +53,7 @@ export class TicketService {
 
   findOpenByChannel(channelId: string): Promise<Ticket | undefined> {
     return this.db.query.tickets.findFirst({
-      where: and(
-        eq(schema.tickets.channelId, channelId),
-        eq(schema.tickets.status, "open"),
-      ),
+      where: and(eq(schema.tickets.channelId, channelId), eq(schema.tickets.status, "open")),
     });
   }
 
@@ -73,25 +70,17 @@ export class TicketService {
   /** All open tickets for a user across every guild. */
   findOpenByUser(userId: string): Promise<Ticket[]> {
     return this.db.query.tickets.findMany({
-      where: and(
-        eq(schema.tickets.userId, userId),
-        eq(schema.tickets.status, "open"),
-      ),
+      where: and(eq(schema.tickets.userId, userId), eq(schema.tickets.status, "open")),
     });
   }
 
   async isBlocked(guildId: string, userId: string): Promise<boolean> {
     const row = await this.db.query.blockedUsers.findFirst({
-      where: and(
-        eq(schema.blockedUsers.guildId, guildId),
-        eq(schema.blockedUsers.userId, userId),
-      ),
+      where: and(eq(schema.blockedUsers.guildId, guildId), eq(schema.blockedUsers.userId, userId)),
     });
     if (!row) return false;
     if (row.expiresAt && row.expiresAt.getTime() < Date.now()) {
-      await this.db
-        .delete(schema.blockedUsers)
-        .where(eq(schema.blockedUsers.id, row.id));
+      await this.db.delete(schema.blockedUsers).where(eq(schema.blockedUsers.id, row.id));
       return false;
     }
     return true;
@@ -177,9 +166,7 @@ export class TicketService {
       if (target) {
         await target.postChannel
           .send({
-            content: settings.config.pingRoleIds
-              .map((id) => `<@&${id}>`)
-              .join(" "),
+            content: settings.config.pingRoleIds.map((id) => `<@&${id}>`).join(" "),
           })
           .then((m) => setTimeout(() => m.delete().catch(() => null), 1500))
           .catch(() => null);
@@ -230,9 +217,7 @@ export class TicketService {
                 : "Unknown",
               inline: true,
             },
-            ...(ticket.reason
-              ? [{ name: "Reason", value: ticket.reason, inline: false }]
-              : []),
+            ...(ticket.reason ? [{ name: "Reason", value: ticket.reason, inline: false }] : []),
             ...(roles ? [{ name: "Roles", value: roles, inline: false }] : []),
           ],
         },
@@ -258,9 +243,7 @@ export class TicketService {
 
   private async resolveRelayTarget(ticket: Ticket): Promise<RelayTarget | null> {
     if (!ticket.channelId) return null;
-    const channel = await this.client.channels
-      .fetch(ticket.channelId)
-      .catch(() => null);
+    const channel = await this.client.channels.fetch(ticket.channelId).catch(() => null);
     if (!channel) return null;
 
     if (channel.isThread()) {
@@ -357,9 +340,7 @@ export class TicketService {
     let channelMessageId: string | null = null;
     if (target) {
       const webhook = await getWebhook(target.webhookChannel);
-      const label = opts.anonymous
-        ? "Staff (anonymous)"
-        : `${opts.authorTag} • Staff`;
+      const label = opts.anonymous ? "Staff (anonymous)" : `${opts.authorTag} • Staff`;
       const sent = await webhook
         .send({
           threadId: target.threadId ?? undefined,
@@ -468,10 +449,7 @@ export class TicketService {
     return true;
   }
 
-  async deleteStaffMessage(
-    ticket: Ticket,
-    channelMessageId: string,
-  ): Promise<boolean> {
+  async deleteStaffMessage(ticket: Ticket, channelMessageId: string): Promise<boolean> {
     const row = await this.db.query.ticketMessages.findFirst({
       where: and(
         eq(schema.ticketMessages.ticketId, ticket.id),
@@ -486,9 +464,7 @@ export class TicketService {
     const target = await this.resolveRelayTarget(ticket);
     if (target) {
       const webhook = await getWebhook(target.webhookChannel);
-      await webhook
-        .deleteMessage(channelMessageId, target.threadId ?? undefined)
-        .catch(() => null);
+      await webhook.deleteMessage(channelMessageId, target.threadId ?? undefined).catch(() => null);
     }
 
     await this.db
@@ -542,11 +518,7 @@ export class TicketService {
       .where(eq(schema.tickets.id, ticket.id));
 
     // close DM
-    if (
-      settings &&
-      !opts.silent &&
-      settings.config.closeMessageEnabled
-    ) {
+    if (settings && !opts.silent && settings.config.closeMessageEnabled) {
       const dm = await this.fetchDM(ticket);
       if (dm) {
         const guild = await this.client.guilds.fetch(ticket.guildId).catch(() => null);
@@ -562,9 +534,7 @@ export class TicketService {
 
     // log embed
     if (settings?.logChannelId) {
-      const logChannel = await this.client.channels
-        .fetch(settings.logChannelId)
-        .catch(() => null);
+      const logChannel = await this.client.channels.fetch(settings.logChannelId).catch(() => null);
       if (logChannel && "send" in logChannel) {
         await (logChannel as TextChannel)
           .send({
@@ -592,9 +562,10 @@ export class TicketService {
     const delaySec = settings?.config.deleteChannelAfterCloseSeconds ?? 10;
     const channelId = ticket.channelId;
     if (channelId) {
-      setTimeout(
-        () => {
-          void this.client.channels.fetch(channelId).then(async (c) => {
+      setTimeout(() => {
+        void this.client.channels
+          .fetch(channelId)
+          .then(async (c) => {
             if (!c) return;
             if (c.isThread()) {
               await c.setArchived(true, "Ticket closed").catch(() => null);
@@ -602,10 +573,9 @@ export class TicketService {
             } else if ("delete" in c) {
               await c.delete("Ticket closed").catch(() => null);
             }
-          }).catch(() => null);
-        },
-        Math.max(0, delaySec) * 1000,
-      );
+          })
+          .catch(() => null);
+      }, Math.max(0, delaySec) * 1000);
     }
 
     await this.audit(ticket.guildId, opts.byId, "ticket.close", "ticket", ticket.id);
@@ -671,10 +641,7 @@ export class TicketService {
 
   async recentTicketsByUser(guildId: string, userId: string): Promise<Ticket[]> {
     return this.db.query.tickets.findMany({
-      where: and(
-        eq(schema.tickets.guildId, guildId),
-        eq(schema.tickets.userId, userId),
-      ),
+      where: and(eq(schema.tickets.guildId, guildId), eq(schema.tickets.userId, userId)),
       orderBy: desc(schema.tickets.createdAt),
       limit: 15,
     });

@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Inbox } from "lucide-react";
-import { getSession } from "#/server/fns/session.ts";
 import { Button } from "#/components/ui/index.tsx";
 import { loginWithDiscord } from "#/lib/auth-client.ts";
+import { getSession } from "#/server/fns/session.ts";
 
 export const Route = createFileRoute("/login")({
   loader: async () => {

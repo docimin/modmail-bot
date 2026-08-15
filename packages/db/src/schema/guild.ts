@@ -1,13 +1,5 @@
-import {
-  pgTable,
-  text,
-  timestamp,
-  boolean,
-  jsonb,
-  primaryKey,
-  index,
-} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+import { boolean, index, jsonb, pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
 import type { GuildConfig } from "../json-types.ts";
 import { modmailMode, staffRole } from "./enums.ts";
 

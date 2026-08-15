@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { guildConfigSchema } from "./settings.ts";
 import { LIMITS, PRIORITIES } from "./constants.ts";
+import { guildConfigSchema } from "./settings.ts";
 
 const snowflake = z.string().regex(/^\d{15,20}$/, "Invalid Discord ID");
 

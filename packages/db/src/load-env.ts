@@ -1,6 +1,6 @@
-import { config } from "dotenv";
-import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { config } from "dotenv";
 
 // Load the monorepo root .env (packages/db/src -> ../../../.env). Needed because
 // bun only auto-loads .env from the cwd, and db scripts run with cwd = packages/db.

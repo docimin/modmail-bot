@@ -1,5 +1,5 @@
-import { SlashCommandBuilder, MessageFlags, EmbedBuilder } from "discord.js";
 import { eq, schema } from "@modmail/db";
+import { EmbedBuilder, MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {

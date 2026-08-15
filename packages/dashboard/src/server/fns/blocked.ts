@@ -1,11 +1,12 @@
-import { createServerFn } from "@tanstack/react-start";
 import { blockInputSchema } from "@modmail/core";
-import { db, schema, and, eq, desc } from "#/server/db.ts";
+import { createServerFn } from "@tanstack/react-start";
 import { requireGuildAccess } from "#/server/access.ts";
 import { botApi } from "#/server/bot-api.ts";
+import { and, db, desc, eq, schema } from "#/server/db.ts";
+import { guildRef, snowflake } from "#/server/validators.ts";
 
 export const listBlocked = createServerFn({ method: "GET" })
-  .validator((d: { guildId: string }) => d)
+  .validator((d: unknown) => guildRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
     return db.query.blockedUsers.findMany({
@@ -15,36 +16,31 @@ export const listBlocked = createServerFn({ method: "GET" })
   });
 
 export const blockUser = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; userId: string; reason?: string; durationMinutes?: number }) => d)
+  .validator((d: unknown) => guildRef.extend(blockInputSchema.shape).parse(d))
   .handler(async ({ data }) => {
     const access = await requireGuildAccess(data.guildId);
-    const parsed = blockInputSchema.parse({
-      userId: data.userId,
-      reason: data.reason,
-      durationMinutes: data.durationMinutes,
-    });
-    const expiresAt = parsed.durationMinutes
-      ? new Date(Date.now() + parsed.durationMinutes * 60000)
+    const expiresAt = data.durationMinutes
+      ? new Date(Date.now() + data.durationMinutes * 60000)
       : null;
     await db
       .insert(schema.blockedUsers)
       .values({
         guildId: data.guildId,
-        userId: parsed.userId,
-        reason: parsed.reason,
+        userId: data.userId,
+        reason: data.reason,
         blockedById: access.discordUserId,
         expiresAt,
       })
       .onConflictDoUpdate({
         target: [schema.blockedUsers.guildId, schema.blockedUsers.userId],
-        set: { reason: parsed.reason, expiresAt, blockedById: access.discordUserId },
+        set: { reason: data.reason, expiresAt, blockedById: access.discordUserId },
       });
     await botApi.invalidate(data.guildId);
     return { ok: true };
   });
 
 export const unblockUser = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; userId: string }) => d)
+  .validator((d: unknown) => guildRef.extend({ userId: snowflake }).parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
     await db

@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, MessageFlags, EmbedBuilder } from "discord.js";
+import { EmbedBuilder, MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand, CommandAccess } from "../framework.ts";
 
 const groupLabels: Record<CommandAccess, string> = {
@@ -8,9 +8,7 @@ const groupLabels: Record<CommandAccess, string> = {
 };
 
 const command: BotCommand = {
-  data: new SlashCommandBuilder()
-    .setName("help")
-    .setDescription("List the available commands"),
+  data: new SlashCommandBuilder().setName("help").setDescription("List the available commands"),
   access: "everyone",
   async execute({ interaction, services }) {
     const groups: Record<CommandAccess, string[]> = {
@@ -26,9 +24,7 @@ const command: BotCommand = {
       groups[access].push(`**/${json.name}** — ${description}`);
     }
 
-    const embed = new EmbedBuilder()
-      .setColor(0x5865f2)
-      .setTitle("Commands");
+    const embed = new EmbedBuilder().setColor(0x5865f2).setTitle("Commands");
 
     for (const access of ["everyone", "staff", "admin"] as const) {
       const lines = groups[access];

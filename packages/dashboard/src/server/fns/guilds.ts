@@ -1,13 +1,10 @@
-import { createServerFn } from "@tanstack/react-start";
 import { parseGuildConfig } from "@modmail/core";
-import { db, schema, eq, inArray } from "#/server/db.ts";
-import { requireUser, requireGuildAccess } from "#/server/access.ts";
-import {
-  getUserGuilds,
-  canManageDiscordGuild,
-  guildIconUrl,
-} from "#/server/discord.ts";
+import { createServerFn } from "@tanstack/react-start";
+import { requireGuildAccess, requireUser } from "#/server/access.ts";
 import { botApi } from "#/server/bot-api.ts";
+import { db, eq, inArray, schema } from "#/server/db.ts";
+import { canManageDiscordGuild, getUserGuilds, guildIconUrl } from "#/server/discord.ts";
+import { guildRef } from "#/server/validators.ts";
 
 export interface DashboardGuild {
   id: string;
@@ -43,16 +40,14 @@ export const getMyGuilds = createServerFn({ method: "GET" }).handler(
         icon: guildIconUrl(g.id, g.icon, 128),
         botPresent: botIds.has(g.id),
         enabled: settingsMap.get(g.id)?.enabled ?? false,
-        setupCompleted: !!(
-          settingsMap.get(g.id)?.enabled && settingsMap.get(g.id)?.inboxChannelId
-        ),
+        setupCompleted: !!(settingsMap.get(g.id)?.enabled && settingsMap.get(g.id)?.inboxChannelId),
       }))
       .sort((a, b) => Number(b.botPresent) - Number(a.botPresent));
   },
 );
 
 export const getGuildContext = createServerFn({ method: "GET" })
-  .validator((d: { guildId: string }) => d)
+  .validator((d: unknown) => guildRef.parse(d))
   .handler(async ({ data }) => {
     const access = await requireGuildAccess(data.guildId);
     const bot = await botApi.guild(data.guildId);

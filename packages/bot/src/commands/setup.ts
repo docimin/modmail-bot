@@ -1,5 +1,5 @@
-import { SlashCommandBuilder, MessageFlags, EmbedBuilder } from "discord.js";
 import { eq, schema } from "@modmail/db";
+import { EmbedBuilder, MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {
@@ -18,20 +18,27 @@ const command: BotCommand = {
             .setName("mode")
             .setDescription("Ticket mode")
             .setRequired(true)
-            .addChoices({ name: "threads", value: "threads" }, { name: "channels", value: "channels" }),
+            .addChoices(
+              { name: "threads", value: "threads" },
+              { name: "channels", value: "channels" },
+            ),
         ),
     )
     .addSubcommand((s) =>
       s
         .setName("inbox")
         .setDescription("Set the inbox channel")
-        .addChannelOption((o) => o.setName("channel").setDescription("Inbox channel").setRequired(true)),
+        .addChannelOption((o) =>
+          o.setName("channel").setDescription("Inbox channel").setRequired(true),
+        ),
     )
     .addSubcommand((s) =>
       s
         .setName("logs")
         .setDescription("Set the log channel")
-        .addChannelOption((o) => o.setName("channel").setDescription("Log channel").setRequired(true)),
+        .addChannelOption((o) =>
+          o.setName("channel").setDescription("Log channel").setRequired(true),
+        ),
     )
     .addSubcommand((s) =>
       s
@@ -71,16 +78,32 @@ const command: BotCommand = {
         .addFields(
           { name: "Enabled", value: settings.enabled ? "✅ Yes" : "❌ No", inline: true },
           { name: "Mode", value: settings.mode, inline: true },
-          { name: "Setup completed", value: settings.setupCompleted ? "✅ Yes" : "❌ No", inline: true },
-          { name: "Inbox", value: settings.inboxChannelId ? `<#${settings.inboxChannelId}>` : "—", inline: true },
-          { name: "Log", value: settings.logChannelId ? `<#${settings.logChannelId}>` : "—", inline: true },
+          {
+            name: "Setup completed",
+            value: settings.setupCompleted ? "✅ Yes" : "❌ No",
+            inline: true,
+          },
+          {
+            name: "Inbox",
+            value: settings.inboxChannelId ? `<#${settings.inboxChannelId}>` : "—",
+            inline: true,
+          },
+          {
+            name: "Log",
+            value: settings.logChannelId ? `<#${settings.logChannelId}>` : "—",
+            inline: true,
+          },
           {
             name: "Staff roles",
-            value: settings.staffRoleIds.length ? settings.staffRoleIds.map((r) => `<@&${r}>`).join(" ") : "—",
+            value: settings.staffRoleIds.length
+              ? settings.staffRoleIds.map((r) => `<@&${r}>`).join(" ")
+              : "—",
           },
           {
             name: "Admin roles",
-            value: settings.adminRoleIds.length ? settings.adminRoleIds.map((r) => `<@&${r}>`).join(" ") : "—",
+            value: settings.adminRoleIds.length
+              ? settings.adminRoleIds.map((r) => `<@&${r}>`).join(" ")
+              : "—",
           },
         );
       await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
@@ -108,7 +131,10 @@ const command: BotCommand = {
         .set({ mode, updatedAt: new Date() })
         .where(eq(schema.guildSettings.guildId, guildId));
       services.settings.invalidate(guildId);
-      await interaction.reply({ content: `✅ Mode set to \`${mode}\`.`, flags: MessageFlags.Ephemeral });
+      await interaction.reply({
+        content: `✅ Mode set to \`${mode}\`.`,
+        flags: MessageFlags.Ephemeral,
+      });
       return;
     }
 
@@ -119,7 +145,10 @@ const command: BotCommand = {
         .set({ inboxChannelId: channelId, setupCompleted: true, updatedAt: new Date() })
         .where(eq(schema.guildSettings.guildId, guildId));
       services.settings.invalidate(guildId);
-      await interaction.reply({ content: `✅ Inbox set to <#${channelId}>.`, flags: MessageFlags.Ephemeral });
+      await interaction.reply({
+        content: `✅ Inbox set to <#${channelId}>.`,
+        flags: MessageFlags.Ephemeral,
+      });
       return;
     }
 
@@ -130,7 +159,10 @@ const command: BotCommand = {
         .set({ logChannelId: channelId, updatedAt: new Date() })
         .where(eq(schema.guildSettings.guildId, guildId));
       services.settings.invalidate(guildId);
-      await interaction.reply({ content: `✅ Log channel set to <#${channelId}>.`, flags: MessageFlags.Ephemeral });
+      await interaction.reply({
+        content: `✅ Log channel set to <#${channelId}>.`,
+        flags: MessageFlags.Ephemeral,
+      });
       return;
     }
 
@@ -158,11 +190,17 @@ const command: BotCommand = {
     const next = isAdd ? [...list, roleId] : list.filter((r) => r !== roleId);
     await db
       .update(schema.guildSettings)
-      .set(isStaff ? { staffRoleIds: next, updatedAt: new Date() } : { adminRoleIds: next, updatedAt: new Date() })
+      .set(
+        isStaff
+          ? { staffRoleIds: next, updatedAt: new Date() }
+          : { adminRoleIds: next, updatedAt: new Date() },
+      )
       .where(eq(schema.guildSettings.guildId, guildId));
     services.settings.invalidate(guildId);
     await interaction.reply({
-      content: isAdd ? `✅ Added <@&${roleId}> as ${label}.` : `🗑️ Removed <@&${roleId}> from ${label}.`,
+      content: isAdd
+        ? `✅ Added <@&${roleId}> as ${label}.`
+        : `🗑️ Removed <@&${roleId}> from ${label}.`,
       flags: MessageFlags.Ephemeral,
     });
   },

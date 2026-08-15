@@ -1,6 +1,6 @@
 import { readdir } from "node:fs/promises";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
 import type { BotCommand } from "../framework.ts";
 
 /** Dynamically import every command module in this folder. */

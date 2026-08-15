@@ -1,5 +1,5 @@
-import { SlashCommandBuilder, MessageFlags, EmbedBuilder } from "discord.js";
-import { and, eq, gte, count, schema } from "@modmail/db";
+import { and, count, eq, gte, schema } from "@modmail/db";
+import { EmbedBuilder, MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {
@@ -34,7 +34,9 @@ const command: BotCommand = {
       db
         .select({ c: count() })
         .from(schema.tickets)
-        .where(and(eq(schema.tickets.guildId, guildId), gte(schema.tickets.createdAt, startOfToday)))
+        .where(
+          and(eq(schema.tickets.guildId, guildId), gte(schema.tickets.createdAt, startOfToday)),
+        )
         .then((r) => r[0]?.c ?? 0),
       db
         .select({ c: count() })

@@ -1,15 +1,13 @@
-import { SlashCommandBuilder, MessageFlags } from "discord.js";
-import { schema } from "@modmail/db";
 import { blockInputSchema } from "@modmail/core";
+import { schema } from "@modmail/db";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {
   data: new SlashCommandBuilder()
     .setName("block")
     .setDescription("Block a user from opening tickets")
-    .addUserOption((o) =>
-      o.setName("user").setDescription("User to block").setRequired(true),
-    )
+    .addUserOption((o) => o.setName("user").setDescription("User to block").setRequired(true))
     .addStringOption((o) =>
       o.setName("reason").setDescription("Reason for the block").setMaxLength(1000),
     )

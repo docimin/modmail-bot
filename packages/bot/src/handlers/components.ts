@@ -1,12 +1,12 @@
+import { eq, schema } from "@modmail/db";
 import {
   ActionRowBuilder,
-  StringSelectMenuBuilder,
-  MessageFlags,
-  type MessageComponentInteraction,
-  type ModalSubmitInteraction,
   type GuildMember,
+  type MessageComponentInteraction,
+  MessageFlags,
+  type ModalSubmitInteraction,
+  StringSelectMenuBuilder,
 } from "discord.js";
-import { eq, schema } from "@modmail/db";
 import type { Services } from "../framework.ts";
 import { memberAccess } from "../lib/access.ts";
 

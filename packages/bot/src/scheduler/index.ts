@@ -1,13 +1,11 @@
-import { and, eq, lt, lte, isNull, or, sql, schema } from "@modmail/db";
+import { and, eq, isNull, lt, lte, or, schema, sql } from "@modmail/db";
 import type { Services } from "../framework.ts";
 
 const INTERVAL_MS = 60_000;
 
 export function startScheduler(services: Services): void {
   const run = () =>
-    void tick(services).catch((err) =>
-      services.logger.error({ err }, "scheduler tick failed"),
-    );
+    void tick(services).catch((err) => services.logger.error({ err }, "scheduler tick failed"));
   setInterval(run, INTERVAL_MS).unref?.();
   run();
 }
@@ -51,9 +49,7 @@ async function runDueTasks(services: Services): Promise<void> {
     } catch (err) {
       services.logger.error({ err, taskId: task.id }, "scheduled task failed");
     } finally {
-      await db
-        .delete(schema.scheduledTasks)
-        .where(eq(schema.scheduledTasks.id, task.id));
+      await db.delete(schema.scheduledTasks).where(eq(schema.scheduledTasks.id, task.id));
     }
   }
 }
@@ -74,10 +70,7 @@ async function autoCloseInactive(services: Services): Promise<void> {
         eq(schema.tickets.guildId, row.guildId),
         eq(schema.tickets.status, "open"),
         or(
-          and(
-            isNull(schema.tickets.lastUserMessageAt),
-            lt(schema.tickets.createdAt, cutoff),
-          ),
+          and(isNull(schema.tickets.lastUserMessageAt), lt(schema.tickets.createdAt, cutoff)),
           lt(schema.tickets.lastUserMessageAt, cutoff),
         ),
       ),

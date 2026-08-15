@@ -1,6 +1,6 @@
 import { PERMISSIONS } from "@modmail/core";
 import { auth } from "./auth.ts";
-import { db, schema, and, eq } from "./db.ts";
+import { and, db, eq, schema } from "./db.ts";
 
 export interface UserGuild {
   id: string;

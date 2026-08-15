@@ -1,16 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  MessagesSquare,
-  Inbox,
-  ShieldCheck,
-  Zap,
-  LayoutDashboard,
-  GitBranch,
-} from "lucide-react";
-import { getPublicConfig } from "#/server/fns/public.ts";
-import { getSession } from "#/server/fns/session.ts";
+import { GitBranch, Inbox, LayoutDashboard, MessagesSquare, ShieldCheck, Zap } from "lucide-react";
 import { Button } from "#/components/ui/index.tsx";
 import { loginWithDiscord } from "#/lib/auth-client.ts";
+import { getPublicConfig } from "#/server/fns/public.ts";
+import { getSession } from "#/server/fns/session.ts";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -21,12 +14,36 @@ export const Route = createFileRoute("/")({
 });
 
 const FEATURES = [
-  { icon: Inbox, title: "Thread or channel inbox", desc: "Every DM becomes a private staff thread (or channel). Reply, edit, and close from Discord or the web." },
-  { icon: MessagesSquare, title: "Snippets & canned replies", desc: "Save common answers and fire them off with a slash command or one click in the dashboard." },
-  { icon: ShieldCheck, title: "Blocks, cooldowns & gating", desc: "Stop spam with per-user blocks, cooldowns, minimum account age and confirmation prompts." },
-  { icon: Zap, title: "Automation", desc: "Auto-close inactive tickets, schedule closes, ping roles, and route by category." },
-  { icon: LayoutDashboard, title: "Feature-rich dashboard", desc: "Manage tickets, settings, categories, tags, staff and analytics from anywhere." },
-  { icon: GitBranch, title: "Multi-server", desc: "One bot, every server. Members pick which community they're contacting." },
+  {
+    icon: Inbox,
+    title: "Thread or channel inbox",
+    desc: "Every DM becomes a private staff thread (or channel). Reply, edit, and close from Discord or the web.",
+  },
+  {
+    icon: MessagesSquare,
+    title: "Snippets & canned replies",
+    desc: "Save common answers and fire them off with a slash command or one click in the dashboard.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Blocks, cooldowns & gating",
+    desc: "Stop spam with per-user blocks, cooldowns, minimum account age and confirmation prompts.",
+  },
+  {
+    icon: Zap,
+    title: "Automation",
+    desc: "Auto-close inactive tickets, schedule closes, ping roles, and route by category.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Feature-rich dashboard",
+    desc: "Manage tickets, settings, categories, tags, staff and analytics from anywhere.",
+  },
+  {
+    icon: GitBranch,
+    title: "Multi-server",
+    desc: "One bot, every server. Members pick which community they're contacting.",
+  },
 ];
 
 function Landing() {
@@ -43,14 +60,18 @@ function Landing() {
         </div>
         <div className="flex items-center gap-3">
           <a href={config.inviteUrl} target="_blank" rel="noreferrer">
-            <Button variant="outline" size="sm">Add to server</Button>
+            <Button variant="outline" size="sm">
+              Add to server
+            </Button>
           </a>
           {user ? (
             <Link to="/dashboard">
               <Button size="sm">Open dashboard</Button>
             </Link>
           ) : (
-            <Button size="sm" onClick={() => loginWithDiscord()}>Sign in</Button>
+            <Button size="sm" onClick={() => loginWithDiscord()}>
+              Sign in
+            </Button>
           )}
         </div>
       </header>
@@ -74,7 +95,9 @@ function Landing() {
           </a>
           {user ? (
             <Link to="/dashboard">
-              <Button variant="outline" size="md">Open dashboard</Button>
+              <Button variant="outline" size="md">
+                Open dashboard
+              </Button>
             </Link>
           ) : (
             <Button variant="outline" size="md" onClick={() => loginWithDiscord()}>
@@ -87,7 +110,10 @@ function Landing() {
       <section className="mx-auto max-w-6xl px-6 pb-24">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <div key={f.title} className="rounded-[var(--radius-card)] border border-border bg-surface p-5">
+            <div
+              key={f.title}
+              className="rounded-[var(--radius-card)] border border-border bg-surface p-5"
+            >
               <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-accent/15 text-accent">
                 <f.icon className="h-4.5 w-4.5" />
               </div>

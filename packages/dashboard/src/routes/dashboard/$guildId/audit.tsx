@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ScrollText, ChevronLeft, ChevronRight } from "lucide-react";
-import { listAudit } from "#/server/fns/audit.ts";
+import { ChevronLeft, ChevronRight, ScrollText } from "lucide-react";
+import { useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
 import { Badge, Button, Card, EmptyState, Spinner } from "#/components/ui/index.tsx";
 import { relativeTime } from "#/lib/utils.ts";
+import { listAudit } from "#/server/fns/audit.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/audit")({
   loader: ({ params }) => listAudit({ data: { guildId: params.guildId } }),
@@ -39,7 +39,10 @@ function AuditPage() {
 
   return (
     <div>
-      <PageHeader title="Audit log" description="Every action taken across your modmail, by the bot and from this dashboard." />
+      <PageHeader
+        title="Audit log"
+        description="Every action taken across your modmail, by the bot and from this dashboard."
+      />
       <div className="px-8 py-6">
         {data.items.length === 0 ? (
           <EmptyState

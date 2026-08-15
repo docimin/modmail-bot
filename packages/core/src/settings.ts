@@ -1,15 +1,13 @@
-import { z } from "zod";
 import type { GuildConfig } from "@modmail/db";
+import { z } from "zod";
 import {
-  DEFAULT_GREETING,
-  DEFAULT_CLOSE_MESSAGE,
-  DEFAULT_BLOCKED_MESSAGE,
   DEFAULT_AWAY_MESSAGE,
+  DEFAULT_BLOCKED_MESSAGE,
+  DEFAULT_CLOSE_MESSAGE,
+  DEFAULT_GREETING,
 } from "./default-messages.ts";
 
-const hexColor = z
-  .string()
-  .regex(/^#?[0-9a-fA-F]{6}$/, "Must be a hex color like #5865f2");
+const hexColor = z.string().regex(/^#?[0-9a-fA-F]{6}$/, "Must be a hex color like #5865f2");
 
 export const embedFieldSchema = z.object({
   name: z.string().max(256),
@@ -135,10 +133,7 @@ export function parseGuildConfig(raw: unknown): GuildConfig {
 }
 
 /** Validate a partial update and merge it onto an existing config. */
-export function mergeGuildConfig(
-  current: GuildConfig,
-  patch: unknown,
-): GuildConfig {
+export function mergeGuildConfig(current: GuildConfig, patch: unknown): GuildConfig {
   const partial = guildConfigSchema.partial().parse(patch ?? {});
   return guildConfigSchema.parse({ ...current, ...partial });
 }

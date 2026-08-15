@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, MessageFlags, EmbedBuilder } from "discord.js";
+import { EmbedBuilder, MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {
@@ -27,9 +27,7 @@ const command: BotCommand = {
       .setColor(0x5865f2)
       .setTitle(`Ticket history — ${user.username}`)
       .setDescription(
-        lines.length
-          ? lines.join("\n").slice(0, 4000)
-          : "No tickets found for this user.",
+        lines.length ? lines.join("\n").slice(0, 4000) : "No tickets found for this user.",
       );
 
     await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });

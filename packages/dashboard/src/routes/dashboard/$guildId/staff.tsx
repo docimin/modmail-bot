@@ -1,20 +1,12 @@
-import { useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Plus, Trash2, Users } from "lucide-react";
-import { listStaff, addStaff, removeStaff } from "#/server/fns/staff.ts";
+import { useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
-import {
-  Badge,
-  Button,
-  Card,
-  EmptyState,
-  Field,
-  Input,
-  Select,
-} from "#/components/ui/index.tsx";
 import { Dialog } from "#/components/ui/Dialog.tsx";
+import { Badge, Button, Card, EmptyState, Field, Input, Select } from "#/components/ui/index.tsx";
 import { toast } from "#/components/ui/toast.tsx";
 import { formatDateTime } from "#/lib/utils.ts";
+import { addStaff, listStaff, removeStaff } from "#/server/fns/staff.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/staff")({
   loader: ({ params }) => listStaff({ data: { guildId: params.guildId } }),
@@ -123,8 +115,12 @@ function StaffPage() {
         description="Enter a Discord user ID to grant them dashboard access."
         footer={
           <>
-            <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={save} loading={saving} disabled={!userId}>Add</Button>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={save} loading={saving} disabled={!userId}>
+              Add
+            </Button>
           </>
         }
       >

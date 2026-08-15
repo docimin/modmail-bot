@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, MessageFlags } from "discord.js";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {
@@ -13,9 +13,7 @@ const command: BotCommand = {
   async execute({ interaction, services, ticket }) {
     if (!ticket) return;
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-    const content = interaction.options
-      .getString("message", true)
-      .replaceAll("\\n", "\n");
+    const content = interaction.options.getString("message", true).replaceAll("\\n", "\n");
 
     const result = await services.tickets.sendStaffReply(ticket, {
       authorId: interaction.user.id,

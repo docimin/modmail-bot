@@ -1,11 +1,8 @@
+import { type ResolvedAccess, resolveAccess } from "@modmail/core";
 import type { GuildMember } from "discord.js";
-import { resolveAccess, type ResolvedAccess } from "@modmail/core";
 import type { ResolvedSettings } from "../settings/service.ts";
 
-export function memberAccess(
-  member: GuildMember,
-  settings: ResolvedSettings,
-): ResolvedAccess {
+export function memberAccess(member: GuildMember, settings: ResolvedSettings): ResolvedAccess {
   return resolveAccess(
     {
       roleIds: [...member.roles.cache.keys()],

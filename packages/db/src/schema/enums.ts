@@ -2,12 +2,7 @@ import { pgEnum } from "drizzle-orm/pg-core";
 
 export const modmailMode = pgEnum("modmail_mode", ["threads", "channels"]);
 export const ticketStatus = pgEnum("ticket_status", ["open", "closed"]);
-export const ticketPriority = pgEnum("ticket_priority", [
-  "low",
-  "normal",
-  "high",
-  "urgent",
-]);
+export const ticketPriority = pgEnum("ticket_priority", ["low", "normal", "high", "urgent"]);
 export const messageType = pgEnum("message_type", [
   "user", // sent by the ticket user (DM -> inbox)
   "staff", // staff reply relayed to user

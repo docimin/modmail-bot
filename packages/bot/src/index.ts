@@ -1,17 +1,17 @@
 import { Events } from "discord.js";
-import { env } from "./env.ts";
-import { logger } from "./logger.ts";
-import { db } from "./db.ts";
-import { createClient } from "./client.ts";
-import { SettingsService } from "./settings/service.ts";
-import { TicketService } from "./modmail/TicketService.ts";
-import { DMRouter } from "./modmail/DMRouter.ts";
-import { loadCommands } from "./commands/loader.ts";
-import { registerEvents } from "./events/index.ts";
 import { startApi } from "./api/server.ts";
-import { startScheduler } from "./scheduler/index.ts";
-import { deployCommands } from "./lib/deploy.ts";
+import { createClient } from "./client.ts";
+import { loadCommands } from "./commands/loader.ts";
+import { db } from "./db.ts";
+import { env } from "./env.ts";
+import { registerEvents } from "./events/index.ts";
 import type { Services } from "./framework.ts";
+import { deployCommands } from "./lib/deploy.ts";
+import { logger } from "./logger.ts";
+import { DMRouter } from "./modmail/DMRouter.ts";
+import { TicketService } from "./modmail/TicketService.ts";
+import { startScheduler } from "./scheduler/index.ts";
+import { SettingsService } from "./settings/service.ts";
 
 const client = createClient();
 const settings = new SettingsService(db);

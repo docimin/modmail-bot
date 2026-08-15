@@ -1,7 +1,7 @@
+import { getDb, schema } from "@modmail/db";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
-import { getDb, schema } from "@modmail/db";
 import { env } from "./env.ts";
 
 export const auth = betterAuth({
@@ -26,6 +26,12 @@ export const auth = betterAuth({
   account: {
     accountLinking: { enabled: true },
   },
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 30,
+  },
+  trustedOrigins: [env.BETTER_AUTH_URL],
   plugins: [tanstackStartCookies()],
 });
 

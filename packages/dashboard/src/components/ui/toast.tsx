@@ -1,5 +1,5 @@
+import { AlertCircle, CheckCircle2, Info, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { CheckCircle2, AlertCircle, Info, X } from "lucide-react";
 import { cn } from "#/lib/utils.ts";
 
 export type ToastTone = "success" | "error" | "info";
@@ -56,6 +56,7 @@ export function Toaster() {
           {icons[t.tone]}
           <span className="flex-1">{t.message}</span>
           <button
+            type="button"
             onClick={() => {
               items = items.filter((i) => i.id !== t.id);
               emit();

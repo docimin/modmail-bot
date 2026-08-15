@@ -1,11 +1,12 @@
-import { createServerFn } from "@tanstack/react-start";
 import { snippetInputSchema } from "@modmail/core";
-import { db, schema, and, eq, desc } from "#/server/db.ts";
+import { createServerFn } from "@tanstack/react-start";
 import { requireGuildAccess } from "#/server/access.ts";
 import { botApi } from "#/server/bot-api.ts";
+import { and, db, desc, eq, schema } from "#/server/db.ts";
+import { guildRef, idRef } from "#/server/validators.ts";
 
 export const listSnippets = createServerFn({ method: "GET" })
-  .validator((d: { guildId: string }) => d)
+  .validator((d: unknown) => guildRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
     return db.query.snippets.findMany({
@@ -15,21 +16,20 @@ export const listSnippets = createServerFn({ method: "GET" })
   });
 
 export const saveSnippet = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; name: string; content: string }) => d)
+  .validator((d: unknown) => guildRef.extend(snippetInputSchema.shape).parse(d))
   .handler(async ({ data }) => {
     const { userId } = await requireGuildAccess(data.guildId);
-    const parsed = snippetInputSchema.parse({ name: data.name, content: data.content });
     const [row] = await db
       .insert(schema.snippets)
       .values({
         guildId: data.guildId,
-        name: parsed.name,
-        content: parsed.content,
+        name: data.name,
+        content: data.content,
         createdById: userId,
       })
       .onConflictDoUpdate({
         target: [schema.snippets.guildId, schema.snippets.name],
-        set: { content: parsed.content, updatedAt: new Date() },
+        set: { content: data.content, updatedAt: new Date() },
       })
       .returning();
     await botApi.invalidate(data.guildId);
@@ -37,7 +37,7 @@ export const saveSnippet = createServerFn({ method: "POST" })
   });
 
 export const deleteSnippet = createServerFn({ method: "POST" })
-  .validator((d: { guildId: string; id: string }) => d)
+  .validator((d: unknown) => idRef.parse(d))
   .handler(async ({ data }) => {
     await requireGuildAccess(data.guildId);
     await db

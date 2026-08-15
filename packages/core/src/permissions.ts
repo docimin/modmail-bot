@@ -16,10 +16,7 @@ function toBig(p: string | bigint): bigint {
   return typeof p === "bigint" ? p : BigInt(p || "0");
 }
 
-export function hasPermissionBit(
-  permissions: string | bigint,
-  flag: bigint,
-): boolean {
+export function hasPermissionBit(permissions: string | bigint, flag: bigint): boolean {
   const bits = toBig(permissions);
   if ((bits & PERMISSIONS.ADMINISTRATOR) === PERMISSIONS.ADMINISTRATOR) return true;
   return (bits & flag) === flag;
@@ -27,10 +24,7 @@ export function hasPermissionBit(
 
 /** Can this member configure the bot (Discord-level server management)? */
 export function canManageGuild(member: MemberAccessInput): boolean {
-  return (
-    member.isOwner === true ||
-    hasPermissionBit(member.permissions, PERMISSIONS.MANAGE_GUILD)
-  );
+  return member.isOwner === true || hasPermissionBit(member.permissions, PERMISSIONS.MANAGE_GUILD);
 }
 
 function intersects(a: string[], b: string[]): boolean {
@@ -43,10 +37,7 @@ export interface ResolvedAccess {
   canConfigure: boolean;
 }
 
-export function resolveAccess(
-  member: MemberAccessInput,
-  settings: AccessSettings,
-): ResolvedAccess {
+export function resolveAccess(member: MemberAccessInput, settings: AccessSettings): ResolvedAccess {
   const manage = canManageGuild(member);
   const isAdmin = manage || intersects(member.roleIds, settings.adminRoleIds);
   const isStaff =

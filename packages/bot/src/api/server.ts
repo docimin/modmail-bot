@@ -1,42 +1,63 @@
+import { timingSafeEqual } from "node:crypto";
 import { serve } from "@hono/node-server";
-import { Hono } from "hono";
-import { eq, schema } from "@modmail/db";
 import {
-  replyInputSchema,
   closeInputSchema,
   noteInputSchema,
   priorityInputSchema,
+  replyInputSchema,
 } from "@modmail/core";
+import { eq, schema } from "@modmail/db";
+import { Hono } from "hono";
 import { env } from "../env.ts";
 import type { Services } from "../framework.ts";
-import {
-  guildToDTO,
-  channelsToDTO,
-  rolesToDTO,
-  emojisToDTO,
-  memberToDTO,
-  fetchMemberSafe,
-} from "../lib/discord.ts";
 import { deployCommands } from "../lib/deploy.ts";
+import {
+  channelsToDTO,
+  emojisToDTO,
+  fetchMemberSafe,
+  guildToDTO,
+  memberToDTO,
+  rolesToDTO,
+} from "../lib/discord.ts";
 
-export function startApi(services: Services): void {
+const AUTH_WINDOW_MS = 60_000;
+const MAX_AUTH_FAILURES = 100;
+
+function secretMatches(header: string | undefined, secret: string): boolean {
+  if (!header) return false;
+  const expected = Buffer.from(`Bearer ${secret}`);
+  const received = Buffer.from(header);
+  // length must match before timingSafeEqual, which throws on differing sizes
+  if (expected.length !== received.length) return false;
+  return timingSafeEqual(expected, received);
+}
+
+export function createApi(services: Services, opts: { secret: string }): Hono {
   const app = new Hono();
-  const { client, db, logger } = services;
+  const { client, db } = services;
 
-  // bearer auth
+  // Throttle failed auth only: a shared budget would let an attacker starve the dashboard.
+  let windowStart = Date.now();
+  let failures = 0;
+
   app.use("*", async (c, next) => {
     if (c.req.path === "/health") return next();
-    const auth = c.req.header("authorization");
-    if (auth !== `Bearer ${env.INTERNAL_API_SECRET}`)
-      return c.json({ error: "unauthorized" }, 401);
-    return next();
+
+    if (secretMatches(c.req.header("authorization"), opts.secret)) return next();
+
+    const now = Date.now();
+    if (now - windowStart > AUTH_WINDOW_MS) {
+      windowStart = now;
+      failures = 0;
+    }
+    failures++;
+    if (failures > MAX_AUTH_FAILURES) return c.json({ error: "too_many_requests" }, 429);
+    return c.json({ error: "unauthorized" }, 401);
   });
 
   app.get("/health", (c) => c.json({ ok: true, ready: client.isReady() }));
 
-  app.get("/guilds", (c) =>
-    c.json([...client.guilds.cache.values()].map(guildToDTO)),
-  );
+  app.get("/guilds", (c) => c.json([...client.guilds.cache.values()].map(guildToDTO)));
 
   app.get("/guilds/:id", async (c) => {
     const guild = await client.guilds.fetch(c.req.param("id")).catch(() => null);
@@ -77,12 +98,17 @@ export function startApi(services: Services): void {
 
   // ─── ticket actions ──────────────────────────────────────────────────────
 
-  async function getTicket(id: string) {
-    return db.query.tickets.findFirst({ where: eq(schema.tickets.id, id) });
+  /** Tickets are only ever addressable through the guild that owns them. */
+  async function getTicket(c: { req: { param(k: string): string } }) {
+    const ticket = await db.query.tickets.findFirst({
+      where: eq(schema.tickets.id, c.req.param("ticketId")),
+    });
+    if (!ticket || ticket.guildId !== c.req.param("guildId")) return null;
+    return ticket;
   }
 
-  app.post("/tickets/:id/reply", async (c) => {
-    const ticket = await getTicket(c.req.param("id"));
+  app.post("/guilds/:guildId/tickets/:ticketId/reply", async (c) => {
+    const ticket = await getTicket(c);
     if (!ticket) return c.json({ error: "not_found" }, 404);
     const body = await c.req.json().catch(() => ({}));
     const parsed = replyInputSchema.safeParse(body);
@@ -103,8 +129,8 @@ export function startApi(services: Services): void {
     return c.json(result, result.ok ? 200 : 409);
   });
 
-  app.post("/tickets/:id/note", async (c) => {
-    const ticket = await getTicket(c.req.param("id"));
+  app.post("/guilds/:guildId/tickets/:ticketId/note", async (c) => {
+    const ticket = await getTicket(c);
     if (!ticket) return c.json({ error: "not_found" }, 404);
     const body = await c.req.json().catch(() => ({}));
     const parsed = noteInputSchema.safeParse(body);
@@ -121,8 +147,8 @@ export function startApi(services: Services): void {
     return c.json({ ok: true });
   });
 
-  app.post("/tickets/:id/close", async (c) => {
-    const ticket = await getTicket(c.req.param("id"));
+  app.post("/guilds/:guildId/tickets/:ticketId/close", async (c) => {
+    const ticket = await getTicket(c);
     if (!ticket) return c.json({ error: "not_found" }, 404);
     const body = await c.req.json().catch(() => ({}));
     const parsed = closeInputSchema.safeParse(body);
@@ -137,8 +163,8 @@ export function startApi(services: Services): void {
     return c.json({ ok: true });
   });
 
-  app.post("/tickets/:id/assign", async (c) => {
-    const ticket = await getTicket(c.req.param("id"));
+  app.post("/guilds/:guildId/tickets/:ticketId/assign", async (c) => {
+    const ticket = await getTicket(c);
     if (!ticket) return c.json({ error: "not_found" }, 404);
     const body = await c.req.json().catch(() => ({}));
     const staffId = body.staffId ? String(body.staffId) : null;
@@ -149,8 +175,8 @@ export function startApi(services: Services): void {
     return c.json({ ok: true });
   });
 
-  app.post("/tickets/:id/priority", async (c) => {
-    const ticket = await getTicket(c.req.param("id"));
+  app.post("/guilds/:guildId/tickets/:ticketId/priority", async (c) => {
+    const ticket = await getTicket(c);
     if (!ticket) return c.json({ error: "not_found" }, 404);
     const body = await c.req.json().catch(() => ({}));
     const parsed = priorityInputSchema.safeParse(body);
@@ -170,7 +196,19 @@ export function startApi(services: Services): void {
     return c.json({ ok: true, count });
   });
 
-  serve({ fetch: app.fetch, port: env.INTERNAL_API_PORT }, (info) => {
-    logger.info(`Internal API listening on :${info.port}`);
-  });
+  return app;
+}
+
+export function startApi(services: Services): void {
+  const app = createApi(services, { secret: env.INTERNAL_API_SECRET });
+  serve(
+    {
+      fetch: app.fetch,
+      port: env.INTERNAL_API_PORT,
+      hostname: env.INTERNAL_API_HOST,
+    },
+    (info) => {
+      services.logger.info(`Internal API listening on ${env.INTERNAL_API_HOST}:${info.port}`);
+    },
+  );
 }

@@ -1,17 +1,17 @@
+import type {
+  BotGuildDTO,
+  DiscordChannelDTO,
+  DiscordEmojiDTO,
+  DiscordRoleDTO,
+  GuildMemberDTO,
+} from "@modmail/core";
 import {
+  ChannelType,
   type Client,
   type Guild,
-  type GuildMember,
-  ChannelType,
   type GuildBasedChannel,
+  type GuildMember,
 } from "discord.js";
-import type {
-  DiscordChannelDTO,
-  DiscordRoleDTO,
-  DiscordEmojiDTO,
-  GuildMemberDTO,
-  BotGuildDTO,
-} from "@modmail/core";
 
 export function guildToDTO(guild: Guild): BotGuildDTO {
   return {
@@ -32,8 +32,7 @@ const TEXTLIKE = new Set<number>([
 export function channelsToDTO(guild: Guild): DiscordChannelDTO[] {
   return [...guild.channels.cache.values()]
     .filter(
-      (c): c is GuildBasedChannel =>
-        TEXTLIKE.has(c.type) || c.type === ChannelType.GuildCategory,
+      (c): c is GuildBasedChannel => TEXTLIKE.has(c.type) || c.type === ChannelType.GuildCategory,
     )
     .map((c) => ({
       id: c.id,
@@ -79,16 +78,10 @@ export function memberToDTO(member: GuildMember): GuildMemberDTO {
   };
 }
 
-export async function fetchMemberSafe(
-  guild: Guild,
-  userId: string,
-): Promise<GuildMember | null> {
+export async function fetchMemberSafe(guild: Guild, userId: string): Promise<GuildMember | null> {
   return guild.members.fetch(userId).catch(() => null);
 }
 
-export async function fetchGuildSafe(
-  client: Client,
-  guildId: string,
-): Promise<Guild | null> {
+export async function fetchGuildSafe(client: Client, guildId: string): Promise<Guild | null> {
   return client.guilds.fetch(guildId).catch(() => null);
 }

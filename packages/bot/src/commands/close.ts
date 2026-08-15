@@ -1,14 +1,12 @@
-import { SlashCommandBuilder, MessageFlags } from "discord.js";
 import { schema } from "@modmail/db";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const command: BotCommand = {
   data: new SlashCommandBuilder()
     .setName("close")
     .setDescription("Close this ticket")
-    .addStringOption((o) =>
-      o.setName("reason").setDescription("Close reason").setMaxLength(1000),
-    )
+    .addStringOption((o) => o.setName("reason").setDescription("Close reason").setMaxLength(1000))
     .addIntegerOption((o) =>
       o
         .setName("delay")
@@ -16,9 +14,7 @@ const command: BotCommand = {
         .setMinValue(1)
         .setMaxValue(10080),
     )
-    .addBooleanOption((o) =>
-      o.setName("silent").setDescription("Don't notify the user"),
-    ),
+    .addBooleanOption((o) => o.setName("silent").setDescription("Don't notify the user")),
   access: "staff",
   inTicketOnly: true,
   async execute({ interaction, services, ticket }) {

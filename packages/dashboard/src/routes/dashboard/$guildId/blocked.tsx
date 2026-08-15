@@ -1,20 +1,12 @@
-import { useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Ban, Plus, ShieldOff } from "lucide-react";
-import { listBlocked, blockUser, unblockUser } from "#/server/fns/blocked.ts";
+import { useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
-import {
-  Badge,
-  Button,
-  Card,
-  EmptyState,
-  Field,
-  Input,
-  Select,
-} from "#/components/ui/index.tsx";
 import { Dialog } from "#/components/ui/Dialog.tsx";
+import { Badge, Button, Card, EmptyState, Field, Input, Select } from "#/components/ui/index.tsx";
 import { toast } from "#/components/ui/toast.tsx";
 import { relativeTime } from "#/lib/utils.ts";
+import { blockUser, listBlocked, unblockUser } from "#/server/fns/blocked.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/blocked")({
   loader: ({ params }) => listBlocked({ data: { guildId: params.guildId } }),
@@ -144,7 +136,9 @@ function BlockedPage() {
         description="The user won't be able to open new tickets while blocked."
         footer={
           <>
-            <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
             <Button onClick={save} loading={saving} disabled={!userId.trim()}>
               <Ban className="h-4 w-4" /> Block
             </Button>

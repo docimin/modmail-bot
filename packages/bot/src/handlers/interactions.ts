@@ -1,10 +1,10 @@
 import {
-  MessageFlags,
-  type Interaction,
   type ChatInputCommandInteraction,
   type GuildMember,
+  type Interaction,
+  MessageFlags,
 } from "discord.js";
-import type { Services, CommandContext } from "../framework.ts";
+import type { CommandContext, Services } from "../framework.ts";
 import { memberAccess } from "../lib/access.ts";
 import { handleComponent, handleModal } from "./components.ts";
 
@@ -13,17 +13,14 @@ export async function handleInteraction(
   services: Services,
 ): Promise<void> {
   try {
-    if (interaction.isChatInputCommand())
-      return await handleCommand(interaction, services);
+    if (interaction.isChatInputCommand()) return await handleCommand(interaction, services);
     if (interaction.isAutocomplete()) {
       const cmd = services.commands.get(interaction.commandName);
       if (cmd?.autocomplete) await cmd.autocomplete(interaction, services);
       return;
     }
-    if (interaction.isMessageComponent())
-      return await handleComponent(interaction, services);
-    if (interaction.isModalSubmit())
-      return await handleModal(interaction, services);
+    if (interaction.isMessageComponent()) return await handleComponent(interaction, services);
+    if (interaction.isModalSubmit()) return await handleModal(interaction, services);
   } catch (err) {
     services.logger.error({ err }, "interaction handler error");
   }
@@ -60,8 +57,7 @@ async function handleCommand(
     return;
   }
 
-  const ticket =
-    (await services.tickets.findOpenByChannel(interaction.channelId)) ?? null;
+  const ticket = (await services.tickets.findOpenByChannel(interaction.channelId)) ?? null;
 
   if (command.inTicketOnly && !ticket) {
     await replyError(interaction, "Use this inside a ticket channel.");

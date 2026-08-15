@@ -1,5 +1,5 @@
-import { ChannelType, Events, type Client, type Message } from "discord.js";
 import { eq, schema } from "@modmail/db";
+import { ChannelType, type Client, Events, type Message } from "discord.js";
 import type { Services } from "../framework.ts";
 import { handleInteraction } from "../handlers/interactions.ts";
 

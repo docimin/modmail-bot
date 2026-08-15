@@ -1,4 +1,4 @@
-import type { MessageTemplate, EmbedTemplate } from "@modmail/db";
+import type { EmbedTemplate, MessageTemplate } from "@modmail/db";
 import { LIMITS } from "./constants.ts";
 
 export interface RenderedEmbed {
@@ -97,13 +97,7 @@ function renderEmbed(embed: EmbedTemplate, vars: TemplateVars): RenderedEmbed | 
   if (embed.timestamp) e.timestamp = new Date().toISOString();
 
   const hasContent =
-    e.title ||
-    e.description ||
-    e.fields?.length ||
-    e.image ||
-    e.thumbnail ||
-    e.author ||
-    e.footer;
+    e.title || e.description || e.fields?.length || e.image || e.thumbnail || e.author || e.footer;
   return hasContent ? e : null;
 }
 
@@ -113,10 +107,7 @@ function clip(s: string | undefined, max: number): string | undefined {
 }
 
 /** Render a stored MessageTemplate to a Discord-ready payload. */
-export function renderMessage(
-  template: MessageTemplate,
-  vars: TemplateVars = {},
-): RenderedMessage {
+export function renderMessage(template: MessageTemplate, vars: TemplateVars = {}): RenderedMessage {
   const content = clip(applyVars(template.content, vars), LIMITS.content);
   const embeds = (template.embeds ?? [])
     .slice(0, LIMITS.embeds)

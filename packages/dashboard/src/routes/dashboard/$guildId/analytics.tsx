@@ -1,27 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CheckCircle2, Inbox, Layers, MessageSquareText, Sun, Timer } from "lucide-react";
 import {
-  ResponsiveContainer,
-  AreaChart,
   Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  CartesianGrid,
-  BarChart,
-  Bar,
-  Cell,
 } from "recharts";
-import {
-  Inbox,
-  CheckCircle2,
-  Layers,
-  Sun,
-  Timer,
-  MessageSquareText,
-} from "lucide-react";
-import { getAnalytics, getStats } from "#/server/fns/stats.ts";
 import { PageHeader } from "#/components/AppShell.tsx";
 import { Card } from "#/components/ui/index.tsx";
+import { getAnalytics, getStats } from "#/server/fns/stats.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/analytics")({
   loader: async ({ params }) => {
@@ -61,17 +54,44 @@ function Analytics() {
       <PageHeader title="Analytics" description="Trends and breakdowns for your modmail inbox." />
       <div className="space-y-6 px-8 py-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          <Stat icon={<Layers className="h-5 w-5" />} label="Total tickets" value={stats.total} tone="default" />
-          <Stat icon={<Inbox className="h-5 w-5" />} label="Open" value={stats.open} tone="accent" />
-          <Stat icon={<CheckCircle2 className="h-5 w-5" />} label="Closed" value={stats.closed} tone="success" />
-          <Stat icon={<Sun className="h-5 w-5" />} label="Today" value={stats.today} tone="warning" />
+          <Stat
+            icon={<Layers className="h-5 w-5" />}
+            label="Total tickets"
+            value={stats.total}
+            tone="default"
+          />
+          <Stat
+            icon={<Inbox className="h-5 w-5" />}
+            label="Open"
+            value={stats.open}
+            tone="accent"
+          />
+          <Stat
+            icon={<CheckCircle2 className="h-5 w-5" />}
+            label="Closed"
+            value={stats.closed}
+            tone="success"
+          />
+          <Stat
+            icon={<Sun className="h-5 w-5" />}
+            label="Today"
+            value={stats.today}
+            tone="warning"
+          />
           <Stat
             icon={<Timer className="h-5 w-5" />}
             label="Avg. first response"
-            value={stats.avgFirstResponseMinutes === null ? "—" : `${stats.avgFirstResponseMinutes}m`}
+            value={
+              stats.avgFirstResponseMinutes === null ? "—" : `${stats.avgFirstResponseMinutes}m`
+            }
             tone="default"
           />
-          <Stat icon={<MessageSquareText className="h-5 w-5" />} label="Snippets" value={stats.snippets} tone="default" />
+          <Stat
+            icon={<MessageSquareText className="h-5 w-5" />}
+            label="Snippets"
+            value={stats.snippets}
+            tone="default"
+          />
         </div>
 
         <Card className="p-5">
@@ -103,7 +123,10 @@ function Analytics() {
         <Card className="p-5">
           <h3 className="mb-4 font-semibold text-text">By priority</h3>
           <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={analytics.byPriority} margin={{ top: 4, right: 8, bottom: 0, left: -16 }}>
+            <BarChart
+              data={analytics.byPriority}
+              margin={{ top: 4, right: 8, bottom: 0, left: -16 }}
+            >
               <CartesianGrid stroke="#262c39" vertical={false} />
               <XAxis dataKey="priority" tick={axisStyle} stroke="#262c39" tickLine={false} />
               <YAxis allowDecimals={false} tick={axisStyle} stroke="#262c39" tickLine={false} />
@@ -142,7 +165,9 @@ function Stat({
   return (
     <Card className="p-5">
       <div className="flex items-center gap-3">
-        <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${tones[tone]}`}>{icon}</div>
+        <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${tones[tone]}`}>
+          {icon}
+        </div>
         <div>
           <div className="text-2xl font-bold text-text">{value}</div>
           <div className="text-xs text-muted">{label}</div>

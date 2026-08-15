@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Ticket, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Priority } from "@modmail/core";
-import { listTickets } from "#/server/fns/tickets.ts";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ChevronLeft, ChevronRight, Search, Ticket } from "lucide-react";
+import { useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
 import { Badge, Button, Card, EmptyState, Input, Select, Spinner } from "#/components/ui/index.tsx";
 import { relativeTime } from "#/lib/utils.ts";
+import { listTickets } from "#/server/fns/tickets.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId/tickets/")({
   loader: ({ params }) =>
@@ -161,7 +161,10 @@ function TicketsPage() {
                           <span
                             key={tag.id}
                             className="rounded-full px-2 py-0.5 text-[11px] font-medium"
-                            style={{ backgroundColor: `${tag.color ?? "#5865f2"}22`, color: tag.color ?? "#9aa0a6" }}
+                            style={{
+                              backgroundColor: `${tag.color ?? "#5865f2"}22`,
+                              color: tag.color ?? "#9aa0a6",
+                            }}
                           >
                             {tag.name}
                           </span>

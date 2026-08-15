@@ -1,21 +1,18 @@
 import type {
   BotGuildDTO,
   DiscordChannelDTO,
-  DiscordRoleDTO,
   DiscordEmojiDTO,
+  DiscordRoleDTO,
   GuildMemberDTO,
 } from "@modmail/core";
 import { env } from "./env.ts";
 
-async function botFetch<T>(
-  path: string,
-  init?: RequestInit,
-): Promise<T | null> {
+async function botFetch<T>(path: string, init?: RequestInit): Promise<T | null> {
   try {
     const res = await fetch(`${env.BOT_API_URL}${path}`, {
       ...init,
       headers: {
-        authorization: `Bearer ${env.BOT_API_SECRET}`,
+        authorization: `Bearer ${env.INTERNAL_API_SECRET}`,
         "content-type": "application/json",
         ...(init?.headers ?? {}),
       },
@@ -38,28 +35,28 @@ export const botApi = {
     botFetch<GuildMemberDTO>(`/guilds/${id}/members/${userId}`),
   invalidate: (id: string) =>
     botFetch<{ ok: boolean }>(`/guilds/${id}/invalidate`, { method: "POST" }),
-  reply: (ticketId: string, body: Record<string, unknown>) =>
-    botFetch<{ ok: boolean; error?: string }>(`/tickets/${ticketId}/reply`, {
+  reply: (guildId: string, ticketId: string, body: Record<string, unknown>) =>
+    botFetch<{ ok: boolean; error?: string }>(`/guilds/${guildId}/tickets/${ticketId}/reply`, {
       method: "POST",
       body: JSON.stringify(body),
     }),
-  note: (ticketId: string, body: Record<string, unknown>) =>
-    botFetch<{ ok: boolean }>(`/tickets/${ticketId}/note`, {
+  note: (guildId: string, ticketId: string, body: Record<string, unknown>) =>
+    botFetch<{ ok: boolean }>(`/guilds/${guildId}/tickets/${ticketId}/note`, {
       method: "POST",
       body: JSON.stringify(body),
     }),
-  close: (ticketId: string, body: Record<string, unknown>) =>
-    botFetch<{ ok: boolean }>(`/tickets/${ticketId}/close`, {
+  close: (guildId: string, ticketId: string, body: Record<string, unknown>) =>
+    botFetch<{ ok: boolean }>(`/guilds/${guildId}/tickets/${ticketId}/close`, {
       method: "POST",
       body: JSON.stringify(body),
     }),
-  assign: (ticketId: string, body: Record<string, unknown>) =>
-    botFetch<{ ok: boolean }>(`/tickets/${ticketId}/assign`, {
+  assign: (guildId: string, ticketId: string, body: Record<string, unknown>) =>
+    botFetch<{ ok: boolean }>(`/guilds/${guildId}/tickets/${ticketId}/assign`, {
       method: "POST",
       body: JSON.stringify(body),
     }),
-  priority: (ticketId: string, body: Record<string, unknown>) =>
-    botFetch<{ ok: boolean }>(`/tickets/${ticketId}/priority`, {
+  priority: (guildId: string, ticketId: string, body: Record<string, unknown>) =>
+    botFetch<{ ok: boolean }>(`/guilds/${guildId}/tickets/${ticketId}/priority`, {
       method: "POST",
       body: JSON.stringify(body),
     }),

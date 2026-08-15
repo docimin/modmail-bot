@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, MessageFlags, EmbedBuilder } from "discord.js";
+import { EmbedBuilder, MessageFlags, SlashCommandBuilder } from "discord.js";
 import type { BotCommand } from "../framework.ts";
 
 const channel = (id: string | null) => (id ? `<#${id}>` : "—");
@@ -39,7 +39,9 @@ const command: BotCommand = {
           inline: true,
         },
       )
-      .setDescription(`[Open the dashboard](${baseUrl}/dashboard/${settings.guildId}/settings) for full configuration.`);
+      .setDescription(
+        `[Open the dashboard](${baseUrl}/dashboard/${settings.guildId}/settings) for full configuration.`,
+      );
 
     await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
   },

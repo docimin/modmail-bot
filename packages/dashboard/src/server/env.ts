@@ -1,6 +1,6 @@
-import { config } from "dotenv";
-import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { config } from "dotenv";
 import { z } from "zod";
 
 // server-only: loads the monorepo root .env (packages/dashboard/src/server -> ../../../../.env)
@@ -14,7 +14,7 @@ const schema = z.object({
   BETTER_AUTH_SECRET: z.string().min(1),
   BETTER_AUTH_URL: z.string().default("http://localhost:3000"),
   BOT_API_URL: z.string().default("http://localhost:4000"),
-  BOT_API_SECRET: z.string().default("change-me"),
+  INTERNAL_API_SECRET: z.string().min(32, "INTERNAL_API_SECRET must be at least 32 characters"),
   DISCORD_CLIENT_ID_PUBLIC: z.string().optional(),
   DISCORD_INVITE_URL: z.string().optional(),
   SUPPORT_SERVER_URL: z.string().optional(),

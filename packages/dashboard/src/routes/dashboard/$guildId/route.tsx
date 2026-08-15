@@ -1,8 +1,8 @@
-import { createFileRoute, redirect, Outlet, Link } from "@tanstack/react-router";
-import { getGuildContext } from "#/server/fns/guilds.ts";
-import { getSession } from "#/server/fns/session.ts";
+import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
 import { AppShell } from "#/components/AppShell.tsx";
 import { Button } from "#/components/ui/index.tsx";
+import { getGuildContext } from "#/server/fns/guilds.ts";
+import { getSession } from "#/server/fns/session.ts";
 
 export const Route = createFileRoute("/dashboard/$guildId")({
   loader: async ({ params }) => {
@@ -29,7 +29,8 @@ function GuildError() {
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-bg px-4 text-center">
       <h1 className="text-xl font-semibold text-text">No access to this server</h1>
       <p className="max-w-md text-sm text-muted">
-        You need the Manage Server permission, or to be added as staff, to view this server's modmail.
+        You need the Manage Server permission, or to be added as staff, to view this server's
+        modmail.
       </p>
       <Link to="/dashboard">
         <Button variant="outline">Back to servers</Button>

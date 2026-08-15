@@ -1,9 +1,9 @@
-import { test, expect } from "bun:test";
-import { renderMessage, renderPrefix, resolveColor } from "./messages.ts";
-import { parseGuildConfig, mergeGuildConfig, DEFAULT_GUILD_CONFIG } from "./settings.ts";
-import { resolveAccess, canManageGuild } from "./permissions.ts";
-import { formatTicketName } from "./naming.ts";
+import { expect, test } from "bun:test";
 import { PERMISSIONS } from "./constants.ts";
+import { renderMessage, renderPrefix, resolveColor } from "./messages.ts";
+import { formatTicketName } from "./naming.ts";
+import { canManageGuild, resolveAccess } from "./permissions.ts";
+import { DEFAULT_GUILD_CONFIG, mergeGuildConfig, parseGuildConfig } from "./settings.ts";
 
 test("resolveColor parses hex and ints", () => {
   expect(resolveColor("#5865f2")).toBe(0x5865f2);
@@ -67,6 +67,10 @@ test("canManageGuild respects owner and administrator", () => {
 });
 
 test("formatTicketName sanitizes to a valid channel name", () => {
-  expect(formatTicketName("{username}", { username: "Cool User!", userId: "1", number: 3 })).toBe("cool-user");
-  expect(formatTicketName("ticket-{number}", { username: "x", userId: "1", number: 7 })).toBe("ticket-7");
+  expect(formatTicketName("{username}", { username: "Cool User!", userId: "1", number: 3 })).toBe(
+    "cool-user",
+  );
+  expect(formatTicketName("ticket-{number}", { username: "x", userId: "1", number: 7 })).toBe(
+    "ticket-7",
+  );
 });

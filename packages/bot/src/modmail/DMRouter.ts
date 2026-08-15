@@ -1,21 +1,21 @@
+import { renderMessage } from "@modmail/core";
+import { and, type Database, eq, isNotNull, schema } from "@modmail/db";
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  StringSelectMenuBuilder,
   ChannelType,
   type Client,
-  type Message,
-  type MessageComponentInteraction,
   type Guild,
   type GuildMember,
+  type Message,
+  type MessageComponentInteraction,
+  StringSelectMenuBuilder,
 } from "discord.js";
-import { and, eq, isNotNull, schema, type Database } from "@modmail/db";
-import { renderMessage } from "@modmail/core";
+import { isOutsideWorkingHours } from "../lib/workingHours.ts";
 import type { Logger } from "../logger.ts";
 import type { SettingsService } from "../settings/service.ts";
 import type { TicketService } from "./TicketService.ts";
-import { isOutsideWorkingHours } from "../lib/workingHours.ts";
 
 interface PendingFlow {
   message: Message;
@@ -60,7 +60,10 @@ export class DMRouter {
       return;
     }
     if (open.length > 1) {
-      await this.promptServerSelect(message, open.map((t) => t.guildId));
+      await this.promptServerSelect(
+        message,
+        open.map((t) => t.guildId),
+      );
       return;
     }
     await this.startCreation(message);
@@ -89,9 +92,7 @@ export class DMRouter {
     const mutual = await this.getMutualEnabledGuilds(message.author.id);
     if (mutual.length === 0) {
       await message
-        .reply(
-          "I couldn't find any servers we share that have modmail enabled.",
-        )
+        .reply("I couldn't find any servers we share that have modmail enabled.")
         .catch(() => null);
       return;
     }
@@ -105,10 +106,7 @@ export class DMRouter {
     );
   }
 
-  private async promptServerSelect(
-    message: Message,
-    guildIds: string[],
-  ): Promise<void> {
+  private async promptServerSelect(message: Message, guildIds: string[]): Promise<void> {
     this.pending.set(message.author.id, {
       message,
       expires: Date.now() + FLOW_TTL,
@@ -139,13 +137,12 @@ export class DMRouter {
       .catch(() => null);
   }
 
-  async onServerSelect(
-    interaction: MessageComponentInteraction,
-    guildId: string,
-  ): Promise<void> {
+  async onServerSelect(interaction: MessageComponentInteraction, guildId: string): Promise<void> {
     const flow = this.pending.get(interaction.user.id);
     if (!flow) {
-      await interaction.update({ content: "This selection expired.", components: [], embeds: [] }).catch(() => null);
+      await interaction
+        .update({ content: "This selection expired.", components: [], embeds: [] })
+        .catch(() => null);
       return;
     }
     flow.guildId = guildId;
@@ -184,7 +181,11 @@ export class DMRouter {
     const settings = await this.settings.get(guildId);
     if (!settings) return;
 
-    const reply = async (payload: { content?: string; embeds?: unknown[]; components?: unknown[] }) => {
+    const reply = async (payload: {
+      content?: string;
+      embeds?: unknown[];
+      components?: unknown[];
+    }) => {
       if ("author" in ctx) await ctx.reply(payload as never).catch(() => null);
       else await ctx.update(payload as never).catch(() => null);
     };
@@ -203,18 +204,29 @@ export class DMRouter {
     const last = this.cooldowns.get(cdKey) ?? 0;
     if (cd > 0 && Date.now() - last < cd) {
       this.pending.delete(userId);
-      await reply({ content: "You're opening tickets too quickly. Please wait a bit.", components: [], embeds: [] });
+      await reply({
+        content: "You're opening tickets too quickly. Please wait a bit.",
+        components: [],
+        embeds: [],
+      });
       return;
     }
 
     // account age gate
-    const member = await this.client.guilds.cache.get(guildId)?.members.fetch(userId).catch(() => null);
+    const member = await this.client.guilds.cache
+      .get(guildId)
+      ?.members.fetch(userId)
+      .catch(() => null);
     const minAccount = settings.config.minAccountAgeMinutes;
     if (member && minAccount > 0) {
       const ageMin = (Date.now() - member.user.createdTimestamp) / 60000;
       if (ageMin < minAccount) {
         this.pending.delete(userId);
-        await reply({ content: "Your account is too new to open a ticket here.", components: [], embeds: [] });
+        await reply({
+          content: "Your account is too new to open a ticket here.",
+          components: [],
+          embeds: [],
+        });
         return;
       }
     }
@@ -242,7 +254,13 @@ export class DMRouter {
           ),
       );
       await reply({
-        embeds: [{ color: 0x5865f2, title: "What's this about?", description: "Pick a category to continue." }],
+        embeds: [
+          {
+            color: 0x5865f2,
+            title: "What's this about?",
+            description: "Pick a category to continue.",
+          },
+        ],
         components: [row],
       });
       return;
@@ -250,8 +268,14 @@ export class DMRouter {
 
     if (settings.config.confirmationEnabled) {
       const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId("dm:confirm").setLabel("Open ticket").setStyle(ButtonStyle.Success),
-        new ButtonBuilder().setCustomId("dm:cancel").setLabel("Cancel").setStyle(ButtonStyle.Danger),
+        new ButtonBuilder()
+          .setCustomId("dm:confirm")
+          .setLabel("Open ticket")
+          .setStyle(ButtonStyle.Success),
+        new ButtonBuilder()
+          .setCustomId("dm:cancel")
+          .setLabel("Cancel")
+          .setStyle(ButtonStyle.Danger),
       );
       const serverName = this.client.guilds.cache.get(guildId)?.name ?? "this server";
       await reply({
@@ -276,7 +300,9 @@ export class DMRouter {
   ): Promise<void> {
     const flow = this.pending.get(interaction.user.id);
     if (!flow) {
-      await interaction.update({ content: "This selection expired.", components: [], embeds: [] }).catch(() => null);
+      await interaction
+        .update({ content: "This selection expired.", components: [], embeds: [] })
+        .catch(() => null);
       return;
     }
     flow.categoryId = categoryId;
@@ -286,7 +312,9 @@ export class DMRouter {
   async onConfirm(interaction: MessageComponentInteraction): Promise<void> {
     const flow = this.pending.get(interaction.user.id);
     if (!flow) {
-      await interaction.update({ content: "This request expired.", components: [], embeds: [] }).catch(() => null);
+      await interaction
+        .update({ content: "This request expired.", components: [], embeds: [] })
+        .catch(() => null);
       return;
     }
     await this.finalizeCreation(interaction, flow);
@@ -331,7 +359,8 @@ export class DMRouter {
         const dm = await flow.message.author.createDM().catch(() => null);
         if (dm) {
           const payload = renderMessage(settings.config.awayMessage, {});
-          if (payload.content || payload.embeds?.length) await dm.send(payload as never).catch(() => null);
+          if (payload.content || payload.embeds?.length)
+            await dm.send(payload as never).catch(() => null);
         }
       }
 

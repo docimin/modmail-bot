@@ -9,12 +9,7 @@ export function createClient(): Client {
       GatewayIntentBits.DirectMessages,
       GatewayIntentBits.GuildMembers,
     ],
-    partials: [
-      Partials.Channel,
-      Partials.Message,
-      Partials.User,
-      Partials.GuildMember,
-    ],
+    partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember],
     allowedMentions: { parse: ["roles", "users"] },
   });
 }

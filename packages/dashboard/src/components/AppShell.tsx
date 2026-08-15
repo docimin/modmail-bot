@@ -1,21 +1,21 @@
-import type { ReactNode } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import {
-  LayoutDashboard,
-  Inbox,
-  MessageSquareText,
-  FolderTree,
-  Tags,
   Ban,
-  Users,
   BarChart3,
+  ChevronLeft,
+  FolderTree,
+  Inbox,
+  LayoutDashboard,
+  LogOut,
+  MessageSquareText,
   ScrollText,
   Settings,
-  ChevronLeft,
-  LogOut,
+  Tags,
+  Users,
 } from "lucide-react";
-import { signOut } from "#/lib/auth-client.ts";
+import type { ReactNode } from "react";
 import { Avatar } from "#/components/ui/index.tsx";
+import { signOut } from "#/lib/auth-client.ts";
 import { cn } from "#/lib/utils.ts";
 
 const NAV = [
@@ -59,7 +59,10 @@ export function AppShell({
           )}
           <div className="min-w-0">
             <div className="truncate text-sm font-semibold text-text">{guild.name}</div>
-            <Link to="/dashboard" className="flex items-center gap-0.5 text-xs text-muted hover:text-text">
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-0.5 text-xs text-muted hover:text-text"
+            >
               <ChevronLeft className="h-3 w-3" /> All servers
             </Link>
           </div>
@@ -73,7 +76,9 @@ export function AppShell({
               params={{ guildId: guild.id }}
               activeOptions={{ exact: item.exact }}
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-surface-2 hover:text-text"
-              activeProps={{ className: "bg-accent/15 text-accent hover:bg-accent/15 hover:text-accent" }}
+              activeProps={{
+                className: "bg-accent/15 text-accent hover:bg-accent/15 hover:text-accent",
+              }}
             >
               <item.icon className="h-4 w-4" />
               {item.label}
@@ -85,9 +90,12 @@ export function AppShell({
           <div className="flex items-center gap-3">
             <Avatar src={user?.image} size={32} />
             <div className="min-w-0 flex-1">
-              <div className="truncate text-sm font-medium text-text">{user?.name ?? "Account"}</div>
+              <div className="truncate text-sm font-medium text-text">
+                {user?.name ?? "Account"}
+              </div>
             </div>
             <button
+              type="button"
               onClick={onSignOut}
               className="rounded-md p-1.5 text-muted hover:bg-surface-2 hover:text-text"
               title="Sign out"
@@ -115,7 +123,12 @@ export function PageHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-start justify-between gap-4 border-b border-border px-8 py-6", className)}>
+    <div
+      className={cn(
+        "flex items-start justify-between gap-4 border-b border-border px-8 py-6",
+        className,
+      )}
+    >
       <div>
         <h1 className="text-xl font-semibold text-text">{title}</h1>
         {description && <p className="mt-1 text-sm text-muted">{description}</p>}
