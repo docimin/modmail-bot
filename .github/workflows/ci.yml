@@ -28,9 +28,3 @@ jobs:
       - run: bun run test
 
       - run: bun run build
-        env:
-          DATABASE_URL: postgres://modmail:modmail@localhost:5432/modmail
-          DISCORD_CLIENT_ID: "000000000000000000"
-          DISCORD_CLIENT_SECRET: ci-placeholder
-          BETTER_AUTH_SECRET: ci-placeholder-secret-at-least-32-chars
-          INTERNAL_API_SECRET: ci-placeholder-secret-at-least-32-chars

@@ -1,7 +1,8 @@
 import { getRequestHeaders } from "@tanstack/react-start/server";
+import { type GuildAccess, resolveGuildAccess } from "./access-policy.ts";
 import { auth } from "./auth.ts";
 import { and, db, eq, schema } from "./db.ts";
-import { canManageDiscordGuild, getDiscordUserId, getUserGuilds } from "./discord.ts";
+import { getDiscordUserId, getUserGuilds } from "./discord.ts";
 
 export function currentHeaders(): Headers {
   return new Headers(getRequestHeaders() as HeadersInit);
@@ -25,11 +26,7 @@ export async function requireUser() {
   return { session, headers };
 }
 
-export interface GuildAccess {
-  userId: string;
-  discordUserId: string | null;
-  role: "admin" | "staff";
-}
+export type { GuildAccess } from "./access-policy.ts";
 
 /** Ensure the signed-in user may manage the given guild (Discord MANAGE_GUILD or configured staff). */
 export async function requireGuildAccess(guildId: string): Promise<GuildAccess> {
@@ -37,19 +34,23 @@ export async function requireGuildAccess(guildId: string): Promise<GuildAccess> 
   const discordUserId = await getDiscordUserId(session.user.id);
 
   const guilds = await getUserGuilds(headers);
-  const g = guilds.find((x) => x.id === guildId);
-  if (g && canManageDiscordGuild(g))
-    return { userId: session.user.id, discordUserId, role: "admin" };
+  const guild = guilds.find((x) => x.id === guildId);
 
-  if (discordUserId) {
-    const staff = await db.query.guildStaff.findFirst({
-      where: and(
-        eq(schema.guildStaff.guildId, guildId),
-        eq(schema.guildStaff.userId, discordUserId),
-      ),
-    });
-    if (staff) return { userId: session.user.id, discordUserId, role: staff.role };
-  }
+  const staff = discordUserId
+    ? await db.query.guildStaff.findFirst({
+        where: and(
+          eq(schema.guildStaff.guildId, guildId),
+          eq(schema.guildStaff.userId, discordUserId),
+        ),
+      })
+    : null;
 
-  throw new ForbiddenError();
+  const access = resolveGuildAccess({
+    userId: session.user.id,
+    discordUserId,
+    guild,
+    staffRole: staff?.role ?? null,
+  });
+  if (!access) throw new ForbiddenError();
+  return access;
 }

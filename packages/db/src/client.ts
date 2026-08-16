@@ -10,6 +10,7 @@ export function createDb(connectionString: string) {
 }
 
 let _db: Database | undefined;
+let _pool: Pool | undefined;
 
 // Lazily-created singleton bound to DATABASE_URL. Both the bot and the
 // dashboard share this so connection pools aren't duplicated per import.
@@ -17,6 +18,13 @@ export function getDb(): Database {
   if (_db) return _db;
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL is not set");
-  _db = createDb(url);
+  _pool = new Pool({ connectionString: url, max: 10 });
+  _db = drizzle(_pool, { schema, casing: "snake_case" });
   return _db;
+}
+
+export async function closeDb(): Promise<void> {
+  await _pool?.end();
+  _pool = undefined;
+  _db = undefined;
 }

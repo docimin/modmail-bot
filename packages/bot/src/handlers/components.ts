@@ -17,10 +17,16 @@ export async function handleComponent(
   const id = interaction.customId;
 
   // ─── DM flow (in DMs) ──────────────────────────────────────────────────
-  if (id === "dm:server" && interaction.isStringSelectMenu())
-    return services.dm.onServerSelect(interaction, interaction.values[0]!);
-  if (id === "dm:category" && interaction.isStringSelectMenu())
-    return services.dm.onCategorySelect(interaction, interaction.values[0]!);
+  if (id === "dm:server" && interaction.isStringSelectMenu()) {
+    const [guildId] = interaction.values;
+    if (!guildId) return;
+    return services.dm.onServerSelect(interaction, guildId);
+  }
+  if (id === "dm:category" && interaction.isStringSelectMenu()) {
+    const [categoryId] = interaction.values;
+    if (!categoryId) return;
+    return services.dm.onCategorySelect(interaction, categoryId);
+  }
   if (id === "dm:confirm") return services.dm.onConfirm(interaction);
   if (id === "dm:cancel") return services.dm.onCancel(interaction);
 
@@ -103,8 +109,10 @@ async function handleTicketAction(
     }
     case "snippetpick": {
       if (!interaction.isStringSelectMenu()) return;
+      const [snippetId] = interaction.values;
+      if (!snippetId) return;
       const snippet = await services.db.query.snippets.findFirst({
-        where: eq(schema.snippets.id, interaction.values[0]!),
+        where: eq(schema.snippets.id, snippetId),
       });
       if (!snippet) {
         await interaction.update({ content: "Snippet not found.", components: [] });

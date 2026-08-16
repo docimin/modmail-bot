@@ -11,7 +11,8 @@
     "generate-routes": "bun --bun tsr generate",
     "build": "bun --bun vite build",
     "preview": "bun --bun vite preview",
-    "typecheck": "bun --bun tsr generate && tsc --noEmit"
+    "typecheck": "bun --bun tsr generate && tsc --noEmit",
+    "test": "bun test"
   },
   "dependencies": {
     "@modmail/core": "workspace:*",

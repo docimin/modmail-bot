@@ -78,7 +78,8 @@ export class SettingsService {
       .onConflictDoNothing()
       .returning();
 
-    const resolved = row ? this.toResolved(row) : (await this.get(guildId))!;
+    const resolved = row ? this.toResolved(row) : await this.get(guildId);
+    if (!resolved) throw new Error(`Could not resolve settings for guild ${guildId}`);
     this.cache.set(guildId, {
       value: resolved,
       expires: Date.now() + TTL_MS,

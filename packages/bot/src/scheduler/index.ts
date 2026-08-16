@@ -18,6 +18,8 @@ async function tick(services: Services): Promise<void> {
 
 async function runDueTasks(services: Services): Promise<void> {
   const { db } = services;
+  const botId = services.client.user?.id;
+  if (!botId) return;
   const due = await db.query.scheduledTasks.findMany({
     where: lte(schema.scheduledTasks.runAt, new Date()),
     limit: 50,
@@ -30,7 +32,7 @@ async function runDueTasks(services: Services): Promise<void> {
         });
         if (ticket && ticket.status === "open")
           await services.tickets.close(ticket, {
-            byId: task.createdById ?? services.client.user!.id,
+            byId: task.createdById ?? botId,
             reason: (task.payload.reason as string) ?? "Scheduled close",
             silent: Boolean(task.payload.silent),
           });
@@ -56,6 +58,8 @@ async function runDueTasks(services: Services): Promise<void> {
 
 async function autoCloseInactive(services: Services): Promise<void> {
   const { db } = services;
+  const botId = services.client.user?.id;
+  if (!botId) return;
   const settingsRows = await db.query.guildSettings.findMany({
     where: eq(schema.guildSettings.enabled, true),
   });
@@ -80,7 +84,7 @@ async function autoCloseInactive(services: Services): Promise<void> {
     for (const ticket of stale) {
       await services.tickets
         .close(ticket, {
-          byId: services.client.user!.id,
+          byId: botId,
           reason: "Auto-closed due to inactivity",
           silent: cfg.autoCloseSilent,
         })

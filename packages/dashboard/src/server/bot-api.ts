@@ -17,9 +17,13 @@ async function botFetch<T>(path: string, init?: RequestInit): Promise<T | null> 
         ...(init?.headers ?? {}),
       },
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error(`[bot-api] ${init?.method ?? "GET"} ${path} -> ${res.status}`);
+      return null;
+    }
     return (await res.json()) as T;
-  } catch {
+  } catch (err) {
+    console.error(`[bot-api] ${init?.method ?? "GET"} ${path} unreachable:`, err);
     return null;
   }
 }

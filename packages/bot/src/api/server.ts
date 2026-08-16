@@ -1,5 +1,4 @@
 import { timingSafeEqual } from "node:crypto";
-import { serve } from "@hono/node-server";
 import {
   closeInputSchema,
   noteInputSchema,
@@ -8,7 +7,6 @@ import {
 } from "@modmail/core";
 import { eq, schema } from "@modmail/db";
 import { Hono } from "hono";
-import { env } from "../env.ts";
 import type { Services } from "../framework.ts";
 import { deployCommands } from "../lib/deploy.ts";
 import {
@@ -32,7 +30,13 @@ function secretMatches(header: string | undefined, secret: string): boolean {
   return timingSafeEqual(expected, received);
 }
 
-export function createApi(services: Services, opts: { secret: string }): Hono {
+export interface ApiOptions {
+  secret: string;
+  token: string;
+  clientId: string;
+}
+
+export function createApi(services: Services, opts: ApiOptions): Hono {
   const app = new Hono();
   const { client, db } = services;
 
@@ -190,25 +194,11 @@ export function createApi(services: Services, opts: { secret: string }): Hono {
 
   app.post("/commands/refresh", async (c) => {
     const count = await deployCommands(services.commands, {
-      token: env.DISCORD_BOT_TOKEN,
-      clientId: env.DISCORD_CLIENT_ID,
+      token: opts.token,
+      clientId: opts.clientId,
     });
     return c.json({ ok: true, count });
   });
 
   return app;
-}
-
-export function startApi(services: Services): void {
-  const app = createApi(services, { secret: env.INTERNAL_API_SECRET });
-  serve(
-    {
-      fetch: app.fetch,
-      port: env.INTERNAL_API_PORT,
-      hostname: env.INTERNAL_API_HOST,
-    },
-    (info) => {
-      services.logger.info(`Internal API listening on ${env.INTERNAL_API_HOST}:${info.port}`);
-    },
-  );
 }

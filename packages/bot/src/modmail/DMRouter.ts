@@ -55,8 +55,9 @@ export class DMRouter {
     const userId = message.author.id;
 
     const open = await this.tickets.findOpenByUser(userId);
-    if (open.length === 1) {
-      await this.tickets.relayUserMessage(open[0]!, message);
+    const [onlyOpen] = open;
+    if (open.length === 1 && onlyOpen) {
+      await this.tickets.relayUserMessage(onlyOpen, message);
       return;
     }
     if (open.length > 1) {
@@ -96,8 +97,9 @@ export class DMRouter {
         .catch(() => null);
       return;
     }
-    if (mutual.length === 1) {
-      await this.beginForGuild(message, mutual[0]!.guild.id);
+    const [onlyMutual] = mutual;
+    if (mutual.length === 1 && onlyMutual) {
+      await this.beginForGuild(message, onlyMutual.guild.id);
       return;
     }
     await this.promptServerSelect(
@@ -177,7 +179,8 @@ export class DMRouter {
     flow: PendingFlow,
   ): Promise<void> {
     const userId = "author" in ctx ? ctx.author.id : ctx.user.id;
-    const guildId = flow.guildId!;
+    const guildId = flow.guildId;
+    if (!guildId) return;
     const settings = await this.settings.get(guildId);
     if (!settings) return;
 
@@ -332,7 +335,8 @@ export class DMRouter {
     flow: PendingFlow,
   ): Promise<void> {
     const userId = "author" in ctx ? ctx.author.id : ctx.user.id;
-    const guildId = flow.guildId!;
+    const guildId = flow.guildId;
+    if (!guildId) return;
     this.pending.delete(userId);
     this.cooldowns.set(`${guildId}:${userId}`, Date.now());
 

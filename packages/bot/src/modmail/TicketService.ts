@@ -411,7 +411,7 @@ export class TicketService {
         eq(schema.ticketMessages.channelMessageId, channelMessageId),
       ),
     });
-    if (!row || !row.dmMessageId) return false;
+    if (!row?.dmMessageId) return false;
 
     const dm = await this.fetchDM(ticket);
     const settings = await this.settings.get(ticket.guildId);
@@ -456,7 +456,7 @@ export class TicketService {
         eq(schema.ticketMessages.channelMessageId, channelMessageId),
       ),
     });
-    if (!row || !row.dmMessageId) return false;
+    if (!row?.dmMessageId) return false;
 
     const dm = await this.fetchDM(ticket);
     if (dm) await dm.messages.delete(row.dmMessageId).catch(() => null);
@@ -482,7 +482,7 @@ export class TicketService {
         eq(schema.ticketMessages.dmMessageId, message.id),
       ),
     });
-    if (!row || !row.channelMessageId) return;
+    if (!row?.channelMessageId) return;
     const target = await this.resolveRelayTarget(ticket);
     if (!target) return;
     const webhook = await getWebhook(target.webhookChannel);
@@ -619,9 +619,9 @@ export class TicketService {
   private messageToString(message: Message): string {
     let out = message.content ?? "";
     if (message.attachments.size > 0)
-      out += "\n" + [...message.attachments.values()].map((a) => a.url).join("\n");
+      out += `\n${[...message.attachments.values()].map((a) => a.url).join("\n")}`;
     if (message.stickers.size > 0)
-      out += "\n" + [...message.stickers.values()].map((s) => s.name).join(" ");
+      out += `\n${[...message.stickers.values()].map((s) => s.name).join(" ")}`;
     return out.trim();
   }
 

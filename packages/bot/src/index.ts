@@ -1,5 +1,6 @@
+import { closeDb } from "@modmail/db";
 import { Events } from "discord.js";
-import { startApi } from "./api/server.ts";
+import { startApi } from "./api/start.ts";
 import { createClient } from "./client.ts";
 import { loadCommands } from "./commands/loader.ts";
 import { db } from "./db.ts";
@@ -45,14 +46,30 @@ client.once(Events.ClientReady, async (c) => {
   startScheduler(services);
 });
 
-startApi(services);
+const server = startApi(services);
 
 await client.login(env.DISCORD_BOT_TOKEN);
 
-const shutdown = (signal: string) => {
+let shuttingDown = false;
+const shutdown = async (signal: string) => {
+  if (shuttingDown) return;
+  shuttingDown = true;
   logger.info(`Received ${signal}, shutting down…`);
-  client.destroy();
+
+  const timer = setTimeout(() => {
+    logger.error("Shutdown timed out, forcing exit");
+    process.exit(1);
+  }, 10_000);
+  timer.unref();
+
+  try {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+    await client.destroy();
+    await closeDb();
+  } catch (err) {
+    logger.error({ err }, "Error during shutdown");
+  }
   process.exit(0);
 };
-process.on("SIGINT", () => shutdown("SIGINT"));
-process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => void shutdown("SIGINT"));
+process.on("SIGTERM", () => void shutdown("SIGTERM"));

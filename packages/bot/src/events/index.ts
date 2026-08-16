@@ -43,9 +43,10 @@ export function registerEvents(client: Client, services: Services): void {
     const settings = await services.settings.get(member.guild.id).catch(() => null);
     if (!settings?.config.closeOnLeave) return;
     const ticket = await services.tickets.findOpenInGuild(member.guild.id, member.id);
-    if (ticket)
+    const botId = client.user?.id;
+    if (ticket && botId)
       await services.tickets
-        .close(ticket, { byId: client.user!.id, reason: "User left the server", silent: true })
+        .close(ticket, { byId: botId, reason: "User left the server", silent: true })
         .catch(() => null);
   });
 }
@@ -68,7 +69,7 @@ async function onMessageCreate(message: Message, services: Services): Promise<vo
   const content =
     message.content +
     (message.attachments.size
-      ? "\n" + [...message.attachments.values()].map((a) => a.url).join("\n")
+      ? `\n${[...message.attachments.values()].map((a) => a.url).join("\n")}`
       : "");
   if (!content.trim()) return;
 
