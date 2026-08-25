@@ -24,17 +24,27 @@ function GuildLayout() {
   );
 }
 
-function GuildError() {
+function GuildError({ error }: { error: Error }) {
+  const upstream = error?.message === "UPSTREAM_UNAVAILABLE";
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-bg px-4 text-center">
-      <h1 className="text-xl font-semibold text-text">No access to this server</h1>
+      <h1 className="text-xl font-semibold text-text">
+        {upstream ? "Couldn't verify your access" : "No access to this server"}
+      </h1>
       <p className="max-w-md text-sm text-muted">
-        You need the Manage Server permission, or to be added as staff, to view this server's
-        modmail.
+        {upstream
+          ? "Discord didn't respond in time, so we couldn't check your permissions. This is usually temporary — try again in a moment."
+          : "You need the Manage Server permission, or to be added as staff, to view this server's modmail."}
       </p>
-      <Link to="/dashboard">
-        <Button variant="outline">Back to servers</Button>
-      </Link>
+      {upstream ? (
+        <Button variant="outline" onClick={() => window.location.reload()}>
+          Try again
+        </Button>
+      ) : (
+        <Link to="/dashboard">
+          <Button variant="outline">Back to servers</Button>
+        </Link>
+      )}
     </div>
   );
 }
