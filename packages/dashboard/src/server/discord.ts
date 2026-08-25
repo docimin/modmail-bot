@@ -41,17 +41,24 @@ export async function getUserGuilds(headers: HeadersLike): Promise<UserGuild[]> 
         headers,
       })
       .catch((err) => {
-        throw new UpstreamError(`discord token refresh failed: ${err}`);
+        console.error("[access] discord token refresh failed:", err);
+        throw new UpstreamError();
       });
     const accessToken = token?.accessToken;
-    if (!accessToken) throw new UpstreamError("no discord access token");
+    if (!accessToken) {
+      console.error("[access] no discord access token for user");
+      throw new UpstreamError();
+    }
 
     const res = await fetch("https://discord.com/api/v10/users/@me/guilds", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     // A rate limit or outage is not the same as "this user has no servers" —
     // returning [] here is what made transient failures look like a denial.
-    if (!res.ok) throw new UpstreamError(`discord guilds ${res.status}`);
+    if (!res.ok) {
+      console.error(`[access] discord /users/@me/guilds returned ${res.status}`);
+      throw new UpstreamError();
+    }
     return (await res.json()) as UserGuild[];
   });
 }
