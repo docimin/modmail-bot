@@ -12,6 +12,7 @@ import {
   type MessageComponentInteraction,
   StringSelectMenuBuilder,
 } from "discord.js";
+import { ticketErrorMessage } from "../lib/discord-errors.ts";
 import { isOutsideWorkingHours } from "../lib/workingHours.ts";
 import type { Logger } from "../logger.ts";
 import type { SettingsService } from "../settings/service.ts";
@@ -378,7 +379,7 @@ export class DMRouter {
       void ticket;
     } catch (err) {
       this.logger.error({ err }, "ticket creation failed");
-      const msg = "Something went wrong opening your ticket. Please try again later.";
+      const msg = ticketErrorMessage(err);
       if ("author" in ctx) await ctx.reply(msg).catch(() => null);
       else await ctx.editReply({ content: msg, components: [], embeds: [] }).catch(() => null);
     }
