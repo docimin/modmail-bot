@@ -110,10 +110,7 @@ function Landing() {
       <section className="mx-auto max-w-6xl px-6 pb-24">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <div
-              key={f.title}
-              className="rounded-[var(--radius-card)] border border-border bg-surface p-5"
-            >
+            <div key={f.title} className="rounded-card border border-border bg-surface p-5">
               <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-accent/15 text-accent">
                 <f.icon className="h-4.5 w-4.5" />
               </div>
@@ -125,7 +122,15 @@ function Landing() {
       </section>
 
       <footer className="border-t border-border py-8 text-center text-sm text-muted">
-        Modmail · self-hosted Discord support
+        <p>Modmail · self-hosted Discord support</p>
+        <p className="mt-2 flex items-center justify-center gap-4">
+          <Link to="/terms" className="transition-colors hover:text-text">
+            Terms
+          </Link>
+          <Link to="/privacy" className="transition-colors hover:text-text">
+            Privacy
+          </Link>
+        </p>
       </footer>
     </div>
   );
