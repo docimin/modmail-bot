@@ -39,6 +39,39 @@ export async function getWebhook(channel: TextChannel): Promise<Webhook> {
   return webhook;
 }
 
+/**
+ * Overwrites for a ticket channel. The bot must grant itself access explicitly:
+ * denying @everyone also locks the bot out, and only the webhook relay would
+ * still work, so the info embed and slash commands would fail silently.
+ */
+export function ticketOverwrites(input: {
+  everyoneId: string;
+  botId: string;
+  staffRoleIds: string[];
+  adminRoleIds: string[];
+}) {
+  const { everyoneId, botId, staffRoleIds, adminRoleIds } = input;
+  const overwrites = [
+    { id: everyoneId, deny: [PermissionFlagsBits.ViewChannel] },
+    {
+      id: botId,
+      allow: [
+        PermissionFlagsBits.ViewChannel,
+        PermissionFlagsBits.SendMessages,
+        PermissionFlagsBits.ReadMessageHistory,
+        PermissionFlagsBits.ManageMessages,
+      ],
+    },
+  ];
+  const seen = new Set([everyoneId, botId]);
+  for (const id of [...staffRoleIds, ...adminRoleIds]) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    overwrites.push({ id, allow: [PermissionFlagsBits.ViewChannel] });
+  }
+  return overwrites;
+}
+
 export async function createInbox(
   guild: Guild,
   settings: ResolvedSettings,
@@ -86,20 +119,12 @@ export async function createInbox(
     type: ChannelType.GuildText,
     parent: categoryId ?? undefined,
     reason: `Modmail ticket #${opts.number}`,
-    permissionOverwrites: [
-      {
-        id: guild.id,
-        deny: [PermissionFlagsBits.ViewChannel],
-      },
-      ...settings.staffRoleIds.map((id) => ({
-        id,
-        allow: [PermissionFlagsBits.ViewChannel],
-      })),
-      ...settings.adminRoleIds.map((id) => ({
-        id,
-        allow: [PermissionFlagsBits.ViewChannel],
-      })),
-    ],
+    permissionOverwrites: ticketOverwrites({
+      everyoneId: guild.id,
+      botId: guild.members.me?.id ?? guild.client.user.id,
+      staffRoleIds: settings.staffRoleIds,
+      adminRoleIds: settings.adminRoleIds,
+    }),
   });
 
   return {
