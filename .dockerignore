@@ -1,0 +1,17 @@
+.git
+.github
+node_modules
+**/node_modules
+.env
+.env.*
+!.env.example
+**/.output
+**/.nitro
+**/.tanstack
+**/dist
+**/build
+**/routeTree.gen.ts
+*.tsbuildinfo
+.vscode
+.idea
+docs

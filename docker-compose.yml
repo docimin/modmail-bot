@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: modmail_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-modmail}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-modmail}
+    ports:
+      - "5433:5432"
+    volumes:
+      # Postgres 18's image stores data in a versioned dir (/var/lib/postgresql/<v>/docker)
+      # and declares its VOLUME at the parent, so mount the volume there.
+      - modmail_pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-modmail} -d ${POSTGRES_DB:-modmail}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    build: .
+    command: ["bun", "run", "db:migrate"]
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  bot:
+    build: .
+    restart: unless-stopped
+    command: ["bun", "run", "--filter", "@modmail/bot", "start"]
+    env_file: .env
+    environment:
+      # reachable from the dashboard container, never published to the host
+      INTERNAL_API_HOST: 0.0.0.0
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  dashboard:
+    build: .
+    restart: unless-stopped
+    command: ["bun", "packages/dashboard/.output/server/index.mjs"]
+    env_file: .env
+    environment:
+      BOT_API_URL: http://bot:4000
+    ports:
+      - "3000:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  modmail_pgdata:
