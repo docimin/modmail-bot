@@ -23,6 +23,5 @@ build/
 .nitro/
 .tanstack/
 .output/
-**/drizzle/meta/
 *.tsbuildinfo
 .turbo/
