@@ -1,6 +1,7 @@
+import { missingToEnable } from "@modmail/core";
 import type { GuildConfig } from "@modmail/db";
 import { createFileRoute, getRouteApi, useRouter } from "@tanstack/react-router";
-import { Save } from "lucide-react";
+import { AlertTriangle, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PageHeader } from "#/components/AppShell.tsx";
 import { ColorInput, MultiSelect, type Option } from "#/components/forms.tsx";
@@ -106,6 +107,13 @@ function SettingsPage() {
     setConfig((c) => ({ ...c, [key]: value }));
   }
 
+  const missing = missingToEnable({
+    mode: top.mode,
+    inboxChannelId: top.inboxChannelId,
+    fallbackCategoryId: top.fallbackCategoryId,
+  });
+  const blocked = top.enabled && missing.length > 0;
+
   async function save() {
     setSaving(true);
     try {
@@ -117,8 +125,8 @@ function SettingsPage() {
       await updateSettings({ data: { guildId, update: { ...top, config: fullConfig } } });
       toast.success("Settings saved");
       router.invalidate();
-    } catch {
-      toast.error("Couldn't save settings");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't save settings");
     } finally {
       setSaving(false);
     }
@@ -130,7 +138,7 @@ function SettingsPage() {
         title="Settings"
         description="Configure how modmail behaves in this server."
         actions={
-          <Button onClick={save} loading={saving}>
+          <Button onClick={save} loading={saving} disabled={blocked}>
             <Save className="h-4 w-4" /> Save changes
           </Button>
         }
@@ -141,6 +149,18 @@ function SettingsPage() {
           <Row label="Enabled" hint="Master switch for receiving modmail in this server.">
             <Switch checked={top.enabled} onChange={(v) => setTop((t) => ({ ...t, enabled: v }))} />
           </Row>
+          {blocked && (
+            <div className="flex items-start gap-2 rounded-lg border border-warning/40 bg-warning/10 px-3 py-2.5 text-sm text-text">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-warning" />
+              <div>
+                <p className="font-medium">Can't enable modmail yet</p>
+                <p className="mt-0.5 text-muted">
+                  Still missing {missing.join(" and ")}. Until this is set, the server won't appear
+                  when someone DMs the bot.
+                </p>
+              </div>
+            </div>
+          )}
           <Field label="Mode">
             <Select
               value={top.mode}
