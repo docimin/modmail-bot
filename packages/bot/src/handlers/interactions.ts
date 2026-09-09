@@ -31,10 +31,18 @@ async function handleCommand(
   services: Services,
 ): Promise<void> {
   const command = services.commands.get(interaction.commandName);
-  if (!command) return;
+  if (!command) {
+    // Leaving this silent makes Discord show "application did not respond" with
+    // nothing on our side to explain it.
+    services.logger.warn(
+      { command: interaction.commandName, guildId: interaction.guildId },
+      "unknown command",
+    );
+    return;
+  }
 
   if (!interaction.inCachedGuild()) {
-    await replyError(interaction, "This command can only be used in a server.");
+    await replyError(interaction, "This command can only be used in a server.", services);
     return;
   }
 
@@ -49,18 +57,18 @@ async function handleCommand(
   const required = command.access ?? "staff";
 
   if (required === "staff" && !access.isStaff) {
-    await replyError(interaction, "This command is staff-only.");
+    await replyError(interaction, "This command is staff-only.", services);
     return;
   }
   if (required === "admin" && !access.isAdmin) {
-    await replyError(interaction, "This command is admin-only.");
+    await replyError(interaction, "This command is admin-only.", services);
     return;
   }
 
   const ticket = (await services.tickets.findOpenByChannel(interaction.channelId)) ?? null;
 
   if (command.inTicketOnly && !ticket) {
-    await replyError(interaction, "Use this inside a ticket channel.");
+    await replyError(interaction, "Use this inside a ticket channel.", services);
     return;
   }
 
@@ -70,16 +78,21 @@ async function handleCommand(
     await command.execute(ctx);
   } catch (err) {
     services.logger.error({ err, command: interaction.commandName }, "command failed");
-    await replyError(interaction, "Something went wrong running that command.");
+    await replyError(interaction, "Something went wrong running that command.", services);
   }
 }
 
 async function replyError(
   interaction: ChatInputCommandInteraction,
   content: string,
+  services: Services,
 ): Promise<void> {
   const payload = { content, flags: MessageFlags.Ephemeral as const };
-  if (interaction.replied || interaction.deferred)
-    await interaction.followUp(payload).catch(() => null);
-  else await interaction.reply(payload).catch(() => null);
+  const send = interaction.replied || interaction.deferred ? "followUp" : "reply";
+  await interaction[send](payload).catch((err) =>
+    services.logger.error(
+      { err, command: interaction.commandName, send },
+      "failed to respond to interaction",
+    ),
+  );
 }
